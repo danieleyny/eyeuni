@@ -79,44 +79,30 @@ function UglyWebsite() {
 }
 
 // ─── Beautiful Website Mockup ───────────────────────────
-// Luxury boutique hotel concept — dark with warm gold accents
+// Luxury boutique hotel concept — dark with warm gold accents, real photos
 function BeautifulWebsite() {
+  const base = import.meta.env.BASE_URL
+  const rooms = [
+    { name: 'The Canopy', price: '$420', img: 'room-1.jpg' },
+    { name: 'River Stone', price: '$580', img: 'room-2.jpg' },
+    { name: 'Summit View', price: '$750', img: 'room-3.jpg' },
+  ]
   return (
     <div className="absolute inset-0 bg-[#0c0c0c] overflow-hidden text-white">
-      {/* ── Full-bleed hero with "photo" background ── */}
+      {/* ── Full-bleed hero with real photo ── */}
       <div className="relative h-[62%]">
-        {/* Simulated hero image — layered gradients for depth */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a2a1a] via-[#0d1f2d] to-[#1a1520]" />
-          {/* Warm light source top-right simulating window/sunset */}
-          <div className="absolute -top-4 -right-4 w-32 h-32 bg-[#c8a97e]/20 rounded-full blur-3xl" />
-          <div className="absolute top-6 right-8 w-16 h-16 bg-[#dbb88a]/15 rounded-full blur-2xl" />
-          {/* Depth: dark trees/building silhouette */}
-          <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-gradient-to-t from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent" />
-          {/* Simulated structure shapes */}
-          <div className="absolute bottom-[20%] left-[8%] w-[22%] h-[45%] bg-[#151515]/60 rounded-t-sm" />
-          <div className="absolute bottom-[20%] left-[32%] w-[36%] h-[55%] bg-[#181818]/50 rounded-t-sm" />
-          <div className="absolute bottom-[20%] right-[8%] w-[18%] h-[40%] bg-[#141414]/60 rounded-t-sm" />
-          {/* Warm window lights */}
-          <div className="absolute bottom-[32%] left-[36%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/70 rounded-sm" />
-          <div className="absolute bottom-[38%] left-[42%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/50 rounded-sm" />
-          <div className="absolute bottom-[32%] left-[48%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/60 rounded-sm" />
-          <div className="absolute bottom-[38%] left-[54%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/40 rounded-sm" />
-          <div className="absolute bottom-[32%] left-[60%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/70 rounded-sm" />
-          {/* Stars */}
-          <div className="absolute top-[12%] left-[20%] w-0.5 h-0.5 bg-white/40 rounded-full" />
-          <div className="absolute top-[8%] left-[45%] w-0.5 h-0.5 bg-white/30 rounded-full" />
-          <div className="absolute top-[15%] right-[25%] w-0.5 h-0.5 bg-white/25 rounded-full" />
-          <div className="absolute top-[6%] right-[40%] w-0.5 h-0.5 bg-white/35 rounded-full" />
+          <img src={`${base}mockup/hotel-hero.jpg`} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/35" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1510]/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent" />
         </div>
 
-        {/* Transparent nav overlaid on hero */}
+        {/* Transparent nav */}
         <div className="relative z-10 px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <span className="text-[9px] sm:text-[12px] font-light tracking-[0.25em] uppercase text-white/90" style={{ fontFamily: 'Georgia, serif' }}>
-              Aurelian
-            </span>
-          </div>
+          <span className="text-[9px] sm:text-[12px] font-light tracking-[0.25em] uppercase text-white/90" style={{ fontFamily: 'Georgia, serif' }}>
+            Aurelian
+          </span>
           <div className="flex gap-2 sm:gap-4 text-[6px] sm:text-[8px] text-white/50 tracking-wider uppercase">
             <span className="text-white/90">Home</span>
             <span>Rooms</span>
@@ -128,7 +114,7 @@ function BeautifulWebsite() {
           </div>
         </div>
 
-        {/* Hero text overlaid on image */}
+        {/* Hero text */}
         <div className="absolute bottom-[18%] left-0 right-0 text-center z-10 px-4">
           <div className="text-[5px] sm:text-[7px] text-[#c8a97e] tracking-[0.35em] uppercase mb-1 sm:mb-1.5 font-medium">
             Accord, New York
@@ -151,21 +137,21 @@ function BeautifulWebsite() {
 
       {/* ── Content below hero ── */}
       <div className="relative bg-[#0c0c0c] px-3 sm:px-5">
-        {/* Overlapping feature cards — pulled up into the hero */}
+        {/* Overlapping stat cards */}
         <div className="grid grid-cols-3 gap-1 sm:gap-2 -mt-3 sm:-mt-4 relative z-20">
           {[
-            { label: 'Suites', value: '24', sub: 'Luxury rooms' },
-            { label: 'Rating', value: '4.9', sub: '500+ reviews' },
-            { label: 'Acres', value: '68', sub: 'Private estate' },
+            { value: '24', sub: 'Luxury rooms' },
+            { value: '4.9', sub: '500+ reviews' },
+            { value: '68', sub: 'Private estate' },
           ].map((item) => (
-            <div key={item.label} className="bg-[#161616] border border-white/[0.06] p-1.5 sm:p-2 text-center">
+            <div key={item.sub} className="bg-[#161616] border border-white/[0.06] p-1.5 sm:p-2 text-center">
               <div className="text-[9px] sm:text-[13px] font-light text-[#c8a97e]" style={{ fontFamily: 'Georgia, serif' }}>{item.value}</div>
               <div className="text-[5px] sm:text-[7px] text-white/40 tracking-wider uppercase mt-0.5">{item.sub}</div>
             </div>
           ))}
         </div>
 
-        {/* Rooms preview */}
+        {/* Rooms with real photos */}
         <div className="mt-2 sm:mt-3">
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
             <div>
@@ -175,16 +161,11 @@ function BeautifulWebsite() {
             <div className="text-[5px] sm:text-[7px] text-[#c8a97e]/60 tracking-wider uppercase">View all →</div>
           </div>
           <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
-            {[
-              { name: 'The Canopy', price: '$420', grad: 'from-[#1a2418] to-[#0f1a0f]' },
-              { name: 'River Stone', price: '$580', grad: 'from-[#1a1a24] to-[#12121a]' },
-              { name: 'Summit View', price: '$750', grad: 'from-[#241a1a] to-[#1a0f12]' },
-            ].map((room) => (
+            {rooms.map((room) => (
               <div key={room.name} className="relative overflow-hidden rounded-sm">
-                <div className={`aspect-[3/2] bg-gradient-to-br ${room.grad}`}>
-                  {/* Simulated room photo lighting */}
-                  <div className="absolute top-1 right-1 w-3 h-3 bg-[#e8c87a]/20 rounded-full blur-sm" />
-                  <div className="absolute bottom-0 inset-x-0 h-[60%] bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="aspect-[3/2] relative">
+                  <img src={`${base}mockup/${room.img}`} alt="" className="w-full h-full object-cover" />
+                  <div className="absolute bottom-0 inset-x-0 h-[65%] bg-gradient-to-t from-black/80 to-transparent" />
                   <div className="absolute bottom-1 left-1 right-1">
                     <div className="text-[5px] sm:text-[7px] font-medium">{room.name}</div>
                     <div className="text-[4px] sm:text-[6px] text-[#c8a97e]">from {room.price}/night</div>
