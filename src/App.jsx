@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Services from './components/Services'
+import WebsiteTransform from './components/WebsiteTransform'
 import Portfolio from './components/Portfolio'
 import Testimonials from './components/Testimonials'
 import DemoWebsiteCTA from './components/DemoWebsiteCTA'
@@ -17,6 +18,7 @@ function HomePage() {
       <main>
         <Hero />
         <Services />
+        <WebsiteTransform />
         <Portfolio />
         <Testimonials />
         <DemoWebsiteCTA />
