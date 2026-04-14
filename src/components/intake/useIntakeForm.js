@@ -86,10 +86,50 @@ export function useIntakeForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           _subject: 'New Intake Form Submission — EYEuni',
-          ...state.formData,
-          biggestProblems: state.formData.biggestProblems.join(', '),
-          pagesNeeded: state.formData.pagesNeeded.join(', '),
-          featuresNeeded: state.formData.featuresNeeded.join(', '),
+
+          // — Step 1: Business Information —
+          'Business Name': state.formData.businessName,
+          'Industry / Niche': state.formData.industry,
+          'Business Tagline': state.formData.tagline || '(not provided)',
+          'Target Audience': state.formData.targetAudience,
+          'Contact Email': state.formData.contactEmail || '(not provided)',
+          'Contact Phone': state.formData.contactPhone || '(not provided)',
+
+          // — Step 2: Current Website (Optional) —
+          'Current Website URL': state.formData.currentWebsiteUrl || '(no existing website)',
+          'What They Like About Current Site': state.formData.whatYouLike || '(not provided)',
+          'What They Dislike About Current Site': state.formData.whatYouDislike || '(not provided)',
+          'Biggest Problems With Current Site': state.formData.biggestProblems.length > 0 ? state.formData.biggestProblems.join(', ') : '(none selected)',
+
+          // — Step 3: Website Goals —
+          'Primary Goal': state.formData.primaryGoal,
+          'Desired Visitor Action': state.formData.desiredAction,
+          'Competitor Websites': state.formData.competitors || '(not provided)',
+          'Websites They Like': state.formData.websitesYouLike || '(not provided)',
+          'What They Like About Those Websites': state.formData.whatYouLikeAboutThem || '(not provided)',
+          'Other Goals': state.formData.otherGoals || '(not provided)',
+
+          // — Step 4: Content & Pages —
+          'Pages Needed': state.formData.pagesNeeded.length > 0 ? state.formData.pagesNeeded.join(', ') : '(none selected)',
+          'Other Pages Requested': state.formData.otherPages || '(none)',
+          'Main Services or Products': state.formData.mainServicesProducts,
+          'Existing Content Preference': state.formData.existingContent || '(not selected)',
+
+          // — Step 5: Design Preferences —
+          'Design Style': state.formData.designStyle,
+          'Primary Color': state.formData.primaryColor,
+          'Secondary Color': state.formData.secondaryColor,
+          'Accent Color': state.formData.accentColor,
+          'Logo Status': state.formData.logoStatus || '(not selected)',
+
+          // — Step 6: Features & Functionality —
+          'Features Needed': state.formData.featuresNeeded.length > 0 ? state.formData.featuresNeeded.join(', ') : '(none selected)',
+          'Other Features Requested': state.formData.otherFeatures || '(none)',
+
+          // — Step 7: Budget & Timeline —
+          'Budget Range': state.formData.budget || '(not selected)',
+          'Timeline': state.formData.timeline || '(not selected)',
+          'Additional Notes': state.formData.anythingElse || '(none)',
         }),
       })
       dispatch({ type: 'SUBMIT_SUCCESS' })

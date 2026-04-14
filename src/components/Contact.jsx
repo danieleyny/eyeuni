@@ -22,9 +22,9 @@ export default function Contact() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           _subject: 'New Contact Form Submission — EYEuni',
-          name: e.target.name.value,
-          email: e.target.email.value,
-          message: e.target.message.value,
+          'Contact Name': e.target.name.value,
+          'Contact Email': e.target.email.value,
+          'Message': e.target.message.value,
         }),
       })
       if (res.ok) {

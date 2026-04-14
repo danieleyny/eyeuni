@@ -18,7 +18,7 @@ export default function StepCurrentWebsite({ formData, updateField, toggleArrayI
           <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
             <Globe className="w-5 h-5 text-primary" />
           </div>
-          <h3 className="text-2xl font-bold">Your Current Website</h3>
+          <h3 className="text-2xl font-bold">Your Current Website <span className="text-gray-500 text-lg font-normal">(Optional)</span></h3>
         </div>
         <p className="text-gray-400">
           Help us understand what's working and what needs improvement.
