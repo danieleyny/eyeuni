@@ -17,61 +17,75 @@ const TIMING = {
 // ─── Ugly Website Mockup ────────────────────────────────
 function UglyWebsite() {
   return (
-    <div className="absolute inset-0 bg-[#ffff00] overflow-hidden" style={{ fontFamily: '"Comic Sans MS", "Comic Sans", cursive' }}>
+    <div className="absolute inset-0 bg-[#f5e6c8] overflow-hidden" style={{ fontFamily: '"Comic Sans MS", "Comic Sans", cursive' }}>
       {/* Ugly nav */}
-      <div className="bg-[#ff00ff] px-2 py-1 flex items-center justify-between border-b-4 border-[#00ff00]">
-        <div className="text-[#00ff00] font-bold text-[10px] sm:text-xs drop-shadow-[1px_1px_0px_#000]">
-          ★ Bob's Amazing Website ★
+      <div className="bg-[#006400] px-2 py-1 flex items-center justify-between border-b-4 border-[#8B4513]">
+        <div className="text-[#ffff00] font-bold text-[10px] sm:text-xs drop-shadow-[1px_1px_0px_#000]">
+          🏠 Aurelian Lodge & Cabins 🌲
         </div>
         <div className="flex gap-1 sm:gap-2 text-[7px] sm:text-[9px]">
           <span className="text-white underline">Home</span>
-          <span className="text-[#ffff00] underline">About</span>
-          <span className="text-[#00ffff] underline">Links</span>
+          <span className="text-[#ffff00] underline">Rooms</span>
+          <span className="text-[#00ffff] underline">Rates</span>
           <span className="text-white underline">Guestbook</span>
         </div>
       </div>
 
       {/* Marquee */}
-      <div className="bg-[#ff0000] text-white text-[8px] sm:text-[10px] py-0.5 overflow-hidden whitespace-nowrap">
-        <div className="animate-[marquee_8s_linear_infinite] inline-block">
-          ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp; Welcome to my website!!! &nbsp;&nbsp; Please sign my guestbook!!! &nbsp;&nbsp; ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp; Best viewed in IE 6.0 &nbsp;&nbsp;
+      <div className="bg-[#8B0000] text-white text-[8px] sm:text-[10px] py-0.5 overflow-hidden whitespace-nowrap">
+        <div className="animate-[marquee_10s_linear_infinite] inline-block">
+          🌟 BOOK NOW FOR SUMMER!! 🌟 &nbsp;&nbsp; Call (845) 555-0199 for reservations!!! &nbsp;&nbsp; 🌟 FREE BREAKFAST INCLUDED!! 🌟 &nbsp;&nbsp; Family owned since 1994 &nbsp;&nbsp;
         </div>
       </div>
 
       <div className="p-2 sm:p-3">
         <div className="text-center">
-          <h1 className="text-[#0000ff] text-sm sm:text-lg font-bold animate-[blink_1s_step-end_infinite]">
-            Welcome To My WebSite!!!
+          <h1 className="text-[#8B4513] text-[11px] sm:text-base font-bold animate-[blink_1s_step-end_infinite]">
+            Welcome to Aurelian Lodge!!!
           </h1>
-          <div className="text-[#ff0000] text-[8px] sm:text-[10px] mt-1">
-            You are visitor #: <span className="bg-black text-[#00ff00] px-1 font-mono">004,721</span>
+          <div className="text-[#006400] text-[7px] sm:text-[9px] mt-0.5" style={{ fontFamily: 'Times New Roman, serif' }}>
+            ★ Accord, New York's #1 Vacation Spot!!! ★
+          </div>
+          <div className="text-[#ff0000] text-[7px] sm:text-[9px] mt-0.5">
+            You are visitor #: <span className="bg-black text-[#00ff00] px-1 font-mono">002,847</span>
           </div>
         </div>
 
-        <div className="mt-2 sm:mt-3 border-2 border-[#0000ff]" style={{ background: 'repeating-linear-gradient(45deg, #fff, #fff 5px, #eee 5px, #eee 10px)' }}>
+        <div className="mt-2 sm:mt-2 border-2 border-[#8B4513]">
           <div className="grid grid-cols-3 gap-0 text-[7px] sm:text-[9px]">
-            <div className="bg-[#008080] text-white p-1.5 border border-[#000]">
-              <div className="font-bold underline mb-1">Navigation</div>
-              <div className="text-[#ffff00]">→ Home</div>
-              <div className="text-[#ffff00]">→ Products</div>
-              <div className="text-[#ffff00]">→ Contact</div>
-              <div className="text-[#ffff00]">→ Links</div>
+            <div className="bg-[#006400] text-white p-1.5 border border-[#000]">
+              <div className="font-bold underline mb-1">Our Rooms</div>
+              <div className="text-[#ffff00]">→ Cabin A - $89</div>
+              <div className="text-[#ffff00]">→ Cabin B - $99</div>
+              <div className="text-[#ffff00]">→ Suite - $149</div>
+              <div className="text-[#ffff00]">→ Campsite - $39</div>
             </div>
             <div className="col-span-2 p-1.5 border border-[#000] bg-white">
-              <div className="text-[#800080] font-bold text-[8px] sm:text-[10px]">About Us</div>
+              <div className="text-[#8B4513] font-bold text-[8px] sm:text-[10px]">About Our Lodge</div>
               <div className="text-[#000] mt-1 leading-tight" style={{ fontFamily: 'Times New Roman, serif' }}>
-                We are the BEST company in the world!! Click here to learn more about our AMAZING products!!!
+                Nestled in the beautful Hudson Valley!! Our rustic cabins have been welcoming guests for 30 years!! Pet friendly!! Free WiFi in lobby!!
               </div>
               <div className="mt-1 text-[#ff0000] font-bold animate-[blink_0.5s_step-end_infinite]">
-                🔥 HOT DEALS! CLICK NOW!!! 🔥
+                🔥 LABOR DAY SPECIAL!! 20% OFF!! 🔥
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-2 text-[7px] sm:text-[8px]">
-          <div className="bg-[#000080] text-[#00ff00] px-1 py-0.5 border border-[#808080]">Made with Notepad</div>
-          <div className="bg-[#000080] text-[#ffff00] px-1 py-0.5 border border-[#808080]">Best viewed 800x600</div>
+        {/* Ugly image placeholder + badges */}
+        <div className="flex items-center justify-between mt-1.5">
+          <div className="flex gap-1">
+            <div className="w-10 h-7 sm:w-14 sm:h-9 bg-[#556B2F] border-2 border-[#8B4513] flex items-center justify-center">
+              <span className="text-white text-[5px] sm:text-[6px]">📷 PHOTO<br/>COMING<br/>SOON</span>
+            </div>
+            <div className="w-10 h-7 sm:w-14 sm:h-9 bg-[#8FBC8F] border-2 border-[#8B4513] flex items-center justify-center">
+              <span className="text-[#000] text-[5px] sm:text-[6px] text-center">🌲 SCENIC<br/>VIEWS!!</span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="bg-[#000080] text-[#00ff00] px-1 py-0.5 border border-[#808080] text-[6px] sm:text-[7px]">Made with FrontPage</div>
+            <div className="bg-[#000080] text-[#ffff00] px-1 py-0.5 border border-[#808080] text-[6px] sm:text-[7px]">Best viewed 800x600</div>
+          </div>
         </div>
       </div>
     </div>
