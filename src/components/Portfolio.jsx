@@ -6,8 +6,8 @@ const projects = [
   { title: 'Fleur Fund', category: 'Real Estate Investment Fund', color: 'from-cyan-600 to-blue-600', image: '/portfolio/fleurfund.jpg', url: 'https://fleurfund.com/' },
   { title: 'Laundry Day', category: 'Laundry Service', color: 'from-emerald-600 to-teal-600', image: '/portfolio/laundryday.jpg', url: 'https://laundryday.nyc/' },
   { title: 'NY Apts', category: 'Real Estate Management', color: 'from-amber-600 to-orange-600', image: '/portfolio/nyapts.jpg', url: 'https://ny-apts.com/' },
-  { title: 'Coming Soon', category: 'TBD', color: 'from-pink-600 to-rose-600', image: null, url: null },
-  { title: 'Coming Soon', category: 'TBD', color: 'from-blue-600 to-accent', image: null, url: null },
+  { title: 'Rent Overcharge', category: 'Rent Overcharge Auto Fighting System', color: 'from-pink-600 to-rose-600', image: '/portfolio/rentovercharge.jpg', url: 'https://www.rentoverchargenyc.com/' },
+  { title: 'Safe Consulting', category: 'Custom Swag Shop', color: 'from-blue-600 to-accent', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },
 ]
 
 export default function Portfolio() {
