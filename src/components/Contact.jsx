@@ -3,8 +3,8 @@ import { AnimateIn } from './useScrollAnimation'
 import { useState } from 'react'
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'dani@gmail.com', href: 'mailto:dani@gmail.com' },
-  { icon: Phone, label: 'Phone', value: '(123) 456-7890', href: 'tel:1234567890' },
+  { icon: Mail, label: 'Email', value: 'charlieeyny@gmail.com', href: 'mailto:charlieeyny@gmail.com' },
+  { icon: Phone, label: 'Phone', value: '(917) 847-4664', href: 'tel:9178474664' },
   { icon: MapPin, label: 'Location', value: 'New York, NY', href: '#' },
 ]
 
