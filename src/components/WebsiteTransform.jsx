@@ -78,127 +78,120 @@ function UglyWebsite() {
   )
 }
 
-// ─── Beautiful Website Mockup (much richer) ─────────────
+// ─── Beautiful Website Mockup ───────────────────────────
+// Luxury boutique hotel concept — dark with warm gold accents
 function BeautifulWebsite() {
   return (
-    <div className="absolute inset-0 bg-[#0a0a0f] overflow-hidden text-white">
-      {/* Modern nav */}
-      <div className="px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-sm">
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/80" />
+    <div className="absolute inset-0 bg-[#0c0c0c] overflow-hidden text-white">
+      {/* ── Full-bleed hero with "photo" background ── */}
+      <div className="relative h-[62%]">
+        {/* Simulated hero image — layered gradients for depth */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a2a1a] via-[#0d1f2d] to-[#1a1520]" />
+          {/* Warm light source top-right simulating window/sunset */}
+          <div className="absolute -top-4 -right-4 w-32 h-32 bg-[#c8a97e]/20 rounded-full blur-3xl" />
+          <div className="absolute top-6 right-8 w-16 h-16 bg-[#dbb88a]/15 rounded-full blur-2xl" />
+          {/* Depth: dark trees/building silhouette */}
+          <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-gradient-to-t from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent" />
+          {/* Simulated structure shapes */}
+          <div className="absolute bottom-[20%] left-[8%] w-[22%] h-[45%] bg-[#151515]/60 rounded-t-sm" />
+          <div className="absolute bottom-[20%] left-[32%] w-[36%] h-[55%] bg-[#181818]/50 rounded-t-sm" />
+          <div className="absolute bottom-[20%] right-[8%] w-[18%] h-[40%] bg-[#141414]/60 rounded-t-sm" />
+          {/* Warm window lights */}
+          <div className="absolute bottom-[32%] left-[36%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/70 rounded-sm" />
+          <div className="absolute bottom-[38%] left-[42%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/50 rounded-sm" />
+          <div className="absolute bottom-[32%] left-[48%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/60 rounded-sm" />
+          <div className="absolute bottom-[38%] left-[54%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/40 rounded-sm" />
+          <div className="absolute bottom-[32%] left-[60%] w-1 h-1.5 sm:w-1.5 sm:h-2 bg-[#e8c87a]/70 rounded-sm" />
+          {/* Stars */}
+          <div className="absolute top-[12%] left-[20%] w-0.5 h-0.5 bg-white/40 rounded-full" />
+          <div className="absolute top-[8%] left-[45%] w-0.5 h-0.5 bg-white/30 rounded-full" />
+          <div className="absolute top-[15%] right-[25%] w-0.5 h-0.5 bg-white/25 rounded-full" />
+          <div className="absolute top-[6%] right-[40%] w-0.5 h-0.5 bg-white/35 rounded-full" />
+        </div>
+
+        {/* Transparent nav overlaid on hero */}
+        <div className="relative z-10 px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] sm:text-[12px] font-light tracking-[0.25em] uppercase text-white/90" style={{ fontFamily: 'Georgia, serif' }}>
+              Aurelian
+            </span>
           </div>
-          <span className="font-bold text-[10px] sm:text-xs tracking-tight">Luxe<span className="text-blue-400">Brand</span></span>
-        </div>
-        <div className="flex gap-2 sm:gap-3 text-[7px] sm:text-[9px] text-gray-400">
-          <span className="text-white">Home</span>
-          <span>Services</span>
-          <span>About</span>
-          <span className="hidden sm:inline">Contact</span>
-        </div>
-        <div className="px-2 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[6px] sm:text-[8px] font-medium shadow-lg shadow-blue-600/20">Get Started</div>
-      </div>
-
-      {/* Hero section with background gradient */}
-      <div className="relative">
-        {/* Background gradient orb */}
-        <div className="absolute top-2 right-4 w-20 h-20 sm:w-32 sm:h-32 bg-blue-600/20 rounded-full blur-2xl" />
-        <div className="absolute top-8 right-12 w-10 h-10 sm:w-16 sm:h-16 bg-indigo-500/15 rounded-full blur-xl" />
-
-        <div className="px-3 sm:px-4 pt-3 sm:pt-4 relative">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="flex-1 min-w-0">
-              <div className="text-[5px] sm:text-[7px] text-blue-400 font-semibold tracking-[0.2em] uppercase mb-0.5 sm:mb-1">Premium Solutions</div>
-              <div className="text-[11px] sm:text-[15px] font-extrabold leading-[1.1] mb-1 sm:mb-1.5">
-                Elevate Your
-                <br />
-                <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Digital Presence</span>
-              </div>
-              <div className="text-[6px] sm:text-[8px] text-gray-400 leading-relaxed mb-1.5 sm:mb-2 max-w-[85%]">
-                Beautiful, high-performance websites that convert visitors into loyal customers.
-              </div>
-              <div className="flex gap-1.5">
-                <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[5px] sm:text-[7px] font-semibold shadow-lg shadow-blue-600/25 flex items-center gap-0.5">
-                  Get Started <span className="text-[8px]">→</span>
-                </div>
-                <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/15 rounded-full text-[5px] sm:text-[7px] text-gray-300 hover:border-white/30">View Work</div>
-              </div>
-            </div>
-            {/* Hero image placeholder */}
-            <div className="w-20 h-16 sm:w-28 sm:h-22 rounded-xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-white/10 flex-shrink-0 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-indigo-600/20" />
-              {/* Browser mockup inside */}
-              <div className="absolute inset-1.5 sm:inset-2 rounded-md bg-[#12121a] border border-white/10 overflow-hidden">
-                <div className="h-1 sm:h-1.5 bg-[#1a1a2e] flex items-center gap-0.5 px-1">
-                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-red-400/60" />
-                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-yellow-400/60" />
-                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-green-400/60" />
-                </div>
-                <div className="p-1">
-                  <div className="h-1 w-8 bg-blue-500/30 rounded-full mb-0.5" />
-                  <div className="h-0.5 w-12 bg-white/10 rounded-full mb-0.5" />
-                  <div className="h-0.5 w-10 bg-white/10 rounded-full" />
-                </div>
-              </div>
-              {/* Glow effect */}
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-500/30 rounded-full blur-lg" />
-            </div>
+          <div className="flex gap-2 sm:gap-4 text-[6px] sm:text-[8px] text-white/50 tracking-wider uppercase">
+            <span className="text-white/90">Home</span>
+            <span>Rooms</span>
+            <span>Dining</span>
+            <span className="hidden sm:inline">Experience</span>
+          </div>
+          <div className="px-2 sm:px-3 py-0.5 sm:py-1 border border-[#c8a97e]/40 text-[5px] sm:text-[7px] text-[#c8a97e] tracking-wider uppercase">
+            Reserve
           </div>
         </div>
+
+        {/* Hero text overlaid on image */}
+        <div className="absolute bottom-[18%] left-0 right-0 text-center z-10 px-4">
+          <div className="text-[5px] sm:text-[7px] text-[#c8a97e] tracking-[0.35em] uppercase mb-1 sm:mb-1.5 font-medium">
+            Accord, New York
+          </div>
+          <div className="text-[14px] sm:text-[20px] font-light leading-[1.1] tracking-wide mb-1 sm:mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+            Where Luxury Meets
+            <br />
+            <span className="italic text-[#c8a97e]/90">Nature</span>
+          </div>
+          <div className="flex justify-center gap-2 sm:gap-3">
+            <div className="px-2.5 sm:px-4 py-0.5 sm:py-1 bg-[#c8a97e] text-[#0c0c0c] text-[5px] sm:text-[7px] font-semibold tracking-wider uppercase">
+              Book Your Stay
+            </div>
+            <div className="px-2.5 sm:px-4 py-0.5 sm:py-1 border border-white/30 text-[5px] sm:text-[7px] tracking-wider uppercase text-white/80">
+              View Gallery
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Stats bar */}
-      <div className="px-3 sm:px-4 mt-2 sm:mt-3">
-        <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
+      {/* ── Content below hero ── */}
+      <div className="relative bg-[#0c0c0c] px-3 sm:px-5">
+        {/* Overlapping feature cards — pulled up into the hero */}
+        <div className="grid grid-cols-3 gap-1 sm:gap-2 -mt-3 sm:-mt-4 relative z-20">
           {[
-            { num: '500+', label: 'Projects', icon: '📊' },
-            { num: '98%', label: 'Satisfaction', icon: '⭐' },
-            { num: '24/7', label: 'Support', icon: '🛡️' },
-            { num: '50+', label: 'Clients', icon: '🤝' },
-          ].map((s) => (
-            <div key={s.label} className="text-center py-1 sm:py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-              <div className="text-[6px] sm:text-[8px] mb-0.5">{s.icon}</div>
-              <div className="text-[8px] sm:text-[11px] font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">{s.num}</div>
-              <div className="text-[5px] sm:text-[7px] text-gray-500">{s.label}</div>
+            { label: 'Suites', value: '24', sub: 'Luxury rooms' },
+            { label: 'Rating', value: '4.9', sub: '500+ reviews' },
+            { label: 'Acres', value: '68', sub: 'Private estate' },
+          ].map((item) => (
+            <div key={item.label} className="bg-[#161616] border border-white/[0.06] p-1.5 sm:p-2 text-center">
+              <div className="text-[9px] sm:text-[13px] font-light text-[#c8a97e]" style={{ fontFamily: 'Georgia, serif' }}>{item.value}</div>
+              <div className="text-[5px] sm:text-[7px] text-white/40 tracking-wider uppercase mt-0.5">{item.sub}</div>
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Service cards */}
-      <div className="px-3 sm:px-4 mt-2 sm:mt-3">
-        <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
-          {[
-            { title: 'Web Design', color: 'from-blue-500/20 to-blue-600/5', icon: '🎨' },
-            { title: 'Development', color: 'from-indigo-500/20 to-indigo-600/5', icon: '⚡' },
-            { title: 'SEO & Growth', color: 'from-purple-500/20 to-purple-600/5', icon: '📈' },
-          ].map((card) => (
-            <div key={card.title} className={`rounded-lg bg-gradient-to-br ${card.color} border border-white/[0.06] p-1.5 sm:p-2`}>
-              <div className="text-[8px] sm:text-[10px] mb-0.5">{card.icon}</div>
-              <div className="text-[6px] sm:text-[8px] font-semibold mb-0.5">{card.title}</div>
-              <div className="h-0.5 w-6 bg-white/10 rounded-full mb-0.5" />
-              <div className="h-0.5 w-10 bg-white/5 rounded-full" />
+        {/* Rooms preview */}
+        <div className="mt-2 sm:mt-3">
+          <div className="flex items-center justify-between mb-1 sm:mb-1.5">
+            <div>
+              <div className="text-[5px] sm:text-[6px] text-[#c8a97e] tracking-[0.3em] uppercase">Accommodations</div>
+              <div className="text-[8px] sm:text-[11px] font-light" style={{ fontFamily: 'Georgia, serif' }}>Our Signature Suites</div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Testimonial snippet */}
-      <div className="px-3 sm:px-4 mt-2 sm:mt-2.5">
-        <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-1.5 sm:p-2 flex items-start gap-1.5 sm:gap-2">
-          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center text-[6px] sm:text-[8px] font-bold">J</div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1 mb-0.5">
-              <span className="text-[6px] sm:text-[8px] font-semibold">Jessica M.</span>
-              <div className="flex gap-px">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-[5px] sm:text-[7px] text-yellow-400">★</span>
-                ))}
+            <div className="text-[5px] sm:text-[7px] text-[#c8a97e]/60 tracking-wider uppercase">View all →</div>
+          </div>
+          <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
+            {[
+              { name: 'The Canopy', price: '$420', grad: 'from-[#1a2418] to-[#0f1a0f]' },
+              { name: 'River Stone', price: '$580', grad: 'from-[#1a1a24] to-[#12121a]' },
+              { name: 'Summit View', price: '$750', grad: 'from-[#241a1a] to-[#1a0f12]' },
+            ].map((room) => (
+              <div key={room.name} className="relative overflow-hidden rounded-sm">
+                <div className={`aspect-[3/2] bg-gradient-to-br ${room.grad}`}>
+                  {/* Simulated room photo lighting */}
+                  <div className="absolute top-1 right-1 w-3 h-3 bg-[#e8c87a]/20 rounded-full blur-sm" />
+                  <div className="absolute bottom-0 inset-x-0 h-[60%] bg-gradient-to-t from-black/70 to-transparent" />
+                  <div className="absolute bottom-1 left-1 right-1">
+                    <div className="text-[5px] sm:text-[7px] font-medium">{room.name}</div>
+                    <div className="text-[4px] sm:text-[6px] text-[#c8a97e]">from {room.price}/night</div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="text-[5px] sm:text-[7px] text-gray-400 leading-relaxed italic">
-              "Incredible work. Our conversions jumped 340% after the redesign..."
-            </div>
+            ))}
           </div>
         </div>
       </div>
