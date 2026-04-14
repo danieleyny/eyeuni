@@ -1,24 +1,17 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimateIn } from './useScrollAnimation'
 
 // Animation phases
-const PHASE_UGLY = 0      // Show ugly site
-const PHASE_RUN = 1       // Character runs in
-const PHASE_SMASH = 2     // Character smashes screen
-const PHASE_SHATTER = 3   // Screen shatters
-const PHASE_REVEAL = 4    // Beautiful site reveals
-const PHASE_DISPLAY = 5   // Show beautiful site
-const PHASE_RESET = 6     // Fade back
+const PHASE_UGLY = 0
+const PHASE_WIPE = 1
+const PHASE_BEAUTIFUL = 2
+const PHASE_RESET = 3
 
-// Timing (ms)
 const TIMING = {
-  [PHASE_UGLY]: 1200,
-  [PHASE_RUN]: 1400,
-  [PHASE_SMASH]: 600,
-  [PHASE_SHATTER]: 1000,
-  [PHASE_REVEAL]: 1000,
-  [PHASE_DISPLAY]: 2500,
-  [PHASE_RESET]: 800,
+  [PHASE_UGLY]: 2800,
+  [PHASE_WIPE]: 1800,
+  [PHASE_BEAUTIFUL]: 4000,
+  [PHASE_RESET]: 1000,
 }
 
 // ─── Ugly Website Mockup ────────────────────────────────
@@ -31,21 +24,20 @@ function UglyWebsite() {
           ★ Bob's Amazing Website ★
         </div>
         <div className="flex gap-1 sm:gap-2 text-[7px] sm:text-[9px]">
-          <span className="text-white underline cursor-pointer">Home</span>
-          <span className="text-[#ffff00] underline cursor-pointer">About</span>
-          <span className="text-[#00ffff] underline cursor-pointer">Links</span>
-          <span className="text-white underline cursor-pointer">Guestbook</span>
+          <span className="text-white underline">Home</span>
+          <span className="text-[#ffff00] underline">About</span>
+          <span className="text-[#00ffff] underline">Links</span>
+          <span className="text-white underline">Guestbook</span>
         </div>
       </div>
 
-      {/* Marquee banner */}
+      {/* Marquee */}
       <div className="bg-[#ff0000] text-white text-[8px] sm:text-[10px] py-0.5 overflow-hidden whitespace-nowrap">
         <div className="animate-[marquee_8s_linear_infinite] inline-block">
-          ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp;&nbsp; Welcome to my website!!! Please sign my guestbook!!! &nbsp;&nbsp;&nbsp; ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp;&nbsp; Best viewed in Internet Explorer 6.0 &nbsp;&nbsp;&nbsp;
+          ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp; Welcome to my website!!! &nbsp;&nbsp; Please sign my guestbook!!! &nbsp;&nbsp; ⚠️ UNDER CONSTRUCTION ⚠️ &nbsp;&nbsp; Best viewed in IE 6.0 &nbsp;&nbsp;
         </div>
       </div>
 
-      {/* Main content */}
       <div className="p-2 sm:p-3">
         <div className="text-center">
           <h1 className="text-[#0000ff] text-sm sm:text-lg font-bold animate-[blink_1s_step-end_infinite]">
@@ -56,7 +48,6 @@ function UglyWebsite() {
           </div>
         </div>
 
-        {/* Ugly table layout */}
         <div className="mt-2 sm:mt-3 border-2 border-[#0000ff]" style={{ background: 'repeating-linear-gradient(45deg, #fff, #fff 5px, #eee 5px, #eee 10px)' }}>
           <div className="grid grid-cols-3 gap-0 text-[7px] sm:text-[9px]">
             <div className="bg-[#008080] text-white p-1.5 border border-[#000]">
@@ -78,7 +69,6 @@ function UglyWebsite() {
           </div>
         </div>
 
-        {/* Hit counter & badges */}
         <div className="flex items-center justify-center gap-2 mt-2 text-[7px] sm:text-[8px]">
           <div className="bg-[#000080] text-[#00ff00] px-1 py-0.5 border border-[#808080]">Made with Notepad</div>
           <div className="bg-[#000080] text-[#ffff00] px-1 py-0.5 border border-[#808080]">Best viewed 800x600</div>
@@ -88,314 +78,225 @@ function UglyWebsite() {
   )
 }
 
-// ─── Beautiful Website Mockup ───────────────────────────
+// ─── Beautiful Website Mockup (much richer) ─────────────
 function BeautifulWebsite() {
   return (
     <div className="absolute inset-0 bg-[#0a0a0f] overflow-hidden text-white">
       {/* Modern nav */}
-      <div className="px-3 sm:px-4 py-2 flex items-center justify-between border-b border-white/10">
+      <div className="px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-sm">
         <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600" />
-          <span className="font-semibold text-[10px] sm:text-xs">Luxe Brand</span>
+          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/80" />
+          </div>
+          <span className="font-bold text-[10px] sm:text-xs tracking-tight">Luxe<span className="text-blue-400">Brand</span></span>
         </div>
         <div className="flex gap-2 sm:gap-3 text-[7px] sm:text-[9px] text-gray-400">
-          <span>Home</span>
+          <span className="text-white">Home</span>
           <span>Services</span>
           <span>About</span>
           <span className="hidden sm:inline">Contact</span>
         </div>
-        <div className="px-2 py-0.5 bg-blue-600 rounded text-[7px] sm:text-[8px] font-medium">Get Started</div>
+        <div className="px-2 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[6px] sm:text-[8px] font-medium shadow-lg shadow-blue-600/20">Get Started</div>
       </div>
 
-      {/* Hero */}
-      <div className="px-3 sm:px-4 pt-3 sm:pt-5">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <div className="text-[6px] sm:text-[8px] text-blue-400 font-medium tracking-wider uppercase mb-1">Premium Solutions</div>
-            <div className="text-xs sm:text-base font-bold leading-tight mb-1.5 sm:mb-2">
-              Elevate Your
-              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"> Digital Presence</span>
+      {/* Hero section with background gradient */}
+      <div className="relative">
+        {/* Background gradient orb */}
+        <div className="absolute top-2 right-4 w-20 h-20 sm:w-32 sm:h-32 bg-blue-600/20 rounded-full blur-2xl" />
+        <div className="absolute top-8 right-12 w-10 h-10 sm:w-16 sm:h-16 bg-indigo-500/15 rounded-full blur-xl" />
+
+        <div className="px-3 sm:px-4 pt-3 sm:pt-4 relative">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="text-[5px] sm:text-[7px] text-blue-400 font-semibold tracking-[0.2em] uppercase mb-0.5 sm:mb-1">Premium Solutions</div>
+              <div className="text-[11px] sm:text-[15px] font-extrabold leading-[1.1] mb-1 sm:mb-1.5">
+                Elevate Your
+                <br />
+                <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Digital Presence</span>
+              </div>
+              <div className="text-[6px] sm:text-[8px] text-gray-400 leading-relaxed mb-1.5 sm:mb-2 max-w-[85%]">
+                Beautiful, high-performance websites that convert visitors into loyal customers.
+              </div>
+              <div className="flex gap-1.5">
+                <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[5px] sm:text-[7px] font-semibold shadow-lg shadow-blue-600/25 flex items-center gap-0.5">
+                  Get Started <span className="text-[8px]">→</span>
+                </div>
+                <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/15 rounded-full text-[5px] sm:text-[7px] text-gray-300 hover:border-white/30">View Work</div>
+              </div>
             </div>
-            <div className="text-[7px] sm:text-[9px] text-gray-400 leading-relaxed mb-2">
-              Beautiful, high-performance websites that convert visitors into customers.
+            {/* Hero image placeholder */}
+            <div className="w-20 h-16 sm:w-28 sm:h-22 rounded-xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-white/10 flex-shrink-0 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-indigo-600/20" />
+              {/* Browser mockup inside */}
+              <div className="absolute inset-1.5 sm:inset-2 rounded-md bg-[#12121a] border border-white/10 overflow-hidden">
+                <div className="h-1 sm:h-1.5 bg-[#1a1a2e] flex items-center gap-0.5 px-1">
+                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-red-400/60" />
+                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-yellow-400/60" />
+                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-green-400/60" />
+                </div>
+                <div className="p-1">
+                  <div className="h-1 w-8 bg-blue-500/30 rounded-full mb-0.5" />
+                  <div className="h-0.5 w-12 bg-white/10 rounded-full mb-0.5" />
+                  <div className="h-0.5 w-10 bg-white/10 rounded-full" />
+                </div>
+              </div>
+              {/* Glow effect */}
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-500/30 rounded-full blur-lg" />
             </div>
-            <div className="flex gap-1.5">
-              <div className="px-2 py-1 bg-blue-600 rounded text-[6px] sm:text-[8px] font-medium">Learn More</div>
-              <div className="px-2 py-1 border border-white/20 rounded text-[6px] sm:text-[8px]">View Work</div>
-            </div>
-          </div>
-          <div className="w-16 h-14 sm:w-24 sm:h-20 rounded-lg bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-white/10 flex items-center justify-center flex-shrink-0">
-            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-indigo-500/30 border border-white/10" />
           </div>
         </div>
+      </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-2 mt-3 sm:mt-4">
+      {/* Stats bar */}
+      <div className="px-3 sm:px-4 mt-2 sm:mt-3">
+        <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
           {[
-            { num: '500+', label: 'Projects' },
-            { num: '98%', label: 'Satisfaction' },
-            { num: '24/7', label: 'Support' },
+            { num: '500+', label: 'Projects', icon: '📊' },
+            { num: '98%', label: 'Satisfaction', icon: '⭐' },
+            { num: '24/7', label: 'Support', icon: '🛡️' },
+            { num: '50+', label: 'Clients', icon: '🤝' },
           ].map((s) => (
-            <div key={s.label} className="text-center py-1.5 rounded-lg bg-white/5 border border-white/5">
-              <div className="text-[9px] sm:text-xs font-bold text-blue-400">{s.num}</div>
-              <div className="text-[6px] sm:text-[8px] text-gray-500">{s.label}</div>
+            <div key={s.label} className="text-center py-1 sm:py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+              <div className="text-[6px] sm:text-[8px] mb-0.5">{s.icon}</div>
+              <div className="text-[8px] sm:text-[11px] font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">{s.num}</div>
+              <div className="text-[5px] sm:text-[7px] text-gray-500">{s.label}</div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Service cards */}
+      <div className="px-3 sm:px-4 mt-2 sm:mt-3">
+        <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
+          {[
+            { title: 'Web Design', color: 'from-blue-500/20 to-blue-600/5', icon: '🎨' },
+            { title: 'Development', color: 'from-indigo-500/20 to-indigo-600/5', icon: '⚡' },
+            { title: 'SEO & Growth', color: 'from-purple-500/20 to-purple-600/5', icon: '📈' },
+          ].map((card) => (
+            <div key={card.title} className={`rounded-lg bg-gradient-to-br ${card.color} border border-white/[0.06] p-1.5 sm:p-2`}>
+              <div className="text-[8px] sm:text-[10px] mb-0.5">{card.icon}</div>
+              <div className="text-[6px] sm:text-[8px] font-semibold mb-0.5">{card.title}</div>
+              <div className="h-0.5 w-6 bg-white/10 rounded-full mb-0.5" />
+              <div className="h-0.5 w-10 bg-white/5 rounded-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Testimonial snippet */}
+      <div className="px-3 sm:px-4 mt-2 sm:mt-2.5">
+        <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-1.5 sm:p-2 flex items-start gap-1.5 sm:gap-2">
+          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center text-[6px] sm:text-[8px] font-bold">J</div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1 mb-0.5">
+              <span className="text-[6px] sm:text-[8px] font-semibold">Jessica M.</span>
+              <div className="flex gap-px">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-[5px] sm:text-[7px] text-yellow-400">★</span>
+                ))}
+              </div>
+            </div>
+            <div className="text-[5px] sm:text-[7px] text-gray-400 leading-relaxed italic">
+              "Incredible work. Our conversions jumped 340% after the redesign..."
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
-// ─── SVG Running Character ──────────────────────────────
-function RunningCharacter({ phase }) {
-  const isRunning = phase === PHASE_RUN
-  const isSmashing = phase === PHASE_SMASH
-
-  // Position: runs from -60px to ~65% of screen width
-  const getTransform = () => {
-    if (phase < PHASE_RUN) return 'translateX(-60px)'
-    if (isRunning) return 'translateX(calc(65% - 20px))'
-    if (isSmashing) return 'translateX(calc(65% - 20px)) translateY(-20px)'
-    return 'translateX(calc(65% - 20px)) translateY(-20px) scale(0)'
-  }
-
+// ─── Wipe Transition Effect ─────────────────────────────
+function WipeTransition({ active, children }) {
   return (
     <div
-      className="absolute bottom-2 left-0 z-[4]"
+      className="absolute inset-0 z-[10] pointer-events-none flex items-center justify-center"
       style={{
-        transform: getTransform(),
-        transition: isRunning
-          ? 'transform 1.3s cubic-bezier(0.25, 0.1, 0.25, 1)'
-          : isSmashing
-            ? 'transform 0.3s cubic-bezier(0.6, -0.28, 0.74, 0.05)'
-            : 'transform 0.3s ease',
-        opacity: phase > PHASE_SHATTER ? 0 : 1,
+        opacity: active ? 1 : 0,
+        transition: 'opacity 0.3s ease',
       }}
     >
-      <svg
-        width="36"
-        height="40"
-        viewBox="0 0 36 40"
-        className={isRunning ? 'animate-[characterBounce_0.35s_ease-in-out_infinite]' : ''}
+      {/* Sweeping gradient overlay */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-accent via-primary to-accent"
+        style={{
+          transform: active ? 'translateX(0)' : 'translateX(-110%)',
+          transition: 'transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)',
+        }}
+      />
+      {/* Title text centered */}
+      <div
+        className="relative z-10 text-center"
+        style={{
+          opacity: active ? 1 : 0,
+          transform: active ? 'scale(1)' : 'scale(0.8)',
+          transition: 'opacity 0.4s ease 0.3s, transform 0.4s ease 0.3s',
+        }}
       >
-        {/* Head */}
-        <circle cx="18" cy="8" r="6" fill="#b3c8f4" />
-        {/* Eyes */}
-        <circle cx="16" cy="7" r="1" fill="#0a0a0f" />
-        <circle cx="20" cy="7" r="1" fill="#0a0a0f" />
-        {/* Determined mouth */}
-        <line x1="15" y1="10" x2="21" y2="10" stroke="#0a0a0f" strokeWidth="1.2" strokeLinecap="round" />
-        {/* Body */}
-        <rect x="14" y="14" width="8" height="10" rx="2" fill="#0f31b8" />
-        {/* Belt */}
-        <rect x="14" y="19" width="8" height="2" fill="#b3c8f4" />
-        {/* Arms */}
-        {isSmashing ? (
-          <>
-            {/* Smashing pose - arms raised with hammer */}
-            <line x1="14" y1="16" x2="6" y2="8" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="22" y1="16" x2="30" y2="8" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-            {/* Hammer */}
-            <rect x="26" y="2" width="8" height="6" rx="1" fill="#888" />
-            <line x1="30" y1="8" x2="30" y2="3" stroke="#a0522d" strokeWidth="2" />
-          </>
-        ) : (
-          <>
-            {/* Running arms */}
-            <g className={isRunning ? 'animate-[armSwing_0.35s_ease-in-out_infinite]' : ''} style={{ transformOrigin: '14px 16px' }}>
-              <line x1="14" y1="16" x2="6" y2="22" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-            </g>
-            <g className={isRunning ? 'animate-[armSwingAlt_0.35s_ease-in-out_infinite]' : ''} style={{ transformOrigin: '22px 16px' }}>
-              <line x1="22" y1="16" x2="30" y2="22" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-            </g>
-          </>
-        )}
-        {/* Legs */}
-        <g className={isRunning ? 'animate-[legRun_0.35s_ease-in-out_infinite]' : ''} style={{ transformOrigin: '16px 24px' }}>
-          <line x1="16" y1="24" x2="12" y2="36" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="12" y1="36" x2="10" y2="38" stroke="#0f31b8" strokeWidth="3" strokeLinecap="round" />
-        </g>
-        <g className={isRunning ? 'animate-[legRunAlt_0.35s_ease-in-out_infinite]' : ''} style={{ transformOrigin: '20px 24px' }}>
-          <line x1="20" y1="24" x2="24" y2="36" stroke="#b3c8f4" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="24" y1="36" x2="26" y2="38" stroke="#0f31b8" strokeWidth="3" strokeLinecap="round" />
-        </g>
-      </svg>
+        {children}
+      </div>
     </div>
   )
 }
 
-// ─── Shatter Pieces ─────────────────────────────────────
-// phase: 'hidden' (default), 'appear' (crack moment), 'explode' (fly out)
-function ShatterOverlay({ phase }) {
-  const pieces = useRef(
-    Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      x: (i % 4) * 25,
-      y: Math.floor(i / 4) * 33,
-      w: 26,
-      h: 34,
-      rotation: (Math.random() - 0.5) * 180,
-      tx: (Math.random() - 0.5) * 400,
-      ty: (Math.random() - 0.5) * 300 - 50,
-      delay: Math.random() * 0.15,
-    }))
-  ).current
-
-  if (phase === 'hidden') return null
-
-  return (
-    <div className="absolute inset-0 z-[6] pointer-events-none">
-      {pieces.map((p) => (
-        <div
-          key={p.id}
-          className="absolute border border-white/30"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: `${p.w}%`,
-            height: `${p.h}%`,
-            background: 'linear-gradient(135deg, rgba(179,200,244,0.15), rgba(15,49,184,0.08))',
-            boxShadow: 'inset 0 0 20px rgba(255,255,255,0.1)',
-            transform: phase === 'explode'
-              ? `translate(${p.tx}px, ${p.ty}px) rotate(${p.rotation}deg) scale(0.2)`
-              : 'translate(0, 0) rotate(0deg) scale(1)',
-            opacity: phase === 'explode' ? 0 : 0.9,
-            transition: phase === 'explode'
-              ? `all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${p.delay}s`
-              : 'none',
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
-// ─── Crack Lines SVG ────────────────────────────────────
-function CrackLines({ visible }) {
-  return (
-    <svg
-      className="absolute inset-0 w-full h-full z-25 pointer-events-none"
-      viewBox="0 0 400 300"
-      style={{
-        opacity: visible ? 1 : 0,
-        transition: 'opacity 0.15s ease',
-      }}
-    >
-      {/* Impact point at ~65%, 50% */}
-      <g stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.8">
-        {/* Main cracks radiating from impact */}
-        <path d="M260,150 L200,80 L180,20" className={visible ? 'animate-[crackDraw_0.3s_ease-out_forwards]' : ''} />
-        <path d="M260,150 L310,90 L350,30" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.05s_forwards]' : ''} />
-        <path d="M260,150 L340,170 L400,160" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.1s_forwards]' : ''} />
-        <path d="M260,150 L300,230 L320,280" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.08s_forwards]' : ''} />
-        <path d="M260,150 L200,200 L150,260" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.12s_forwards]' : ''} />
-        <path d="M260,150 L160,130 L80,100" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.06s_forwards]' : ''} />
-        <path d="M260,150 L220,220 L200,290" className={visible ? 'animate-[crackDraw_0.3s_ease-out_0.1s_forwards]' : ''} />
-        {/* Secondary branching cracks */}
-        <path d="M200,80 L150,60" strokeWidth="1" opacity="0.5" className={visible ? 'animate-[crackDraw_0.2s_ease-out_0.2s_forwards]' : ''} />
-        <path d="M310,90 L330,50" strokeWidth="1" opacity="0.5" className={visible ? 'animate-[crackDraw_0.2s_ease-out_0.2s_forwards]' : ''} />
-        <path d="M300,230 L260,260" strokeWidth="1" opacity="0.5" className={visible ? 'animate-[crackDraw_0.2s_ease-out_0.22s_forwards]' : ''} />
-      </g>
-    </svg>
-  )
-}
-
-// ─── Spark Particles (Canvas) ───────────────────────────
-function SparkCanvas({ active }) {
+// ─── Sparkle Particles (Canvas) ─────────────────────────
+function SparkleCanvas({ active }) {
   const canvasRef = useRef(null)
-  const particlesRef = useRef([])
   const animRef = useRef(null)
-
-  const createParticles = useCallback(() => {
-    const particles = []
-    for (let i = 0; i < 40; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const speed = 2 + Math.random() * 6
-      particles.push({
-        x: 0.65,  // 65% from left (impact point)
-        y: 0.5,   // center
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 2,
-        size: 1 + Math.random() * 3,
-        life: 1,
-        decay: 0.015 + Math.random() * 0.02,
-        color: Math.random() > 0.5
-          ? `rgba(179, 200, 244, `    // primary blue
-          : `rgba(15, 49, 184, `,      // accent blue
-      })
-    }
-    return particles
-  }, [])
+  const particlesRef = useRef([])
 
   useEffect(() => {
     if (!active || !canvasRef.current) return
-
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
     canvas.width = canvas.offsetWidth * 2
     canvas.height = canvas.offsetHeight * 2
     ctx.scale(2, 2)
+    const w = canvas.offsetWidth
+    const h = canvas.offsetHeight
 
-    particlesRef.current = createParticles()
+    // Create rising sparkle particles
+    particlesRef.current = Array.from({ length: 30 }, () => ({
+      x: Math.random() * w,
+      y: h + Math.random() * 20,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: -(1 + Math.random() * 2),
+      size: 1 + Math.random() * 2,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.01,
+    }))
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-
+      ctx.clearRect(0, 0, w, h)
       let alive = false
-      particlesRef.current.forEach((p) => {
+      particlesRef.current.forEach(p => {
         if (p.life <= 0) return
         alive = true
-        p.x += p.vx / canvas.offsetWidth * 10
-        p.y += p.vy / canvas.offsetHeight * 10
-        p.vy += 0.15 // gravity
+        p.x += p.vx
+        p.y += p.vy
         p.life -= p.decay
 
-        const px = p.x * canvas.offsetWidth
-        const py = p.y * canvas.offsetHeight
-
         ctx.beginPath()
-        ctx.arc(px, py, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = p.color + (p.life * 0.8) + ')'
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(179, 200, 244, ${p.life * 0.6})`
         ctx.fill()
 
-        // Glow
         ctx.beginPath()
-        ctx.arc(px, py, p.size * 2, 0, Math.PI * 2)
-        ctx.fillStyle = p.color + (p.life * 0.2) + ')'
+        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(15, 49, 184, ${p.life * 0.15})`
         ctx.fill()
       })
-
-      if (alive) {
-        animRef.current = requestAnimationFrame(animate)
-      }
+      if (alive) animRef.current = requestAnimationFrame(animate)
     }
-
     animRef.current = requestAnimationFrame(animate)
-
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current)
-    }
-  }, [active, createParticles])
+    return () => { if (animRef.current) cancelAnimationFrame(animRef.current) }
+  }, [active])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full z-[7] pointer-events-none"
-      style={{ opacity: active ? 1 : 0 }}
-    />
-  )
-}
-
-// ─── Flash Effect ───────────────────────────────────────
-function ImpactFlash({ visible }) {
-  return (
-    <div
-      className="absolute inset-0 z-[9] pointer-events-none bg-white"
-      style={{
-        opacity: visible ? 0.7 : 0,
-        transition: visible ? 'opacity 0.05s ease' : 'opacity 0.3s ease',
-      }}
+      className="absolute inset-0 w-full h-full z-[3] pointer-events-none"
+      style={{ opacity: active ? 1 : 0, transition: 'opacity 0.5s ease' }}
     />
   )
 }
@@ -407,56 +308,36 @@ export default function WebsiteTransform() {
   const sectionRef = useRef(null)
   const timeoutRef = useRef(null)
 
-  // Intersection observer for scroll trigger
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !inView) {
-          setInView(true)
-        }
-      },
+      ([entry]) => { if (entry.isIntersecting && !inView) setInView(true) },
       { threshold: 0.3 }
     )
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [inView])
 
-  // Animation loop
   useEffect(() => {
     if (!inView) return
-
     const advancePhase = () => {
-      setPhase((prev) => {
+      setPhase(prev => {
         const next = prev >= PHASE_RESET ? PHASE_UGLY : prev + 1
         timeoutRef.current = setTimeout(advancePhase, TIMING[next] || TIMING[PHASE_UGLY])
         return next
       })
     }
-
     timeoutRef.current = setTimeout(advancePhase, TIMING[PHASE_UGLY])
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current) }
   }, [inView])
 
-  const showUgly = phase <= PHASE_SMASH
-  const showCracks = phase === PHASE_SMASH || phase === PHASE_SHATTER
-  const showSparks = phase === PHASE_SMASH || phase === PHASE_SHATTER
-  const showFlash = phase === PHASE_SMASH
-  const showBeautiful = phase >= PHASE_REVEAL && phase <= PHASE_DISPLAY
-  const showCharacter = phase >= PHASE_RUN && phase <= PHASE_SHATTER
-
-  // Shatter overlay: hidden → appear on smash → explode on shatter → hidden after
-  const shatterPhase = phase === PHASE_SMASH
-    ? 'appear'
-    : phase === PHASE_SHATTER
-      ? 'explode'
-      : 'hidden'
+  const showUgly = phase === PHASE_UGLY
+  const showWipe = phase === PHASE_WIPE
+  const showBeautiful = phase === PHASE_BEAUTIFUL
+  const showSparkles = phase === PHASE_BEAUTIFUL
 
   return (
     <section ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
-      {/* Background effects */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark-card/50 to-dark" />
       <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-[pulse-glow_6s_ease-in-out_infinite]" />
       <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-[pulse-glow_8s_ease-in-out_infinite_1s]" />
@@ -481,77 +362,73 @@ export default function WebsiteTransform() {
         {/* The Laptop Animation */}
         <AnimateIn delay={200}>
           <div className="max-w-2xl mx-auto">
-            {/* Laptop frame */}
             <div className="relative">
               {/* Screen bezel */}
               <div className="bg-[#1a1a2e] rounded-t-2xl p-2 sm:p-3 pb-0 border border-dark-border border-b-0">
-                {/* Camera notch */}
                 <div className="flex justify-center mb-1.5 sm:mb-2">
                   <div className="w-2 h-2 rounded-full bg-gray-700 ring-1 ring-gray-600" />
                 </div>
 
-                {/* Screen area */}
+                {/* Screen */}
                 <div className="relative aspect-[16/10] rounded-sm overflow-hidden bg-[#0a0a0f]">
-                  {/* Layer 1: Ugly website */}
+                  {/* Ugly website */}
                   <div
                     className="absolute inset-0 z-[1]"
                     style={{
                       opacity: showUgly ? 1 : 0,
-                      transition: 'opacity 0.3s ease',
+                      transition: 'opacity 0.5s ease',
                     }}
                   >
                     <UglyWebsite />
                   </div>
 
-                  {/* Layer 2: Beautiful website (underneath shatter, above ugly) */}
+                  {/* Beautiful website */}
                   <div
                     className="absolute inset-0 z-[2]"
                     style={{
                       opacity: showBeautiful ? 1 : 0,
-                      transform: showBeautiful ? 'scale(1)' : 'scale(0.95)',
-                      transition: 'opacity 0.8s ease 0.2s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+                      transition: 'opacity 0.6s ease 0.8s',
                     }}
                   >
                     <BeautifulWebsite />
                   </div>
 
-                  {/* Layer 3: Crack lines */}
-                  <div className="absolute inset-0 z-[5]">
-                    <CrackLines visible={showCracks} />
-                  </div>
+                  {/* Sparkle particles on reveal */}
+                  <SparkleCanvas active={showSparkles} />
 
-                  {/* Layer 4: Shatter pieces — only rendered during smash/shatter */}
-                  <ShatterOverlay phase={shatterPhase} />
+                  {/* Wipe transition with "The EYEuni Effect" */}
+                  <WipeTransition active={showWipe}>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <svg width="28" height="28" viewBox="0 0 36 36" fill="none" className="drop-shadow-lg">
+                        <rect width="36" height="36" rx="8" fill="white" fillOpacity="0.2"/>
+                        <path d="M10 18C10 18 14 11 18 11C22 11 26 18 26 18C26 18 22 25 18 25C14 25 10 18 10 18Z" stroke="white" strokeWidth="1.5" fill="none"/>
+                        <circle cx="18" cy="18" r="3" fill="white"/>
+                      </svg>
+                      <div>
+                        <div className="text-[8px] sm:text-[10px] text-white/60 tracking-[0.3em] uppercase font-medium">Introducing</div>
+                        <div className="text-lg sm:text-2xl font-black text-white tracking-tight">
+                          The EYE<span className="text-white/80">uni</span> Effect
+                        </div>
+                      </div>
+                    </div>
+                  </WipeTransition>
 
-                  {/* Layer 5: Spark particles */}
-                  <SparkCanvas active={showSparks} />
-
-                  {/* Layer 6: Impact flash */}
-                  <ImpactFlash visible={showFlash} />
-
-                  {/* Layer 7: Glitch effect during smash */}
-                  {(phase === PHASE_SMASH || phase === PHASE_SHATTER) && (
-                    <div className="absolute inset-0 z-[8] pointer-events-none animate-[glitch_0.3s_ease_infinite]">
-                      <div className="absolute inset-0 bg-[#ff000015]" style={{ clipPath: 'inset(10% 0 80% 0)' }} />
-                      <div className="absolute inset-0 bg-[#00ff0015]" style={{ clipPath: 'inset(40% 0 40% 0)', transform: 'translateX(3px)' }} />
-                      <div className="absolute inset-0 bg-[#0000ff15]" style={{ clipPath: 'inset(70% 0 10% 0)', transform: 'translateX(-3px)' }} />
+                  {/* Glow ring during beautiful phase */}
+                  {showBeautiful && (
+                    <div className="absolute inset-0 z-[4] pointer-events-none">
+                      <div className="absolute inset-[-2px] rounded-sm ring-1 ring-blue-500/30 animate-[pulse-glow_2s_ease-in-out_infinite]" />
                     </div>
                   )}
 
-                  {/* Layer 8: Running character */}
-                  {showCharacter && <RunningCharacter phase={phase} />}
-
-                  {/* Layer 9: Subtle screen reflection */}
+                  {/* Screen reflection */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none z-[50]" />
                 </div>
               </div>
 
-              {/* Laptop base / keyboard */}
+              {/* Laptop base */}
               <div className="bg-[#1a1a2e] border border-dark-border border-t-[#2a2a3e] rounded-b-lg h-3 sm:h-4 flex items-center justify-center">
                 <div className="w-16 sm:w-24 h-1 rounded-full bg-gray-700" />
               </div>
-
-              {/* Laptop shadow */}
               <div className="mx-8 h-2 bg-black/40 rounded-full blur-md -mt-1" />
             </div>
 
@@ -560,6 +437,10 @@ export default function WebsiteTransform() {
               <div className={`flex items-center gap-2 transition-all duration-500 ${showUgly ? 'opacity-100 scale-100' : 'opacity-30 scale-95'}`}>
                 <div className="w-3 h-3 rounded-full bg-red-500/80" />
                 <span className="text-sm text-gray-400 font-medium">Before</span>
+              </div>
+              <div className={`flex items-center gap-2 transition-all duration-500 ${showWipe ? 'opacity-100 scale-110' : showBeautiful ? 'opacity-30 scale-95' : 'opacity-30 scale-95'}`}>
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-accent" />
+                <span className="text-sm font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">The EYEuni Effect</span>
               </div>
               <div className={`flex items-center gap-2 transition-all duration-500 ${showBeautiful ? 'opacity-100 scale-100' : 'opacity-30 scale-95'}`}>
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
@@ -570,7 +451,6 @@ export default function WebsiteTransform() {
         </AnimateIn>
       </div>
 
-      {/* Inline keyframes */}
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(100%); }
@@ -579,38 +459,6 @@ export default function WebsiteTransform() {
         @keyframes blink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
-        }
-        @keyframes characterBounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
-        }
-        @keyframes armSwing {
-          0%, 100% { transform: rotate(-20deg); }
-          50% { transform: rotate(20deg); }
-        }
-        @keyframes armSwingAlt {
-          0%, 100% { transform: rotate(20deg); }
-          50% { transform: rotate(-20deg); }
-        }
-        @keyframes legRun {
-          0%, 100% { transform: rotate(-15deg); }
-          50% { transform: rotate(15deg); }
-        }
-        @keyframes legRunAlt {
-          0%, 100% { transform: rotate(15deg); }
-          50% { transform: rotate(-15deg); }
-        }
-        @keyframes crackDraw {
-          0% { stroke-dasharray: 0 500; }
-          100% { stroke-dasharray: 500 0; }
-        }
-        @keyframes glitch {
-          0% { transform: translate(0); }
-          20% { transform: translate(-2px, 1px); }
-          40% { transform: translate(2px, -1px); }
-          60% { transform: translate(-1px, 2px); }
-          80% { transform: translate(1px, -2px); }
-          100% { transform: translate(0); }
         }
       `}</style>
     </section>
