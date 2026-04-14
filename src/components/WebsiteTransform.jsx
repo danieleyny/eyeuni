@@ -162,7 +162,7 @@ function RunningCharacter({ phase }) {
 
   return (
     <div
-      className="absolute bottom-2 left-0 z-20"
+      className="absolute bottom-2 left-0 z-[4]"
       style={{
         transform: getTransform(),
         transition: isRunning
@@ -226,37 +226,44 @@ function RunningCharacter({ phase }) {
 }
 
 // ─── Shatter Pieces ─────────────────────────────────────
-function ShatterOverlay({ active }) {
+// phase: 'hidden' (default), 'appear' (crack moment), 'explode' (fly out)
+function ShatterOverlay({ phase }) {
   const pieces = useRef(
     Array.from({ length: 12 }, (_, i) => ({
       id: i,
-      x: (i % 4) * 25 + Math.random() * 10,
-      y: Math.floor(i / 4) * 33 + Math.random() * 10,
-      w: 25 + Math.random() * 10,
-      h: 33 + Math.random() * 10,
-      rotation: (Math.random() - 0.5) * 120,
-      tx: (Math.random() - 0.5) * 300,
-      ty: (Math.random() - 0.5) * 200 - 100,
+      x: (i % 4) * 25,
+      y: Math.floor(i / 4) * 33,
+      w: 26,
+      h: 34,
+      rotation: (Math.random() - 0.5) * 180,
+      tx: (Math.random() - 0.5) * 400,
+      ty: (Math.random() - 0.5) * 300 - 50,
       delay: Math.random() * 0.15,
     }))
   ).current
 
+  if (phase === 'hidden') return null
+
   return (
-    <div className="absolute inset-0 z-30 pointer-events-none">
+    <div className="absolute inset-0 z-[6] pointer-events-none">
       {pieces.map((p) => (
         <div
           key={p.id}
-          className="absolute bg-gradient-to-br from-white/20 to-white/5 border border-white/20 backdrop-blur-sm"
+          className="absolute border border-white/30"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             width: `${p.w}%`,
             height: `${p.h}%`,
-            transform: active
-              ? `translate(${p.tx}px, ${p.ty}px) rotate(${p.rotation}deg) scale(0.3)`
+            background: 'linear-gradient(135deg, rgba(179,200,244,0.15), rgba(15,49,184,0.08))',
+            boxShadow: 'inset 0 0 20px rgba(255,255,255,0.1)',
+            transform: phase === 'explode'
+              ? `translate(${p.tx}px, ${p.ty}px) rotate(${p.rotation}deg) scale(0.2)`
               : 'translate(0, 0) rotate(0deg) scale(1)',
-            opacity: active ? 0 : 1,
-            transition: `all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${p.delay}s`,
+            opacity: phase === 'explode' ? 0 : 0.9,
+            transition: phase === 'explode'
+              ? `all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${p.delay}s`
+              : 'none',
           }}
         />
       ))}
@@ -374,7 +381,7 @@ function SparkCanvas({ active }) {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full z-35 pointer-events-none"
+      className="absolute inset-0 w-full h-full z-[7] pointer-events-none"
       style={{ opacity: active ? 1 : 0 }}
     />
   )
@@ -384,7 +391,7 @@ function SparkCanvas({ active }) {
 function ImpactFlash({ visible }) {
   return (
     <div
-      className="absolute inset-0 z-40 pointer-events-none bg-white"
+      className="absolute inset-0 z-[9] pointer-events-none bg-white"
       style={{
         opacity: visible ? 0.7 : 0,
         transition: visible ? 'opacity 0.05s ease' : 'opacity 0.3s ease',
@@ -435,11 +442,17 @@ export default function WebsiteTransform() {
 
   const showUgly = phase <= PHASE_SMASH
   const showCracks = phase === PHASE_SMASH || phase === PHASE_SHATTER
-  const showShatter = phase >= PHASE_SHATTER && phase <= PHASE_REVEAL
   const showSparks = phase === PHASE_SMASH || phase === PHASE_SHATTER
   const showFlash = phase === PHASE_SMASH
   const showBeautiful = phase >= PHASE_REVEAL && phase <= PHASE_DISPLAY
   const showCharacter = phase >= PHASE_RUN && phase <= PHASE_SHATTER
+
+  // Shatter overlay: hidden → appear on smash → explode on shatter → hidden after
+  const shatterPhase = phase === PHASE_SMASH
+    ? 'appear'
+    : phase === PHASE_SHATTER
+      ? 'explode'
+      : 'hidden'
 
   return (
     <section ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
@@ -479,53 +492,57 @@ export default function WebsiteTransform() {
 
                 {/* Screen area */}
                 <div className="relative aspect-[16/10] rounded-sm overflow-hidden bg-[#0a0a0f]">
-                  {/* Ugly website layer */}
+                  {/* Layer 1: Ugly website */}
                   <div
+                    className="absolute inset-0 z-[1]"
                     style={{
                       opacity: showUgly ? 1 : 0,
-                      transition: 'opacity 0.4s ease',
+                      transition: 'opacity 0.3s ease',
                     }}
                   >
                     <UglyWebsite />
                   </div>
 
-                  {/* Beautiful website layer */}
+                  {/* Layer 2: Beautiful website (underneath shatter, above ugly) */}
                   <div
+                    className="absolute inset-0 z-[2]"
                     style={{
                       opacity: showBeautiful ? 1 : 0,
-                      transform: showBeautiful ? 'scale(1)' : 'scale(1.1)',
-                      transition: 'opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                      transform: showBeautiful ? 'scale(1)' : 'scale(0.95)',
+                      transition: 'opacity 0.8s ease 0.2s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
                     }}
                   >
                     <BeautifulWebsite />
                   </div>
 
-                  {/* Crack lines */}
-                  <CrackLines visible={showCracks} />
+                  {/* Layer 3: Crack lines */}
+                  <div className="absolute inset-0 z-[5]">
+                    <CrackLines visible={showCracks} />
+                  </div>
 
-                  {/* Shatter pieces */}
-                  <ShatterOverlay active={showShatter} />
+                  {/* Layer 4: Shatter pieces — only rendered during smash/shatter */}
+                  <ShatterOverlay phase={shatterPhase} />
 
-                  {/* Spark particles */}
+                  {/* Layer 5: Spark particles */}
                   <SparkCanvas active={showSparks} />
 
-                  {/* Impact flash */}
+                  {/* Layer 6: Impact flash */}
                   <ImpactFlash visible={showFlash} />
 
-                  {/* Screen glitch effect during smash */}
+                  {/* Layer 7: Glitch effect during smash */}
                   {(phase === PHASE_SMASH || phase === PHASE_SHATTER) && (
-                    <div className="absolute inset-0 z-20 pointer-events-none animate-[glitch_0.3s_ease_infinite]">
-                      <div className="absolute inset-0 bg-[#ff000010]" style={{ clipPath: 'inset(10% 0 80% 0)' }} />
-                      <div className="absolute inset-0 bg-[#00ff0010]" style={{ clipPath: 'inset(40% 0 40% 0)', transform: 'translateX(3px)' }} />
-                      <div className="absolute inset-0 bg-[#0000ff10]" style={{ clipPath: 'inset(70% 0 10% 0)', transform: 'translateX(-3px)' }} />
+                    <div className="absolute inset-0 z-[8] pointer-events-none animate-[glitch_0.3s_ease_infinite]">
+                      <div className="absolute inset-0 bg-[#ff000015]" style={{ clipPath: 'inset(10% 0 80% 0)' }} />
+                      <div className="absolute inset-0 bg-[#00ff0015]" style={{ clipPath: 'inset(40% 0 40% 0)', transform: 'translateX(3px)' }} />
+                      <div className="absolute inset-0 bg-[#0000ff15]" style={{ clipPath: 'inset(70% 0 10% 0)', transform: 'translateX(-3px)' }} />
                     </div>
                   )}
 
-                  {/* Running character */}
+                  {/* Layer 8: Running character */}
                   {showCharacter && <RunningCharacter phase={phase} />}
 
-                  {/* Screen reflection */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none z-50" />
+                  {/* Layer 9: Subtle screen reflection */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none z-[50]" />
                 </div>
               </div>
 
