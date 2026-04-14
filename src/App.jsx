@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import Services from './components/Services'
 import WebsiteTransform from './components/WebsiteTransform'
 import Portfolio from './components/Portfolio'
+import BuildingSection from './components/BuildingSection'
 import Testimonials from './components/Testimonials'
 import DemoWebsiteCTA from './components/DemoWebsiteCTA'
 import FAQ from './components/FAQ'
@@ -20,6 +21,7 @@ function HomePage() {
         <Services />
         <WebsiteTransform />
         <Portfolio />
+        <BuildingSection />
         <Testimonials />
         <DemoWebsiteCTA />
         <FAQ />
