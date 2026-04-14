@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const footerLinks = [
   {
     title: 'Services',
@@ -12,16 +14,16 @@ const footerLinks = [
     title: 'Company',
     links: [
       { label: 'Portfolio', href: '#portfolio' },
-      { label: 'Pricing', href: '#pricing' },
       { label: 'Testimonials', href: '#testimonials' },
       { label: 'FAQ', href: '#faq' },
+      { label: 'Contact', href: '#contact' },
     ],
   },
   {
     title: 'Connect',
     links: [
+      { label: 'Free Demo Website', href: '/intake', isRoute: true },
       { label: 'Contact', href: '#contact' },
-      { label: 'Book a Call', href: '#booking' },
       { label: 'LinkedIn', href: '#' },
       { label: 'Instagram', href: '#' },
     ],
@@ -71,12 +73,21 @@ export default function Footer() {
               <ul className="space-y-3">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-gray-400 hover:text-primary transition-colors duration-300"
-                    >
-                      {link.label}
-                    </a>
+                    {link.isRoute ? (
+                      <Link
+                        to={link.href}
+                        className="text-sm text-gray-400 hover:text-primary transition-colors duration-300"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-sm text-gray-400 hover:text-primary transition-colors duration-300"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

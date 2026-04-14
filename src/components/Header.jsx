@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
   { label: 'Services', href: '#services' },
   { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Pricing', href: '#pricing' },
   { label: 'Testimonials', href: '#testimonials' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
@@ -59,12 +59,12 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#booking"
+          <Link
+            to="/intake"
             className="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-lg hover:bg-accent/80 transition-all duration-300 hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5"
           >
-            Book a Demo
-          </a>
+            Get Free Demo
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
@@ -93,13 +93,13 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#booking"
+          <Link
+            to="/intake"
             onClick={() => setMobileOpen(false)}
             className="px-5 py-3 bg-accent text-white text-center font-semibold rounded-lg hover:bg-accent/80 transition-all duration-300"
           >
-            Book a Demo
-          </a>
+            Get Free Demo
+          </Link>
         </div>
       </div>
     </header>

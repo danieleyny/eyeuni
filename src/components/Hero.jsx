@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowDown } from 'lucide-react'
 
 export default function Hero() {
@@ -111,15 +112,15 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a
-            href="#booking"
+          <Link
+            to="/intake"
             className="group px-8 py-4 bg-accent text-white font-bold rounded-xl text-lg hover:bg-accent/80 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/30 hover:-translate-y-1 flex items-center gap-2"
           >
-            Book a Demo Call
+            Get Your Free Demo
             <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </Link>
           <a
             href="#portfolio"
             className="px-8 py-4 border border-primary/30 text-primary font-semibold rounded-xl text-lg hover:bg-primary/10 transition-all duration-300 hover:-translate-y-1"

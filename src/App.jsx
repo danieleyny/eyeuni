@@ -1,15 +1,16 @@
+import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Services from './components/Services'
 import Portfolio from './components/Portfolio'
-import Pricing from './components/Pricing'
 import Testimonials from './components/Testimonials'
+import DemoWebsiteCTA from './components/DemoWebsiteCTA'
 import FAQ from './components/FAQ'
-import Booking from './components/Booking'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import IntakePage from './components/intake/IntakePage'
 
-export default function App() {
+function HomePage() {
   return (
     <>
       <Header />
@@ -17,13 +18,21 @@ export default function App() {
         <Hero />
         <Services />
         <Portfolio />
-        <Pricing />
         <Testimonials />
+        <DemoWebsiteCTA />
         <FAQ />
-        <Booking />
         <Contact />
       </main>
       <Footer />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/intake" element={<IntakePage />} />
+    </Routes>
   )
 }
