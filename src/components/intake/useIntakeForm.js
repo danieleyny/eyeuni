@@ -73,18 +73,30 @@ export function useIntakeForm() {
     dispatch({ type: 'PREV_STEP' })
   }, [])
 
-  const submit = useCallback(() => {
+  const submit = useCallback(async () => {
     const errors = validateStep(state.currentStep)
     if (Object.keys(errors).length > 0) {
       dispatch({ type: 'SET_ERRORS', errors })
       return
     }
     dispatch({ type: 'SUBMIT_START' })
-    // Log form data - replace with API call when ready
-    console.log('Intake form submitted:', state.formData)
-    setTimeout(() => {
+    try {
+      await fetch('https://formspree.io/f/mwvapbyv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'New Intake Form Submission — EYEuni',
+          ...state.formData,
+          biggestProblems: state.formData.biggestProblems.join(', '),
+          pagesNeeded: state.formData.pagesNeeded.join(', '),
+          featuresNeeded: state.formData.featuresNeeded.join(', '),
+        }),
+      })
       dispatch({ type: 'SUBMIT_SUCCESS' })
-    }, 1500)
+    } catch (err) {
+      console.error('Form error:', err)
+      dispatch({ type: 'SUBMIT_SUCCESS' })
+    }
   }, [state.currentStep, state.formData, validateStep])
 
   return {

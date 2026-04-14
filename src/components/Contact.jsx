@@ -11,11 +11,31 @@ const contactInfo = [
 export default function Contact() {
   const [sent, setSent] = useState(false)
 
-  const handleSubmit = (e) => {
+  const [sending, setSending] = useState(false)
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Contact form submitted')
-    setSent(true)
-    setTimeout(() => setSent(false), 3000)
+    setSending(true)
+    try {
+      const res = await fetch('https://formspree.io/f/mwvapbyv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'New Contact Form Submission — EYEuni',
+          name: e.target.name.value,
+          email: e.target.email.value,
+          message: e.target.message.value,
+        }),
+      })
+      if (res.ok) {
+        setSent(true)
+        e.target.reset()
+        setTimeout(() => setSent(false), 3000)
+      }
+    } catch (err) {
+      console.error('Form error:', err)
+    }
+    setSending(false)
   }
 
   return (
@@ -53,18 +73,21 @@ export default function Contact() {
             <div className="grid sm:grid-cols-2 gap-5 mb-5">
               <input
                 type="text"
+                name="name"
                 placeholder="Your Name"
                 required
                 className="w-full px-4 py-3.5 bg-dark/50 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 transition-all duration-300"
               />
               <input
                 type="email"
+                name="email"
                 placeholder="Your Email"
                 required
                 className="w-full px-4 py-3.5 bg-dark/50 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 transition-all duration-300"
               />
             </div>
             <textarea
+              name="message"
               placeholder="Your Message"
               rows={4}
               required
@@ -78,7 +101,7 @@ export default function Contact() {
                   : 'bg-accent text-white hover:bg-accent/80 hover:shadow-lg hover:shadow-accent/25'
               }`}
             >
-              {sent ? 'Message Sent!' : <><Send className="w-4 h-4" /> Send Message</>}
+              {sent ? 'Message Sent!' : sending ? 'Sending...' : <><Send className="w-4 h-4" /> Send Message</>}
             </button>
           </form>
         </AnimateIn>
