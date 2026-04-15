@@ -3,10 +3,9 @@
   <head>
     <meta charset="utf-8">
     <script>
-      // Single Page App redirect for GitHub Pages
-      // Stores the path and redirects to the base, where React Router picks it up
+      // SPA redirect for GitHub Pages — preserves the path for React Router
       sessionStorage.redirect = location.href;
-      location.replace(location.pathname.split('/').slice(0, 2).join('/') + '/');
+      location.replace('/');
     </script>
   </head>
   <body></body>
