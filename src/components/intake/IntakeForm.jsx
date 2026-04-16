@@ -10,6 +10,7 @@ import StepContentPages from './StepContentPages'
 import StepDesign from './StepDesign'
 import StepFeatures from './StepFeatures'
 import StepBudgetTimeline from './StepBudgetTimeline'
+import StepReview from './StepReview'
 import IntakeSuccess from './IntakeSuccess'
 
 const stepComponents = [
@@ -20,6 +21,7 @@ const stepComponents = [
   StepDesign,
   StepFeatures,
   StepBudgetTimeline,
+  null, // Review step handled separately
 ]
 
 const variants = {
@@ -37,23 +39,28 @@ const variants = {
   }),
 }
 
-export default function IntakeForm() {
+export default function IntakeForm({ onSubmitted }) {
   const {
     formData, currentStep, direction, errors,
     isSubmitting, isSubmitted,
-    updateField, toggleArrayItem, next, prev, submit,
+    updateField, toggleArrayItem, next, prev, submit, goToStep,
   } = useIntakeForm()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentStep])
 
+  useEffect(() => {
+    if (isSubmitted && onSubmitted) onSubmitted()
+  }, [isSubmitted, onSubmitted])
+
   if (isSubmitted) {
     return <IntakeSuccess formData={formData} />
   }
 
+  const isReviewStep = currentStep === STEPS.length - 1
+  const isLastContentStep = currentStep === STEPS.length - 2
   const StepComponent = stepComponents[currentStep]
-  const isLastStep = currentStep === STEPS.length - 1
   const progress = ((currentStep + 1) / STEPS.length) * 100
 
   return (
@@ -120,12 +127,16 @@ export default function IntakeForm() {
             exit="exit"
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            <StepComponent
-              formData={formData}
-              updateField={updateField}
-              toggleArrayItem={toggleArrayItem}
-              errors={errors}
-            />
+            {isReviewStep ? (
+              <StepReview formData={formData} onGoToStep={goToStep} />
+            ) : (
+              <StepComponent
+                formData={formData}
+                updateField={updateField}
+                toggleArrayItem={toggleArrayItem}
+                errors={errors}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -147,7 +158,7 @@ export default function IntakeForm() {
           {currentStep + 1} / {STEPS.length}
         </span>
 
-        {isLastStep ? (
+        {isReviewStep ? (
           <button
             type="button"
             onClick={submit}
@@ -161,7 +172,7 @@ export default function IntakeForm() {
               </>
             ) : (
               <>
-                Submit
+                Confirm & Submit
                 <Send className="w-4 h-4" />
               </>
             )}
@@ -172,7 +183,7 @@ export default function IntakeForm() {
             onClick={next}
             className="flex items-center gap-2 px-8 py-3.5 bg-accent text-white font-bold rounded-xl hover:bg-accent/80 transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5"
           >
-            Next
+            {isLastContentStep ? 'Review Answers' : 'Next'}
             <ChevronRight className="w-4 h-4" />
           </button>
         )}

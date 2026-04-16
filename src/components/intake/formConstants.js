@@ -1,13 +1,14 @@
-import { Building2, Globe, Target, Layout, Palette, Wrench, DollarSign } from 'lucide-react'
+import { Building2, Globe, Target, Layout, Palette, Wrench, Clock, ClipboardCheck } from 'lucide-react'
 
 export const STEPS = [
-  { title: 'Business Info', icon: Building2, description: 'Tell us about your business' },
+  { title: 'Contact Info', icon: Building2, description: 'Your details' },
   { title: 'Current Site', icon: Globe, description: 'Your existing website' },
   { title: 'Goals', icon: Target, description: 'What you want to achieve' },
   { title: 'Pages', icon: Layout, description: 'Content & structure' },
   { title: 'Design', icon: Palette, description: 'Look & feel' },
   { title: 'Features', icon: Wrench, description: 'Functionality needs' },
-  { title: 'Budget', icon: DollarSign, description: 'Budget & timeline' },
+  { title: 'Timeline', icon: Clock, description: 'Timeline & notes' },
+  { title: 'Review', icon: ClipboardCheck, description: 'Review & submit' },
 ]
 
 export const BIGGEST_PROBLEMS = [
@@ -21,13 +22,24 @@ export const BIGGEST_PROBLEMS = [
   "Doesn't reflect brand",
 ]
 
-export const PRIMARY_GOALS = [
+export const WEBSITE_GOALS = [
   { label: 'Generate Leads', icon: '🎯' },
   { label: 'Sell Products', icon: '🛒' },
-  { label: 'Provide Info', icon: 'ℹ️' },
-  { label: 'Bookings', icon: '📅' },
-  { label: 'Brand Awareness', icon: '📢' },
-  { label: 'Portfolio', icon: '💼' },
+  { label: 'Provide Information', icon: 'ℹ️' },
+  { label: 'Accept Bookings', icon: '📅' },
+  { label: 'Build Brand Awareness', icon: '📢' },
+  { label: 'Showcase Portfolio', icon: '💼' },
+]
+
+export const VISITOR_ACTIONS = [
+  'Fill out a contact form',
+  'Call or message the business',
+  'Book an appointment',
+  'Make a purchase',
+  'Sign up / Create an account',
+  'Request a quote',
+  'Download a resource',
+  'Browse and learn',
 ]
 
 export const PAGES_OPTIONS = [
@@ -58,19 +70,17 @@ export const LOGO_OPTIONS = [
 ]
 
 export const FEATURES_OPTIONS = [
-  'Contact Form', 'Photo Gallery', 'Testimonials', 'Social Media Integration',
-  'Online Booking', 'Live Chat', 'Blog', 'Newsletter Signup',
-  'Google Maps', 'Video Integration', 'E-commerce / Shop', 'Client Portal',
-  'Search Functionality', 'Multi-language Support',
-]
-
-export const BUDGET_OPTIONS = [
-  'Under $500',
-  '$500 - $1,500',
-  '$1,500 - $5,000',
-  '$5,000 - $10,000',
-  '$10,000+',
-  'Not sure yet',
+  'Photo Gallery',
+  'Social Media Integration',
+  'Online Booking',
+  'Live Chat',
+  'Newsletter Signup',
+  'Google Maps',
+  'Video Integration',
+  'E-commerce / Shop',
+  'Client Portal',
+  'Search Functionality',
+  'Multi-language Support',
 ]
 
 export const TIMELINE_OPTIONS = [
@@ -82,51 +92,52 @@ export const TIMELINE_OPTIONS = [
 ]
 
 export const INITIAL_FORM_DATA = {
-  // Step 1
+  // Step 1 — Contact & Business Info
+  contactName: '',
+  contactEmail: '',
+  contactPhone: '',
   businessName: '',
   industry: '',
   tagline: '',
   targetAudience: '',
-  contactEmail: '',
-  contactPhone: '',
-  // Step 2
+  // Step 2 — Current Website (Optional)
   currentWebsiteUrl: '',
   whatYouLike: '',
   whatYouDislike: '',
   biggestProblems: [],
-  // Step 3
-  primaryGoal: '',
-  desiredAction: '',
+  // Step 3 — Goals
+  websiteGoals: [],
+  desiredActions: [],
   competitors: '',
   websitesYouLike: '',
   whatYouLikeAboutThem: '',
   otherGoals: '',
-  // Step 4
+  // Step 4 — Content & Pages
   pagesNeeded: [],
   otherPages: '',
-  mainServicesProducts: '',
+  businessDescription: '',
   existingContent: '',
-  // Step 5
-  designStyle: '',
+  // Step 5 — Design
+  designStyles: [],
   primaryColor: '#b3c8f4',
   secondaryColor: '#0f31b8',
   accentColor: '#10b981',
   logoStatus: '',
-  // Step 6
+  // Step 6 — Features
   featuresNeeded: [],
   otherFeatures: '',
-  // Step 7
-  budget: '',
+  // Step 7 — Timeline
   timeline: '',
   anythingElse: '',
 }
 
 export const REQUIRED_FIELDS_PER_STEP = [
-  ['businessName', 'industry', 'targetAudience'],
+  ['contactName', 'contactEmail', 'businessName', 'industry', 'targetAudience'],
   [],
-  ['primaryGoal', 'desiredAction'],
-  ['pagesNeeded', 'mainServicesProducts'],
-  ['designStyle'],
+  ['websiteGoals', 'desiredActions'],
+  ['pagesNeeded', 'businessDescription'],
+  ['designStyles'],
   ['featuresNeeded'],
   [],
+  [], // Review step — no validation
 ]

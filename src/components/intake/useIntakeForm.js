@@ -16,6 +16,8 @@ function formReducer(state, action) {
       return { ...state, currentStep: state.currentStep + 1, direction: 1, errors: {} }
     case 'PREV_STEP':
       return { ...state, currentStep: state.currentStep - 1, direction: -1, errors: {} }
+    case 'GO_TO_STEP':
+      return { ...state, currentStep: action.step, direction: action.step > state.currentStep ? 1 : -1, errors: {} }
     case 'SET_ERRORS':
       return { ...state, errors: action.errors }
     case 'SUBMIT_START':
@@ -73,63 +75,63 @@ export function useIntakeForm() {
     dispatch({ type: 'PREV_STEP' })
   }, [])
 
+  const goToStep = useCallback((step) => {
+    dispatch({ type: 'GO_TO_STEP', step })
+  }, [])
+
   const submit = useCallback(async () => {
-    const errors = validateStep(state.currentStep)
-    if (Object.keys(errors).length > 0) {
-      dispatch({ type: 'SET_ERRORS', errors })
-      return
-    }
     dispatch({ type: 'SUBMIT_START' })
     try {
+      const d = state.formData
       await fetch('https://formspree.io/f/mwvapbyv', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           _subject: 'New Intake Form Submission — EYEuni',
 
-          // — Step 1: Business Information —
-          'Business Name': state.formData.businessName,
-          'Industry / Niche': state.formData.industry,
-          'Business Tagline': state.formData.tagline || '(not provided)',
-          'Target Audience': state.formData.targetAudience,
-          'Contact Email': state.formData.contactEmail || '(not provided)',
-          'Contact Phone': state.formData.contactPhone || '(not provided)',
+          // — Contact & Business Info —
+          'Contact Name': d.contactName,
+          'Contact Email': d.contactEmail,
+          'Contact Phone': d.contactPhone || '(not provided)',
+          'Business Name': d.businessName,
+          'Industry / Niche': d.industry,
+          'Business Tagline': d.tagline || '(not provided)',
+          'Target Audience': d.targetAudience,
 
-          // — Step 2: Current Website (Optional) —
-          'Current Website URL': state.formData.currentWebsiteUrl || '(no existing website)',
-          'What They Like About Current Site': state.formData.whatYouLike || '(not provided)',
-          'What They Dislike About Current Site': state.formData.whatYouDislike || '(not provided)',
-          'Biggest Problems With Current Site': state.formData.biggestProblems.length > 0 ? state.formData.biggestProblems.join(', ') : '(none selected)',
+          // — Current Website (Optional) —
+          'Current Website URL': d.currentWebsiteUrl || '(no existing website)',
+          'What They Like About Current Site': d.whatYouLike || '(not provided)',
+          'What They Dislike About Current Site': d.whatYouDislike || '(not provided)',
+          'Biggest Problems With Current Site': d.biggestProblems.length > 0 ? d.biggestProblems.join(', ') : '(none selected)',
 
-          // — Step 3: Website Goals —
-          'Primary Goal': state.formData.primaryGoal,
-          'Desired Visitor Action': state.formData.desiredAction,
-          'Competitor Websites': state.formData.competitors || '(not provided)',
-          'Websites They Like': state.formData.websitesYouLike || '(not provided)',
-          'What They Like About Those Websites': state.formData.whatYouLikeAboutThem || '(not provided)',
-          'Other Goals': state.formData.otherGoals || '(not provided)',
+          // — Website Goals —
+          'Website Goals': d.websiteGoals.length > 0 ? d.websiteGoals.join(', ') : '(none selected)',
+          'Desired Visitor Actions': d.desiredActions.length > 0 ? d.desiredActions.join(', ') : '(none selected)',
+          'Competitor Websites': d.competitors || '(not provided)',
+          'Websites They Like': d.websitesYouLike || '(not provided)',
+          'What They Like About Those Websites': d.whatYouLikeAboutThem || '(not provided)',
+          'Other Goals': d.otherGoals || '(not provided)',
 
-          // — Step 4: Content & Pages —
-          'Pages Needed': state.formData.pagesNeeded.length > 0 ? state.formData.pagesNeeded.join(', ') : '(none selected)',
-          'Other Pages Requested': state.formData.otherPages || '(none)',
-          'Main Services or Products': state.formData.mainServicesProducts,
-          'Existing Content Preference': state.formData.existingContent || '(not selected)',
+          // — Content & Pages —
+          'Pages Needed': d.pagesNeeded.length > 0 ? d.pagesNeeded.join(', ') : '(none selected)',
+          'Other Pages Requested': d.otherPages || '(none)',
+          'Business Description & Services': d.businessDescription,
+          'Existing Content Preference': d.existingContent || '(not selected)',
 
-          // — Step 5: Design Preferences —
-          'Design Style': state.formData.designStyle,
-          'Primary Color': state.formData.primaryColor,
-          'Secondary Color': state.formData.secondaryColor,
-          'Accent Color': state.formData.accentColor,
-          'Logo Status': state.formData.logoStatus || '(not selected)',
+          // — Design Preferences —
+          'Design Styles': (d.designStyles || []).length > 0 ? d.designStyles.join(', ') : '(none selected)',
+          'Primary Color': d.primaryColor,
+          'Secondary Color': d.secondaryColor,
+          'Accent Color': d.accentColor,
+          'Logo Status': d.logoStatus || '(not selected)',
 
-          // — Step 6: Features & Functionality —
-          'Features Needed': state.formData.featuresNeeded.length > 0 ? state.formData.featuresNeeded.join(', ') : '(none selected)',
-          'Other Features Requested': state.formData.otherFeatures || '(none)',
+          // — Features & Functionality —
+          'Features Needed': d.featuresNeeded.length > 0 ? d.featuresNeeded.join(', ') : '(none selected)',
+          'Other Features Requested': d.otherFeatures || '(none)',
 
-          // — Step 7: Budget & Timeline —
-          'Budget Range': state.formData.budget || '(not selected)',
-          'Timeline': state.formData.timeline || '(not selected)',
-          'Additional Notes': state.formData.anythingElse || '(none)',
+          // — Timeline & Notes —
+          'Timeline': d.timeline || '(not selected)',
+          'Additional Notes': d.anythingElse || '(none)',
         }),
       })
       dispatch({ type: 'SUBMIT_SUCCESS' })
@@ -137,7 +139,7 @@ export function useIntakeForm() {
       console.error('Form error:', err)
       dispatch({ type: 'SUBMIT_SUCCESS' })
     }
-  }, [state.currentStep, state.formData, validateStep])
+  }, [state.formData])
 
   return {
     ...state,
@@ -145,6 +147,7 @@ export function useIntakeForm() {
     toggleArrayItem,
     next,
     prev,
+    goToStep,
     submit,
   }
 }

@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import IntakeForm from './IntakeForm'
 
 export default function IntakePage() {
+  const [submitted, setSubmitted] = useState(false)
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -38,23 +40,25 @@ export default function IntakePage() {
       {/* Form Content */}
       <main className="pt-24 pb-16 px-6">
         <div className="max-w-3xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-12">
-            <span className="text-primary text-sm font-semibold tracking-widest uppercase">
-              Free Demo Website
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-4">
-              Tell Us About Your{' '}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Dream Website
+          {/* Page Header — hidden after submission */}
+          {!submitted && (
+            <div className="text-center mb-12">
+              <span className="text-primary text-sm font-semibold tracking-widest uppercase">
+                Free Demo Website
               </span>
-            </h1>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              Fill out this quick questionnaire and we'll build you a free demo website within a few days. No commitment required.
-            </p>
-          </div>
+              <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-4">
+                Tell Us About Your{' '}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Dream Website
+                </span>
+              </h1>
+              <p className="text-gray-400 max-w-xl mx-auto">
+                Fill out this quick questionnaire and we'll build you a free demo website within a few days. No commitment required.
+              </p>
+            </div>
+          )}
 
-          <IntakeForm />
+          <IntakeForm onSubmitted={() => setSubmitted(true)} />
         </div>
       </main>
 

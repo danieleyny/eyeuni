@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { Target } from 'lucide-react'
-import { PRIMARY_GOALS } from './formConstants'
+import { Target, Check } from 'lucide-react'
+import { WEBSITE_GOALS, VISITOR_ACTIONS } from './formConstants'
 
 const inputClasses = 'w-full px-4 py-3.5 bg-dark-card/50 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 transition-all duration-300'
 const labelClasses = 'block text-sm font-medium text-gray-300 mb-2'
@@ -10,7 +10,7 @@ const item = {
   show: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.4 } }),
 }
 
-export default function StepGoals({ formData, updateField, errors }) {
+export default function StepGoals({ formData, updateField, toggleArrayItem, errors }) {
   return (
     <div>
       <div className="mb-8">
@@ -26,16 +26,16 @@ export default function StepGoals({ formData, updateField, errors }) {
       <div className="space-y-6">
         <motion.div variants={item} initial="hidden" animate="show" custom={0}>
           <label className={labelClasses}>
-            Primary Goal <span className="text-red-400">*</span>
+            Website Goals <span className="text-gray-500">(select all that apply)</span> <span className="text-red-400">*</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {PRIMARY_GOALS.map((goal) => {
-              const selected = formData.primaryGoal === goal.label
+            {WEBSITE_GOALS.map((goal) => {
+              const selected = formData.websiteGoals.includes(goal.label)
               return (
                 <button
                   key={goal.label}
                   type="button"
-                  onClick={() => updateField('primaryGoal', goal.label)}
+                  onClick={() => toggleArrayItem('websiteGoals', goal.label)}
                   className={`flex flex-col items-center gap-2 px-4 py-5 rounded-xl border text-sm transition-all duration-300 ${
                     selected
                       ? 'border-primary/50 bg-primary/5 text-white shadow-lg shadow-accent/10'
@@ -43,26 +43,43 @@ export default function StepGoals({ formData, updateField, errors }) {
                   }`}
                 >
                   <span className="text-2xl">{goal.icon}</span>
-                  <span className="font-medium">{goal.label}</span>
+                  <span className="font-medium text-center">{goal.label}</span>
                 </button>
               )
             })}
           </div>
-          {errors.primaryGoal && <p className="text-red-400 text-xs mt-2">{errors.primaryGoal}</p>}
+          {errors.websiteGoals && <p className="text-red-400 text-xs mt-2">{errors.websiteGoals}</p>}
         </motion.div>
 
         <motion.div variants={item} initial="hidden" animate="show" custom={1}>
           <label className={labelClasses}>
-            What action should visitors take? <span className="text-red-400">*</span>
+            What action should visitors take? <span className="text-gray-500">(select all that apply)</span> <span className="text-red-400">*</span>
           </label>
-          <input
-            type="text"
-            placeholder="e.g. Book a call, Buy a product, Sign up..."
-            className={`${inputClasses} ${errors.desiredAction ? 'border-red-400/50' : ''}`}
-            value={formData.desiredAction}
-            onChange={(e) => updateField('desiredAction', e.target.value)}
-          />
-          {errors.desiredAction && <p className="text-red-400 text-xs mt-1">{errors.desiredAction}</p>}
+          <div className="grid grid-cols-2 gap-3">
+            {VISITOR_ACTIONS.map((action) => {
+              const selected = formData.desiredActions.includes(action)
+              return (
+                <button
+                  key={action}
+                  type="button"
+                  onClick={() => toggleArrayItem('desiredActions', action)}
+                  className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-sm text-left transition-all duration-300 ${
+                    selected
+                      ? 'border-primary/50 bg-primary/5 text-white'
+                      : 'border-dark-border bg-dark-card/30 text-gray-400 hover:border-gray-600'
+                  }`}
+                >
+                  <div className={`w-4.5 h-4.5 rounded flex-shrink-0 flex items-center justify-center transition-all duration-200 ${
+                    selected ? 'bg-accent' : 'border border-gray-600'
+                  }`}>
+                    {selected && <Check className="w-3 h-3 text-white" />}
+                  </div>
+                  {action}
+                </button>
+              )
+            })}
+          </div>
+          {errors.desiredActions && <p className="text-red-400 text-xs mt-2">{errors.desiredActions}</p>}
         </motion.div>
 
         <motion.div variants={item} initial="hidden" animate="show" custom={2}>
@@ -93,7 +110,7 @@ export default function StepGoals({ formData, updateField, errors }) {
           <label className={labelClasses}>What do you like about those websites?</label>
           <textarea
             rows={3}
-            placeholder="e.g. I love the clean layout of site X, the color scheme of site Y, the way site Z presents their services..."
+            placeholder="e.g. I love the clean layout of site X, the color scheme of site Y..."
             className={`${inputClasses} resize-none`}
             value={formData.whatYouLikeAboutThem}
             onChange={(e) => updateField('whatYouLikeAboutThem', e.target.value)}

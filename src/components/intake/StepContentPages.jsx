@@ -68,16 +68,16 @@ export default function StepContentPages({ formData, updateField, toggleArrayIte
 
         <motion.div variants={item} initial="hidden" animate="show" custom={2}>
           <label className={labelClasses}>
-            Main services or products <span className="text-red-400">*</span>
+            Tell us briefly what your business does and what products / services you provide <span className="text-red-400">*</span>
           </label>
           <textarea
             rows={4}
-            placeholder="List your main services or products, one per line..."
-            className={`${inputClasses} resize-none ${errors.mainServicesProducts ? 'border-red-400/50' : ''}`}
-            value={formData.mainServicesProducts}
-            onChange={(e) => updateField('mainServicesProducts', e.target.value)}
+            placeholder="e.g. We are a family-owned bakery specializing in custom cakes, pastries, and catering for events. We also sell coffee and seasonal treats in-store."
+            className={`${inputClasses} resize-none ${errors.businessDescription ? 'border-red-400/50' : ''}`}
+            value={formData.businessDescription}
+            onChange={(e) => updateField('businessDescription', e.target.value)}
           />
-          {errors.mainServicesProducts && <p className="text-red-400 text-xs mt-1">{errors.mainServicesProducts}</p>}
+          {errors.businessDescription && <p className="text-red-400 text-xs mt-1">{errors.businessDescription}</p>}
         </motion.div>
 
         <motion.div variants={item} initial="hidden" animate="show" custom={3}>

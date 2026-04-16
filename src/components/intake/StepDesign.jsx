@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Palette } from 'lucide-react'
+import { Palette, Check } from 'lucide-react'
 import { DESIGN_STYLES, LOGO_OPTIONS } from './formConstants'
 
 const inputClasses = 'w-full px-4 py-3.5 bg-dark-card/50 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 transition-all duration-300'
@@ -10,7 +10,18 @@ const item = {
   show: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.4 } }),
 }
 
-export default function StepDesign({ formData, updateField, errors }) {
+export default function StepDesign({ formData, toggleArrayItem, updateField, errors }) {
+  const handleStyleToggle = (label) => {
+    const current = formData.designStyles || []
+    if (current.includes(label)) {
+      // Always allow deselecting
+      toggleArrayItem('designStyles', label)
+    } else if (current.length < 2) {
+      // Only allow selecting if under 2
+      toggleArrayItem('designStyles', label)
+    }
+  }
+
   return (
     <div>
       <div className="mb-8">
@@ -26,29 +37,39 @@ export default function StepDesign({ formData, updateField, errors }) {
       <div className="space-y-6">
         <motion.div variants={item} initial="hidden" animate="show" custom={0}>
           <label className={labelClasses}>
-            Design Style <span className="text-red-400">*</span>
+            Design Style <span className="text-gray-500">(pick up to 2)</span> <span className="text-red-400">*</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {DESIGN_STYLES.map((style) => {
-              const selected = formData.designStyle === style.label
+              const selected = (formData.designStyles || []).includes(style.label)
+              const atMax = (formData.designStyles || []).length >= 2 && !selected
               return (
                 <button
                   key={style.label}
                   type="button"
-                  onClick={() => updateField('designStyle', style.label)}
+                  onClick={() => handleStyleToggle(style.label)}
                   className={`flex flex-col items-start px-4 py-4 rounded-xl border text-left transition-all duration-300 ${
                     selected
                       ? 'border-primary/50 bg-primary/5 text-white shadow-lg shadow-accent/10'
-                      : 'border-dark-border bg-dark-card/30 text-gray-400 hover:border-gray-600'
+                      : atMax
+                        ? 'border-dark-border bg-dark-card/30 text-gray-600 cursor-not-allowed opacity-50'
+                        : 'border-dark-border bg-dark-card/30 text-gray-400 hover:border-gray-600'
                   }`}
                 >
-                  <span className="font-medium text-sm">{style.label}</span>
-                  <span className="text-xs text-gray-500 mt-1">{style.desc}</span>
+                  <div className="flex items-center gap-2 w-full">
+                    <div className={`w-4 h-4 rounded flex-shrink-0 flex items-center justify-center transition-all duration-200 ${
+                      selected ? 'bg-accent' : 'border border-gray-600'
+                    }`}>
+                      {selected && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                    <span className="font-medium text-sm">{style.label}</span>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1 ml-6">{style.desc}</span>
                 </button>
               )
             })}
           </div>
-          {errors.designStyle && <p className="text-red-400 text-xs mt-2">{errors.designStyle}</p>}
+          {errors.designStyles && <p className="text-red-400 text-xs mt-2">{errors.designStyles}</p>}
         </motion.div>
 
         <motion.div variants={item} initial="hidden" animate="show" custom={1}>
@@ -60,14 +81,12 @@ export default function StepDesign({ formData, updateField, errors }) {
               { label: 'Accent', field: 'accentColor' },
             ].map((color) => (
               <div key={color.field} className="flex flex-col items-center gap-2">
-                <div className="relative">
-                  <input
-                    type="color"
-                    value={formData[color.field]}
-                    onChange={(e) => updateField(color.field, e.target.value)}
-                    className="w-16 h-16 rounded-xl cursor-pointer border-2 border-dark-border bg-transparent [&::-webkit-color-swatch-wrapper]:p-1 [&::-webkit-color-swatch]:rounded-lg"
-                  />
-                </div>
+                <input
+                  type="color"
+                  value={formData[color.field]}
+                  onChange={(e) => updateField(color.field, e.target.value)}
+                  className="w-16 h-16 rounded-xl cursor-pointer border-2 border-dark-border bg-transparent [&::-webkit-color-swatch-wrapper]:p-1 [&::-webkit-color-swatch]:rounded-lg"
+                />
                 <span className="text-xs text-gray-400">{color.label}</span>
                 <span className="text-xs text-gray-500 font-mono">{formData[color.field]}</span>
               </div>
@@ -97,7 +116,6 @@ export default function StepDesign({ formData, updateField, errors }) {
             })}
           </div>
         </motion.div>
-
       </div>
     </div>
   )
