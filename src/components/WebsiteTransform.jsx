@@ -333,17 +333,14 @@ export default function WebsiteTransform() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Heading */}
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">
-            Website Upgrades
-          </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
-            We Don't Just Build Websites.{' '}
+            Before & After —{' '}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              We Transform Them.
+              The EYEuni Effect
             </span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Got an outdated website that's hurting your business? We'll take it from embarrassing to extraordinary.
+            See how we transform outdated websites into high-performing, professional online experiences.
           </p>
         </AnimateIn>
 

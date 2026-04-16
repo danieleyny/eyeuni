@@ -58,8 +58,10 @@ export default function Testimonials() {
     <section id="testimonials" className="py-24 md:py-32 bg-dark-card/30">
       <div className="max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">Testimonials</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">What Clients Say</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">What Our Clients Are Saying</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            Our work speaks for itself, but our clients say it even better.
+          </p>
         </AnimateIn>
 
         <AnimateIn>

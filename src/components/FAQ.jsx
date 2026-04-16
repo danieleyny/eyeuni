@@ -71,7 +71,6 @@ export default function FAQ() {
     <section id="faq" className="py-24 md:py-32">
       <div className="max-w-3xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">FAQ</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Frequently Asked Questions</h2>
           <p className="text-gray-400 text-lg">Everything you need to know about working with us.</p>
         </AnimateIn>

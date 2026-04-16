@@ -89,10 +89,6 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="inline-block mb-6 px-4 py-2 border border-primary/30 rounded-full bg-primary/5 backdrop-blur-sm">
-          <span className="text-primary text-sm font-medium tracking-wide">Web Development Agency</span>
-        </div>
-
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.05] tracking-tight">
           You{' '}
           <span className="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent">
@@ -108,25 +104,16 @@ export default function Hero() {
         </h1>
 
         <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Fast, affordable, and stunning websites crafted for businesses ready to make their mark online.
+          Get a fully built, custom website demo — completely free, with zero commitment.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link
             to="/intake"
-            className="group px-8 py-4 bg-accent text-white font-bold rounded-xl text-lg hover:bg-accent/80 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/30 hover:-translate-y-1 flex items-center gap-2"
+            className="px-8 py-4 bg-accent text-white font-bold rounded-xl text-lg hover:bg-accent/80 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/30 hover:-translate-y-1"
           >
             Get Your Free Demo
-            <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
           </Link>
-          <a
-            href="#portfolio"
-            className="px-8 py-4 border border-primary/30 text-primary font-semibold rounded-xl text-lg hover:bg-primary/10 transition-all duration-300 hover:-translate-y-1"
-          >
-            View Our Work
-          </a>
         </div>
       </div>
 

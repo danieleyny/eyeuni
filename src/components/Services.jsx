@@ -1,24 +1,25 @@
 import { Code2, Layout, Server } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { AnimateIn } from './useScrollAnimation'
 
 const services = [
   {
     icon: Code2,
-    title: 'Web Development',
-    description: 'Full-stack web applications built with cutting-edge technologies. From concept to deployment, we handle every line of code.',
-    features: ['Custom Web Apps', 'E-Commerce', 'CMS Integration', 'API Development'],
+    title: 'Custom Built Websites',
+    description: "We don't use templates. Every website is built from scratch — tailored to your business, your goals, and designed to perform.",
+    features: ['Fully custom-built websites', 'E-commerce & booking systems', 'Easy content management', 'Seamless tool integrations', 'Built to convert visitors'],
   },
   {
     icon: Layout,
-    title: 'Front End Development',
-    description: 'Pixel-perfect, responsive interfaces that captivate users. Beautiful designs that perform flawlessly on every device.',
-    features: ['Responsive Design', 'UI/UX Implementation', 'Animations & Effects', 'Cross-Browser Support'],
+    title: 'Design & User Experience',
+    description: 'Every design choice is made to capture attention, build trust, and drive results.',
+    features: ['Modern design', 'Mobile-friendly', 'Easy navigation', 'Smooth interactions', 'Conversion-focused'],
   },
   {
     icon: Server,
-    title: 'Back End Development',
-    description: 'Robust server-side architecture that powers your applications. Secure, scalable, and lightning-fast infrastructure.',
-    features: ['Database Design', 'REST & GraphQL APIs', 'Cloud Deployment', 'Performance Optimization'],
+    title: 'Infrastructure & Reliability',
+    description: 'We build websites that are fast, stable, and ready to handle growth as your business expands.',
+    features: ['High-speed performance', 'Secure infrastructure', 'Scalable systems', 'Reliable performance', 'Optimized for speed'],
   },
 ]
 
@@ -28,10 +29,9 @@ export default function Services() {
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark-card/50 to-dark" />
       <div className="relative max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">What We Do</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Our Services</h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            We deliver end-to-end web solutions that transform your digital presence.
+            Thoughtfully Designed. Strategically Built. Made to Grow Your Business.
           </p>
         </AnimateIn>
 
@@ -39,7 +39,6 @@ export default function Services() {
           {services.map((service, i) => (
             <AnimateIn key={service.title} delay={i * 150}>
               <div className="group relative p-8 rounded-2xl bg-dark-card/50 border border-dark-border hover:border-primary/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent/5 backdrop-blur-sm h-full">
-                {/* Gradient hover glow */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="relative">
@@ -64,17 +63,13 @@ export default function Services() {
           ))}
         </div>
 
-        {/* CTA after services */}
         <AnimateIn delay={500} className="text-center mt-16">
-          <a
-            href="#booking"
+          <Link
+            to="/intake"
             className="inline-flex items-center gap-2 px-8 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/80 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 hover:-translate-y-1"
           >
             Start Your Project
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
+          </Link>
         </AnimateIn>
       </div>
     </section>

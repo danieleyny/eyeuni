@@ -42,7 +42,6 @@ export default function Contact() {
     <section id="contact" className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">Contact</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Get in Touch</h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
             Have a question? We'd love to hear from you.

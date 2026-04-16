@@ -2,12 +2,12 @@ import { AnimateIn } from './useScrollAnimation'
 import { ExternalLink } from 'lucide-react'
 
 const projects = [
-  { title: 'Birchwood', category: 'Short Term Rental Platform', color: 'from-violet-600 to-indigo-600', image: '/portfolio/birchwood.jpg', url: 'https://birchwoodny.com/' },
-  { title: 'Fleur Fund', category: 'Real Estate Investment Fund', color: 'from-cyan-600 to-blue-600', image: '/portfolio/fleurfund.jpg', url: 'https://fleurfund.com/' },
-  { title: 'Laundry Day', category: 'Laundry Service', color: 'from-emerald-600 to-teal-600', image: '/portfolio/laundryday.jpg', url: 'https://laundryday.nyc/' },
-  { title: 'NY Apts', category: 'Real Estate Management', color: 'from-amber-600 to-orange-600', image: '/portfolio/nyapts.jpg', url: 'https://ny-apts.com/' },
-  { title: 'Rent Overcharge', category: 'Rent Overcharge Auto Fighting System', color: 'from-pink-600 to-rose-600', image: '/portfolio/rentovercharge.jpg', url: 'https://www.rentoverchargenyc.com/' },
-  { title: 'Safe Consulting', category: 'Custom Swag Shop', color: 'from-blue-600 to-accent', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },
+  { title: 'Birchwood', category: 'Short-Term Rental Platform for Property Owners', color: 'from-violet-600 to-indigo-600', image: '/portfolio/birchwood.jpg', url: 'https://birchwoodny.com/' },
+  { title: 'Fleur Fund', category: 'Real Estate Investment Platform for Investors', color: 'from-cyan-600 to-blue-600', image: '/portfolio/fleurfund.jpg', url: 'https://fleurfund.com/' },
+  { title: 'Laundry Day', category: 'On-Demand Laundry Service Website', color: 'from-emerald-600 to-teal-600', image: '/portfolio/laundryday.jpg', url: 'https://laundryday.nyc/' },
+  { title: 'NY Apts', category: 'Property Management Website for NYC Rentals', color: 'from-amber-600 to-orange-600', image: '/portfolio/nyapts.jpg', url: 'https://ny-apts.com/' },
+  { title: 'Rent Overcharge', category: 'Automated Platform for Tenant Rent Disputes', color: 'from-pink-600 to-rose-600', image: '/portfolio/rentovercharge.jpg', url: 'https://www.rentoverchargenyc.com/' },
+  { title: 'Safe Consulting', category: 'Custom Merchandise & Swag Store', color: 'from-blue-600 to-accent', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },
 ]
 
 export default function Portfolio() {
@@ -15,10 +15,9 @@ export default function Portfolio() {
     <section id="portfolio" className="py-24 md:py-32 bg-dark-card/30">
       <div className="max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">Our Work</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Portfolio</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">See What We've Built</h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            A showcase of projects we've brought to life for our clients.
+            See how we turn ideas into clean, modern, high-performing websites.
           </p>
         </AnimateIn>
 
