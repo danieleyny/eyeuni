@@ -8,6 +8,8 @@ const projects = [
   { title: 'NY Apts', category: 'Property Management Website for NYC Rentals', color: 'from-amber-600 to-orange-600', image: '/portfolio/nyapts.jpg', url: 'https://ny-apts.com/' },
   { title: 'Rent Overcharge', category: 'Automated Platform for Tenant Rent Disputes', color: 'from-pink-600 to-rose-600', image: '/portfolio/rentovercharge.jpg', url: 'https://www.rentoverchargenyc.com/' },
   { title: 'Safe Consulting', category: 'Custom Merchandise & Swag Store', color: 'from-blue-600 to-accent', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },
+  { title: 'ContractorCo', category: 'Operations Platform for Contractors', color: 'from-slate-600 to-zinc-700', image: '/portfolio/contractorco.jpg', url: 'https://contractorco-ops-demo.vercel.app/' },
+  { title: 'PropertyOS', category: 'All-in-One Property Management Dashboard', color: 'from-indigo-600 to-purple-700', image: '/portfolio/propertyos.jpg', url: 'https://propertyos-ashy.vercel.app/dashboard' },
 ]
 
 export default function Portfolio() {
