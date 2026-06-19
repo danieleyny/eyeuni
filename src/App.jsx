@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import Preloader from './components/Preloader'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Services from './components/Services'
@@ -32,9 +33,12 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/intake" element={<IntakePage />} />
-    </Routes>
+    <>
+      <Preloader />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/intake" element={<IntakePage />} />
+      </Routes>
+    </>
   )
 }
