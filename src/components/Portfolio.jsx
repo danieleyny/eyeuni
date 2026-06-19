@@ -10,6 +10,9 @@ const projects = [
   { title: 'Safe Consulting', category: 'Custom Merchandise & Swag Store', color: 'from-blue-600 to-accent', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },
   { title: 'ContractorCo', category: 'Operations Platform for Contractors', color: 'from-slate-600 to-zinc-700', image: '/portfolio/contractorco.jpg', url: 'https://contractorco-ops-demo.vercel.app/' },
   { title: 'PropertyOS', category: 'All-in-One Property Management Dashboard', color: 'from-indigo-600 to-purple-700', image: '/portfolio/propertyos.jpg', url: 'https://propertyos-ashy.vercel.app/dashboard' },
+  { title: 'RentGuard for Firms', category: 'Rent Overcharge Case Platform for Law Firms', color: 'from-rose-600 to-pink-600', image: '/portfolio/rentoverchargefirms.jpg', url: 'https://rentoverchargenyc.com/for-firms' },
+  { title: 'Boaz Studios', category: 'Members-Only Fitness Studio Website', color: 'from-amber-600 to-yellow-700', image: '/portfolio/boazfitness.jpg', url: 'https://danieleyny.github.io/boaz-fitness-studios/' },
+  { title: 'CARRY', category: 'Concealed Carry Licensing & Training Website', color: 'from-yellow-600 to-stone-700', image: '/portfolio/ccw.jpg', url: 'https://ccw-eight.vercel.app/' },
 ]
 
 export default function Portfolio() {
