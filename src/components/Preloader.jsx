@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { emitIntroDone } from '../hooks/useIntroHandoff'
 
-const STORAGE_KEY = 'eyeuni_intro_seen'
 const WORDMARK = ['E', 'Y', 'E', 'u', 'n', 'i']
 const TAGLINE = ['You', 'Dream', 'It,', 'We', 'Build', 'It.']
 
@@ -11,7 +10,7 @@ export default function Preloader() {
   const [show, setShow] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  // Decide once on mount whether this is a first-time visitor.
+  // Play the intro on every load (including hard refresh).
   useEffect(() => {
     // ?nointro skips the intro (useful for shared links / previews).
     if (
@@ -22,29 +21,15 @@ export default function Preloader() {
       return
     }
 
-    let seen = false
-    try {
-      seen = localStorage.getItem(STORAGE_KEY) === '1'
-    } catch {
-      // localStorage blocked (private mode, etc.) — just skip the intro.
-      seen = true
-    }
-    if (seen) return
-
     setShow(true)
     document.body.style.overflow = 'hidden'
-    try {
-      localStorage.setItem(STORAGE_KEY, '1')
-    } catch {
-      /* ignore */
-    }
   }, [])
 
   // Drive the progress meter, then dismiss.
   useEffect(() => {
     if (!show) return
 
-    const total = reduceMotion ? 700 : 2600
+    const total = reduceMotion ? 900 : 6200
     const start = performance.now()
     let raf
 
@@ -83,7 +68,7 @@ export default function Preloader() {
               : {
                   // The overlay closes like a camera aperture, revealing the site.
                   clipPath: 'circle(0% at 50% 50%)',
-                  transition: { duration: 0.9, ease: [0.83, 0, 0.17, 1] },
+                  transition: { duration: 1.5, ease: [0.83, 0, 0.17, 1] },
                 }
           }
           style={{ willChange: 'clip-path, opacity' }}
@@ -116,7 +101,7 @@ export default function Preloader() {
             className="relative z-10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: 1.1, ease: 'easeOut' }}
           >
             {/* soft glow disc behind the iris */}
             <motion.circle
@@ -126,7 +111,7 @@ export default function Preloader() {
               fill="#0f31b8"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.6, 0.35] }}
-              transition={{ duration: 1.6, delay: 0.6, ease: 'easeOut' }}
+              transition={{ duration: 3, delay: 1.4, ease: 'easeOut' }}
               style={{ filter: 'blur(8px)' }}
             />
 
@@ -139,7 +124,7 @@ export default function Preloader() {
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: reduceMotion ? 0.4 : 1.3, ease: 'easeInOut' }}
+              transition={{ duration: reduceMotion ? 0.5 : 2.8, ease: 'easeInOut' }}
             />
 
             {/* iris ring */}
@@ -152,7 +137,7 @@ export default function Preloader() {
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: reduceMotion ? 0.4 : 1, delay: 0.5, ease: 'easeInOut' }}
+              transition={{ duration: reduceMotion ? 0.5 : 2.2, delay: 1.6, ease: 'easeInOut' }}
             />
 
             {/* pupil */}
@@ -163,7 +148,7 @@ export default function Preloader() {
               fill="#b3c8f4"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 1.05 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 16, delay: 3.4 }}
               style={{ transformOrigin: '60px 60px' }}
             />
             <motion.circle
@@ -173,7 +158,7 @@ export default function Preloader() {
               fill="#0a0a0f"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 1.2 }}
+              transition={{ delay: 3.8, duration: 0.5 }}
               style={{ transformOrigin: '60px 60px' }}
             />
           </motion.svg>
@@ -186,7 +171,7 @@ export default function Preloader() {
                 className={i < 3 ? 'text-primary' : 'text-white'}
                 initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ delay: 0.9 + i * 0.07, duration: 0.5, ease: 'easeOut' }}
+                transition={{ delay: 2.6 + i * 0.16, duration: 0.7, ease: 'easeOut' }}
               >
                 {ch}
               </motion.span>
@@ -200,7 +185,7 @@ export default function Preloader() {
                 key={i}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + i * 0.08, duration: 0.4 }}
+                transition={{ delay: 4.0 + i * 0.16, duration: 0.6 }}
               >
                 {word}
               </motion.span>
@@ -212,7 +197,7 @@ export default function Preloader() {
             className="relative z-10 mt-10 flex w-56 flex-col items-center gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.6, duration: 0.5 }}
+            transition={{ delay: 4.6, duration: 0.6 }}
           >
             <div className="h-px w-full overflow-hidden bg-white/10">
               <div

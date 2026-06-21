@@ -21,8 +21,8 @@ function ScrambleWord({ text, start, className, delay = 0 }) {
     }
     // Time-based scheduling (ms) so it completes in real time even if the tab
     // throttles requestAnimationFrame. Each character resolves in sequence.
-    const per = 55 // ms between characters settling
-    const scrambleWindow = 360 // ms a character spends scrambling before it locks
+    const per = 110 // ms between characters settling
+    const scrambleWindow = 700 // ms a character spends scrambling before it locks
     const settleAt = text.split('').map((_, i) => delay + i * per)
     const total = Math.max(...settleAt) + scrambleWindow
 
@@ -82,7 +82,7 @@ export default function HeroHeadline() {
         <ScrambleWord
           text="Dream"
           start={start}
-          delay={120}
+          delay={240}
           className="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent"
         />{' '}
         It,
@@ -91,7 +91,7 @@ export default function HeroHeadline() {
         <ScrambleWord
           text="Build"
           start={start}
-          delay={360}
+          delay={900}
           className="bg-gradient-to-r from-accent via-blue-400 to-primary bg-clip-text text-transparent"
         />{' '}
         It.
