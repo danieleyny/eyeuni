@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useReducedMotion } from 'framer-motion'
-import { TrendingUp, Gauge, MousePointerClick } from 'lucide-react'
+import { TrendingUp, PiggyBank, MousePointerClick } from 'lucide-react'
 import { AnimateIn } from './useScrollAnimation'
 import { useInViewPaused } from '../hooks/useInViewPaused'
 import CountUp from './effects/CountUp'
@@ -14,7 +14,7 @@ const cases = [
     toasts: ['📅 Booking confirmed — 3 nights', '💰 New reservation $1,260', '⭐ New 5-star review'],
     metrics: [
       { icon: TrendingUp, label: 'Direct bookings', to: 312, prefix: '+', suffix: '%' },
-      { icon: Gauge, label: 'Load time', from: 4.2, to: 0.8, decimals: 1, suffix: 's', invert: true },
+      { icon: PiggyBank, label: 'Airbnb fees saved/yr', to: 10000, prefix: '$' },
       { icon: MousePointerClick, label: 'Bounce rate', to: 47, prefix: '−', suffix: '%' },
     ],
     chart: [22, 30, 41, 55, 70, 88, 100],
@@ -26,7 +26,7 @@ const cases = [
     toasts: ['🧺 New pickup scheduled', '💰 Order paid $48', '🔁 Repeat customer'],
     metrics: [
       { icon: TrendingUp, label: 'Online orders', to: 240, prefix: '+', suffix: '%' },
-      { icon: Gauge, label: 'Load time', from: 3.6, to: 0.7, decimals: 1, suffix: 's', invert: true },
+      { icon: PiggyBank, label: 'Membership saved/yr', to: 1800, prefix: '$' },
       { icon: MousePointerClick, label: 'Checkout drop-off', to: 38, prefix: '−', suffix: '%' },
     ],
     chart: [30, 28, 44, 52, 68, 81, 100],

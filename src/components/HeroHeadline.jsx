@@ -7,10 +7,11 @@ import { useIntroDone } from '../hooks/useIntroHandoff'
 const GLYPHS = '01010110<>/\\|{}[]=+*#$%&01ABCDEF89·:×01101'.split('')
 const rand = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)] || '0'
 
-// Renders a single highlighted word. The decode (shimmer → per-character lock)
-// resolves the word in WHITE; it only takes on its gradient when `colorize`
-// flips true — which the parent times to the moment the highlight sweep passes
-// over it, so the blue lands exactly under the light bar.
+// Renders one word with the decode (shimmer → per-character lock) effect,
+// resolving in WHITE. A word given a `gradientClass` is a highlighted word: it
+// also takes on its gradient when `colorize` flips true — which the parent times
+// to the moment the highlight sweep passes over it. Words without a
+// `gradientClass` simply decrypt and stay white.
 function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
   const reduce = useReducedMotion()
   const chars = text.split('')
@@ -29,11 +30,11 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 
     setLocked(0)
 
-    const per = 90 // ms between characters locking in (cascading decrypt)
+    const per = 75 // ms between characters locking in (cascading decrypt)
     const flicker = 28 // ms between shimmer-glyph swaps (frantic ~35Hz cycle)
     // `hold` keeps EVERY character cycling through code-glyphs for a good while
     // before it locks, so the encryption effect reads for longer.
-    const hold = 750
+    const hold = 700
     const settleAt = chars.map((_, i) => delay + hold + i * per)
     const total = Math.max(...settleAt) + 220
 
@@ -81,7 +82,7 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
   if (reduce || !start) {
     return (
       <span className="relative inline-grid align-baseline">
-        <span className={`whitespace-pre ${gradientClass}`} aria-hidden>
+        <span className={`whitespace-pre ${gradientClass || 'text-white'}`} aria-hidden>
           {text}
         </span>
       </span>
@@ -99,19 +100,21 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
         {text}
       </span>
 
-      <span
-        className={`col-start-1 row-start-1 whitespace-pre ${gradientClass} ${
-          colorize ? 'hh-word-flash' : ''
-        }`}
-        style={{ opacity: colorize ? 1 : 0 }}
-        aria-hidden
-      >
-        {text}
-      </span>
+      {gradientClass && (
+        <span
+          className={`col-start-1 row-start-1 whitespace-pre ${gradientClass} ${
+            colorize ? 'hh-word-flash' : ''
+          }`}
+          style={{ opacity: colorize ? 1 : 0 }}
+          aria-hidden
+        >
+          {text}
+        </span>
+      )}
 
       <span
         className={`col-start-1 row-start-1 whitespace-pre text-white ${
-          colorize ? 'hh-wipe' : ''
+          gradientClass && colorize ? 'hh-wipe' : ''
         }`}
         aria-hidden
       >
@@ -170,25 +173,25 @@ export default function HeroHeadline() {
       {sweep && !reduce && <span className="hh-scanline" aria-hidden />}
 
       <span aria-hidden>
-        You{' '}
+        <DecodeWord text="You" start={start} delay={0} />{' '}
         <DecodeWord
           text="Dream"
           start={start}
-          delay={200}
+          delay={130}
           colorize={colorize}
           gradientClass="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent"
         />{' '}
-        It,
+        <DecodeWord text="It," start={start} delay={330} />
         <br />
-        We{' '}
+        <DecodeWord text="We" start={start} delay={470} />{' '}
         <DecodeWord
           text="Build"
           start={start}
-          delay={450}
+          delay={560}
           colorize={colorize}
           gradientClass="bg-gradient-to-r from-accent via-blue-400 to-primary bg-clip-text text-transparent"
         />{' '}
-        It.
+        <DecodeWord text="It." start={start} delay={760} />
         {/* Blinking typing caret parked at the end. */}
         {start && <span className="hh-caret" aria-hidden />}
       </span>
