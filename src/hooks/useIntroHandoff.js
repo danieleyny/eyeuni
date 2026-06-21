@@ -18,6 +18,12 @@ export function useIntroDone() {
 
   useEffect(() => {
     if (done) return
+    // Close the race where emitIntroDone() fired between our initial render and
+    // this effect subscribing (e.g. the ?nointro path emits on mount).
+    if (introDone) {
+      setDone(true)
+      return
+    }
     const fn = () => setDone(true)
     listeners.add(fn)
     return () => listeners.delete(fn)

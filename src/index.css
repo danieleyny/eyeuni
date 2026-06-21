@@ -93,6 +93,106 @@ body {
   100% { background-position: 200% 0; }
 }
 
+/* ============================================================
+   Hero headline cinematic decode ("You Dream It, We Build It.")
+   ============================================================ */
+
+/* Each character animates as its own inline-block so it can pop + bloom. */
+.hh-char {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform, filter, opacity;
+}
+
+/* Pre-lock: the glyph shimmers, dimmed with a faint blue halo. */
+.hh-char.is-scramble {
+  opacity: 0.55;
+  color: #cdd9f6;
+  text-shadow: 0 0 12px rgba(179, 200, 244, 0.35);
+}
+
+/* The moment a character locks in: a scale pop + bright bloom that settles. */
+.hh-char.is-locked {
+  animation: hh-lock 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes hh-lock {
+  0% {
+    transform: translateY(0.04em) scale(1.55);
+    filter: brightness(2.8);
+    text-shadow: 0 0 26px rgba(179, 200, 244, 0.95), 0 0 52px rgba(179, 200, 244, 0.55);
+  }
+  50% {
+    text-shadow: 0 0 16px rgba(179, 200, 244, 0.7), 0 0 30px rgba(179, 200, 244, 0.35);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+    text-shadow: 0 0 0 rgba(179, 200, 244, 0);
+  }
+}
+
+/* When the whole word resolves, the gradient layer flashes bright once... */
+.hh-word-flash {
+  animation: hh-word-flash 0.6s ease-out both;
+}
+@keyframes hh-word-flash {
+  0% { filter: brightness(1.9) saturate(1.3); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+/* ...while the white overlay is wiped away left→right, revealing the gradient. */
+.hh-wipe {
+  animation: hh-wipe 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.04s both;
+}
+@keyframes hh-wipe {
+  from { clip-path: inset(-30% -30% -30% 0%); }
+  to { clip-path: inset(-30% -30% -30% 100%); }
+}
+
+/* A bright scanline sweeps across the headline once as it decodes. */
+.hh-scanline {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  width: 9%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(179, 200, 244, 0) 8%,
+    rgba(179, 200, 244, 0.65) 50%,
+    rgba(179, 200, 244, 0) 92%,
+    transparent
+  );
+  filter: blur(3px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: hh-scan 2.7s ease-in-out 0.15s 1 forwards;
+}
+@keyframes hh-scan {
+  0% { left: -12%; opacity: 0; }
+  12% { opacity: 0.95; }
+  85% { opacity: 0.95; }
+  100% { left: 104%; opacity: 0; }
+}
+
+/* Blinking typing caret parked at the end of the headline. */
+.hh-caret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.8em;
+  margin-left: 0.08em;
+  vertical-align: -0.02em;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #b3c8f4, #0f31b8);
+  box-shadow: 0 0 12px rgba(179, 200, 244, 0.7);
+  animation: hh-caret-blink 1.05s steps(1, end) infinite;
+}
+@keyframes hh-caret-blink {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+
 /* Tap ripple for magnetic buttons on touch devices. */
 .eyeuni-ripple {
   position: absolute;
