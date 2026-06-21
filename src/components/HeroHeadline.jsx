@@ -20,20 +20,33 @@ function ScrambleWord({ text, start, className, delay = 0 }) {
       return
     }
     // Time-based scheduling (ms) so it completes in real time even if the tab
-    // throttles requestAnimationFrame. Each character resolves in sequence.
-    const per = 110 // ms between characters settling
-    const scrambleWindow = 700 // ms a character spends scrambling before it locks
+    // throttles requestAnimationFrame. Each character resolves in sequence,
+    // left-to-right, like an elegant decode/typewriter.
+    const per = 200 // ms between characters locking in (slow, deliberate)
+    const scrambleWindow = 600 // ms a character spends scrambling before it locks
+    // Refresh the random glyphs on a calm cadence instead of every frame, so the
+    // pre-lock characters read as a gentle shimmer rather than a fast glitch.
+    const flicker = 90 // ms between glyph changes while a character is scrambling
     const settleAt = text.split('').map((_, i) => delay + i * per)
     const total = Math.max(...settleAt) + scrambleWindow
+
+    // Hold the current glyph for each not-yet-locked character; only swap it out
+    // every `flicker` ms so it doesn't strobe at the full frame rate.
+    const glyphState = text.split('').map(() => rand())
+    let lastFlip = -Infinity
 
     const startT = performance.now()
     const tick = (now) => {
       const t = now - startT
+      if (now - lastFlip >= flicker) {
+        for (let i = 0; i < text.length; i++) glyphState[i] = rand()
+        lastFlip = now
+      }
       let out = ''
       for (let i = 0; i < text.length; i++) {
         if (text[i] === ' ') out += ' '
         else if (t >= settleAt[i]) out += text[i]
-        else out += rand() // always show a glyph while scrambling (never empty)
+        else out += glyphState[i] // calm shimmer until this character locks
       }
       setDisplay(out)
       if (t < total) {
@@ -82,7 +95,7 @@ export default function HeroHeadline() {
         <ScrambleWord
           text="Dream"
           start={start}
-          delay={240}
+          delay={300}
           className="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent"
         />{' '}
         It,
@@ -91,7 +104,7 @@ export default function HeroHeadline() {
         <ScrambleWord
           text="Build"
           start={start}
-          delay={900}
+          delay={1800}
           className="bg-gradient-to-r from-accent via-blue-400 to-primary bg-clip-text text-transparent"
         />{' '}
         It.

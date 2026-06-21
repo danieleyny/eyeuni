@@ -29,7 +29,7 @@ export default function Preloader() {
   useEffect(() => {
     if (!show) return
 
-    const total = reduceMotion ? 900 : 6200
+    const total = reduceMotion ? 700 : 2600
     const start = performance.now()
     let raf
 
@@ -68,7 +68,7 @@ export default function Preloader() {
               : {
                   // The overlay closes like a camera aperture, revealing the site.
                   clipPath: 'circle(0% at 50% 50%)',
-                  transition: { duration: 1.5, ease: [0.83, 0, 0.17, 1] },
+                  transition: { duration: 0.9, ease: [0.83, 0, 0.17, 1] },
                 }
           }
           style={{ willChange: 'clip-path, opacity' }}
@@ -101,7 +101,7 @@ export default function Preloader() {
             className="relative z-10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, ease: 'easeOut' }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             {/* soft glow disc behind the iris */}
             <motion.circle
@@ -111,7 +111,7 @@ export default function Preloader() {
               fill="#0f31b8"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.6, 0.35] }}
-              transition={{ duration: 3, delay: 1.4, ease: 'easeOut' }}
+              transition={{ duration: 1.6, delay: 0.6, ease: 'easeOut' }}
               style={{ filter: 'blur(8px)' }}
             />
 
@@ -124,7 +124,7 @@ export default function Preloader() {
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: reduceMotion ? 0.5 : 2.8, ease: 'easeInOut' }}
+              transition={{ duration: reduceMotion ? 0.4 : 1.3, ease: 'easeInOut' }}
             />
 
             {/* iris ring */}
@@ -137,7 +137,7 @@ export default function Preloader() {
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: reduceMotion ? 0.5 : 2.2, delay: 1.6, ease: 'easeInOut' }}
+              transition={{ duration: reduceMotion ? 0.4 : 1, delay: 0.5, ease: 'easeInOut' }}
             />
 
             {/* pupil */}
@@ -148,7 +148,7 @@ export default function Preloader() {
               fill="#b3c8f4"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 220, damping: 16, delay: 3.4 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 1.05 }}
               style={{ transformOrigin: '60px 60px' }}
             />
             <motion.circle
@@ -158,7 +158,7 @@ export default function Preloader() {
               fill="#0a0a0f"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 3.8, duration: 0.5 }}
+              transition={{ delay: 1.2 }}
               style={{ transformOrigin: '60px 60px' }}
             />
           </motion.svg>
@@ -171,7 +171,7 @@ export default function Preloader() {
                 className={i < 3 ? 'text-primary' : 'text-white'}
                 initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ delay: 2.6 + i * 0.16, duration: 0.7, ease: 'easeOut' }}
+                transition={{ delay: 0.9 + i * 0.07, duration: 0.5, ease: 'easeOut' }}
               >
                 {ch}
               </motion.span>
@@ -185,7 +185,7 @@ export default function Preloader() {
                 key={i}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 4.0 + i * 0.16, duration: 0.6 }}
+                transition={{ delay: 1.4 + i * 0.08, duration: 0.4 }}
               >
                 {word}
               </motion.span>
@@ -197,7 +197,7 @@ export default function Preloader() {
             className="relative z-10 mt-10 flex w-56 flex-col items-center gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 4.6, duration: 0.6 }}
+            transition={{ delay: 1.6, duration: 0.5 }}
           >
             <div className="h-px w-full overflow-hidden bg-white/10">
               <div
