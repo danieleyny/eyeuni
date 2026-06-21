@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import { useIntroDone } from '../hooks/useIntroHandoff'
 
-// A curated, techy glyph pool — binary/hex/code symbols rather than random
-// garbage, so the pre-lock shimmer reads as "decoding" instead of noise.
-const GLYPHS = '01<>/{}[]=+*#$%01ABCDEF01·:•01'.split('')
+// A curated, techy glyph pool — heavy on binary/hex with code symbols, so the
+// pre-lock shimmer reads as fast "decryption" rather than random garbage.
+const GLYPHS = '01010110<>/\\|{}[]=+*#$%&01ABCDEF89·:×01101'.split('')
 const rand = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)] || '0'
 
 // Renders a single highlighted word. The decode (shimmer → per-character lock)
@@ -29,8 +29,8 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 
     setLocked(0)
 
-    const per = 150 // ms between characters locking in
-    const flicker = 55 // ms between shimmer-glyph swaps (calm, not a strobe)
+    const per = 80 // ms between characters locking in (fast, cascading decrypt)
+    const flicker = 28 // ms between shimmer-glyph swaps (frantic ~35Hz cycle)
     const settleAt = chars.map((_, i) => delay + i * per)
     const total = Math.max(...settleAt) + 220
 
@@ -133,8 +133,8 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 //   ~SWEEP_AT ..... a single highlight bar starts sweeping left→right
 //   ~COLOR_AT ..... bar reaches the highlighted words → they turn blue together,
 //                   each wiping its gradient in under the bar's trailing edge
-const SWEEP_AT = 1350
-const COLOR_AT = 1900
+const SWEEP_AT = 1100
+const COLOR_AT = 1650
 
 export default function HeroHeadline() {
   const start = useIntroDone()
@@ -171,7 +171,7 @@ export default function HeroHeadline() {
         <DecodeWord
           text="Dream"
           start={start}
-          delay={250}
+          delay={200}
           colorize={colorize}
           gradientClass="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent"
         />{' '}
@@ -181,7 +181,7 @@ export default function HeroHeadline() {
         <DecodeWord
           text="Build"
           start={start}
-          delay={600}
+          delay={450}
           colorize={colorize}
           gradientClass="bg-gradient-to-r from-accent via-blue-400 to-primary bg-clip-text text-transparent"
         />{' '}

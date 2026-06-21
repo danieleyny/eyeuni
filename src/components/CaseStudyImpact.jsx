@@ -54,7 +54,7 @@ function Phone({ image, toasts, play }) {
   return (
     <div className="relative mx-auto w-[220px] sm:w-[240px]">
       <div className="relative rounded-[2rem] border-[6px] border-[#1a1a2e] bg-black overflow-hidden shadow-2xl shadow-accent/10 aspect-[9/18]">
-        <img src={`${base}${image.slice(1)}`} alt="" className="w-full h-full object-cover object-top" loading="lazy" />
+        <img src={`${base}${image.slice(1)}`} alt="" className="w-full h-full object-cover object-top" loading="eager" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40" />
         {/* notification toasts loop */}
         {toasts.map((t, i) => (
