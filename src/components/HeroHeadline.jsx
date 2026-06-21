@@ -29,9 +29,12 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 
     setLocked(0)
 
-    const per = 80 // ms between characters locking in (fast, cascading decrypt)
+    const per = 90 // ms between characters locking in (cascading decrypt)
     const flicker = 28 // ms between shimmer-glyph swaps (frantic ~35Hz cycle)
-    const settleAt = chars.map((_, i) => delay + i * per)
+    // `hold` keeps EVERY character cycling through code-glyphs for a good while
+    // before it locks, so the encryption effect reads for longer.
+    const hold = 750
+    const settleAt = chars.map((_, i) => delay + hold + i * per)
     const total = Math.max(...settleAt) + 220
 
     const pool = chars.map(() => rand())
@@ -133,8 +136,8 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 //   ~SWEEP_AT ..... a single highlight bar starts sweeping left→right
 //   ~COLOR_AT ..... bar reaches the highlighted words → they turn blue together,
 //                   each wiping its gradient in under the bar's trailing edge
-const SWEEP_AT = 1100
-const COLOR_AT = 1650
+const SWEEP_AT = 1650
+const COLOR_AT = 2200
 
 export default function HeroHeadline() {
   const start = useIntroDone()

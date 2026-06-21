@@ -31,16 +31,21 @@ const services = [
 function CodeDemo() {
   const lines = [
     [['<', 'tag'], ['section', 'name'], [' class=', 'attr'], ['"hero"', 'str'], ['>', 'tag']],
-    [['  <', 'tag'], ['h1', 'name'], ['>', 'tag'], ['Grow.', 'txt']],
-    [['  <', 'tag'], ['button', 'name'], ['>', 'tag'], ['Start', 'txt']],
+    [['  <', 'tag'], ['h1', 'name'], ['>', 'tag'], ['Grow.', 'txt'], ['</', 'tag'], ['h1', 'name'], ['>', 'tag']],
+    [['  <', 'tag'], ['p', 'name'], ['>', 'tag'], ['Build better.', 'txt'], ['</', 'tag'], ['p', 'name'], ['>', 'tag']],
+    [['  <', 'tag'], ['button', 'name'], ['>', 'tag'], ['Start', 'txt'], ['</', 'tag'], ['button', 'name'], ['>', 'tag']],
     [['</', 'tag'], ['section', 'name'], ['>', 'tag']],
+    [['<', 'tag'], ['style', 'name'], ['>', 'tag']],
+    [['  .hero', 'name'], [' { ', 'tag'], ['display', 'attr'], [': ', 'tag'], ['grid', 'str'], ['; }', 'tag']],
+    [['  button', 'name'], [' { ', 'tag'], ['background', 'attr'], [': ', 'tag'], ['#0f31b8', 'str'], ['; }', 'tag']],
+    [['</', 'tag'], ['style', 'name'], ['>', 'tag']],
   ]
   const color = { tag: 'text-primary', name: 'text-blue-400', attr: 'text-secondary', str: 'text-emerald-400', txt: 'text-white/80' }
   return (
     <div className="grid grid-cols-2 gap-3 h-full">
-      <pre className="text-[10px] sm:text-[11px] leading-relaxed font-mono overflow-hidden rounded-lg bg-black/40 border border-white/10 p-3">
+      <pre className="text-[10px] sm:text-[11px] leading-snug font-mono overflow-hidden rounded-lg bg-black/40 border border-white/10 p-3">
         {lines.map((line, li) => (
-          <div key={li} className="svc-code-line whitespace-pre" style={{ animationDelay: `${li * 0.5}s` }}>
+          <div key={li} className="svc-code-line whitespace-pre" style={{ animationDelay: `${li * 0.32}s` }}>
             {line.map(([t, c], ci) => (
               <span key={ci} className={color[c]}>{t}</span>
             ))}
