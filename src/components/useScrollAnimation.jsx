@@ -1,13 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 
+// Reveal immediately (no scroll-triggered motion) when the user prefers reduced
+// motion, or when ?reveal is set (used for automated visual checks).
+function shouldRevealImmediately() {
+  if (typeof window === 'undefined') return false
+  const reduce =
+    window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const forced = new URLSearchParams(window.location.search).has('reveal')
+  return reduce || forced
+}
+
 export function useScrollAnimation() {
   const ref = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(() => shouldRevealImmediately())
   const triggered = useRef(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    if (shouldRevealImmediately()) {
+      setIsVisible(true)
+      return
+    }
 
     function check() {
       if (triggered.current) return

@@ -1,5 +1,8 @@
+import { useRef } from 'react'
 import { AnimateIn } from './useScrollAnimation'
 import { ExternalLink } from 'lucide-react'
+import TiltCard from './effects/TiltCard'
+import { useInViewPaused } from '../hooks/useInViewPaused'
 
 const projects = [
   { title: 'Birchwood', category: 'Short-Term Rental Platform for Property Owners', color: 'from-violet-600 to-indigo-600', image: '/portfolio/birchwood.jpg', url: 'https://birchwoodny.com/' },
@@ -15,6 +18,72 @@ const projects = [
   { title: 'CARRY', category: 'Concealed Carry Licensing & Training Website', color: 'from-yellow-600 to-stone-700', image: '/portfolio/ccw.jpg', url: 'https://ccw-eight.vercel.app/' },
 ]
 
+function ProjectCard({ project, index }) {
+  const cardRef = useRef(null)
+  const inView = useInViewPaused(cardRef, { threshold: 0.1 })
+  const base = import.meta.env.BASE_URL
+
+  return (
+    <TiltCard className="h-full">
+      <a
+        ref={cardRef}
+        href={project.url || undefined}
+        target={project.url ? '_blank' : undefined}
+        rel={project.url ? 'noopener noreferrer' : undefined}
+        aria-label={`${project.title} — ${project.category}`}
+        className={`group relative rounded-2xl overflow-hidden block aspect-[4/3] border border-white/[0.06] ${project.url ? 'cursor-pointer' : 'cursor-default'}`}
+      >
+        {/* Gradient background (fallback) */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
+
+        {/* Screenshot — taller than the frame, slowly pans to feel "live" */}
+        {project.image ? (
+          <div className="absolute inset-0 overflow-hidden">
+            <img
+              src={`${base}${project.image.slice(1)}`}
+              alt={project.title}
+              loading="lazy"
+              className="absolute inset-x-0 top-0 w-full h-[160%] object-cover object-top"
+              style={{
+                animation: inView ? 'card-pan 16s ease-in-out infinite alternate' : 'none',
+                animationDelay: `${(index % 3) * -3}s`,
+              }}
+            />
+          </div>
+        ) : (
+          <div className="absolute inset-6 md:inset-8 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 flex items-center justify-center">
+            <div className="text-white/40 text-sm font-medium">Coming Soon</div>
+          </div>
+        )}
+
+        {/* Top sheen for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
+
+        {/* Always-visible glassy label bar (mobile-first affordance).
+            On desktop it yields to the full hover overlay. */}
+        <div className="absolute bottom-0 inset-x-0 z-10 flex items-center justify-between gap-2 px-3 py-2.5 bg-dark/60 backdrop-blur-md border-t border-white/10 transition-opacity duration-300 md:group-hover:opacity-0">
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-white truncate">{project.title}</div>
+            <div className="text-[11px] text-primary/90 truncate">{project.category}</div>
+          </div>
+          {project.url && <ExternalLink className="w-4 h-4 text-primary shrink-0" />}
+        </div>
+
+        {/* Full hover overlay (desktop only) */}
+        <div className="absolute inset-0 z-10 hidden md:flex bg-dark/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex-col items-center justify-center gap-3 text-center px-4">
+          <h3 className="text-xl font-bold text-white translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{project.title}</h3>
+          <span className="text-primary text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">{project.category}</span>
+          {project.url && (
+            <div className="w-10 h-10 rounded-full border border-primary/50 flex items-center justify-center mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150 group-hover:bg-primary/10">
+              <ExternalLink className="w-4 h-4 text-primary" />
+            </div>
+          )}
+        </div>
+      </a>
+    </TiltCard>
+  )
+}
+
 export default function Portfolio() {
   return (
     <section id="portfolio" className="py-24 md:py-32 bg-dark-card/30">
@@ -28,48 +97,8 @@ export default function Portfolio() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
-            <AnimateIn key={project.title + i} delay={i * 100}>
-              <a
-                href={project.url || undefined}
-                target={project.url ? '_blank' : undefined}
-                rel={project.url ? 'noopener noreferrer' : undefined}
-                className={`group relative rounded-2xl overflow-hidden block aspect-[4/3] ${project.url ? 'cursor-pointer' : 'cursor-default'}`}
-              >
-                {/* Gradient background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.color} transition-transform duration-700 group-hover:scale-110`} />
-
-                {/* Screenshot or placeholder */}
-                {project.image ? (
-                  <div className="absolute inset-0">
-                    <img
-                      src={`${import.meta.env.BASE_URL}${project.image.slice(1)}`}
-                      alt={project.title}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div className="absolute inset-0 opacity-10" style={{
-                      backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-                      backgroundSize: '40px 40px'
-                    }} />
-                    <div className="absolute inset-6 md:inset-8 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 flex items-center justify-center">
-                      <div className="text-white/40 text-sm font-medium">Coming Soon</div>
-                    </div>
-                  </>
-                )}
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-dark/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center justify-center gap-3">
-                  <h3 className="text-xl font-bold text-white translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{project.title}</h3>
-                  <span className="text-primary text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">{project.category}</span>
-                  {project.url && (
-                    <div className="w-10 h-10 rounded-full border border-primary/50 flex items-center justify-center mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150 hover:bg-primary/10">
-                      <ExternalLink className="w-4 h-4 text-primary" />
-                    </div>
-                  )}
-                </div>
-              </a>
+            <AnimateIn key={project.title + i} delay={i * 80}>
+              <ProjectCard project={project} index={i} />
             </AnimateIn>
           ))}
         </div>

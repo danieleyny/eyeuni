@@ -12,8 +12,25 @@
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Lenis drives smooth scrolling for motion users. Native smooth-scroll fights
+   Lenis's interpolation, so it's only enabled as the reduced-motion fallback. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -59,4 +76,48 @@ body {
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* In-card "live page" auto-scroll — pans a tall screenshot. */
+@keyframes card-pan {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-37.5%); }
+}
+
+/* Tap ripple for magnetic buttons on touch devices. */
+.eyeuni-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  pointer-events: none;
+  animation: eyeuni-ripple 0.6s ease-out forwards;
+}
+@keyframes eyeuni-ripple {
+  to { transform: scale(2.2); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

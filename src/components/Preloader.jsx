@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { emitIntroDone } from '../hooks/useIntroHandoff'
 
 const STORAGE_KEY = 'eyeuni_intro_seen'
 const WORDMARK = ['E', 'Y', 'E', 'u', 'n', 'i']
@@ -12,6 +13,15 @@ export default function Preloader() {
 
   // Decide once on mount whether this is a first-time visitor.
   useEffect(() => {
+    // ?nointro skips the intro (useful for shared links / previews).
+    if (
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).has('nointro')
+    ) {
+      emitIntroDone()
+      return
+    }
+
     let seen = false
     try {
       seen = localStorage.getItem(STORAGE_KEY) === '1'
@@ -46,6 +56,8 @@ export default function Preloader() {
       if (t < 1) {
         raf = requestAnimationFrame(tick)
       } else {
+        // Fire the hero headline decode as the aperture begins to open.
+        emitIntroDone()
         setShow(false)
       }
     }

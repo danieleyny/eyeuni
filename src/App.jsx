@@ -1,16 +1,31 @@
-import { Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Preloader from './components/Preloader'
+import SmoothScroll from './components/effects/SmoothScroll'
+import MotionPermissionGate from './components/effects/MotionPermissionGate'
+import StickyMobileCTA from './components/StickyMobileCTA'
+import StatsStrip from './components/StatsStrip'
+import ScrollProgress from './components/effects/ScrollProgress'
+import DepthOverlay from './components/effects/DepthOverlay'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import CostOfBadWebsite from './components/CostOfBadWebsite'
 import Services from './components/Services'
+import CapabilityConstellation from './components/CapabilityConstellation'
 import WebsiteTransform from './components/WebsiteTransform'
+import SpeedRace from './components/SpeedRace'
+import CaseStudyImpact from './components/CaseStudyImpact'
 import Portfolio from './components/Portfolio'
+import IntegrationsMarquee from './components/IntegrationsMarquee'
 import Testimonials from './components/Testimonials'
 import DemoWebsiteCTA from './components/DemoWebsiteCTA'
 import FAQ from './components/FAQ'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import IntakePage from './components/intake/IntakePage'
+
+// Intake flow (form steps + confetti) is its own chunk — loaded only on /intake.
+const IntakePage = lazy(() => import('./components/intake/IntakePage'))
 
 function HomePage() {
   return (
@@ -18,27 +33,66 @@ function HomePage() {
       <Header />
       <main>
         <Hero />
+        <CostOfBadWebsite />
         <Services />
+        <StatsStrip />
+        <CapabilityConstellation />
         <WebsiteTransform />
+        <SpeedRace />
+        <CaseStudyImpact />
         <Portfolio />
+        <IntegrationsMarquee />
         <Testimonials />
         <DemoWebsiteCTA />
         <FAQ />
         <Contact />
       </main>
       <Footer />
+      <StickyMobileCTA />
     </>
+  )
+}
+
+// Animated route transitions (home ↔ intake). Quick aperture-fade, <600ms.
+function AnimatedRoutes() {
+  const location = useLocation()
+  const reduce = useReducedMotion()
+
+  const routes = (
+    <Suspense fallback={<div className="min-h-screen bg-dark" />}>
+      <Routes location={location}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/intake" element={<IntakePage />} />
+      </Routes>
+    </Suspense>
+  )
+
+  if (reduce) return routes
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, scale: 0.99, clipPath: 'circle(0% at 50% 45%)' }}
+        animate={{ opacity: 1, scale: 1, clipPath: 'circle(150% at 50% 45%)' }}
+        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+        transition={{ duration: 0.45, ease: [0.83, 0, 0.17, 1] }}
+      >
+        {routes}
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
 export default function App() {
   return (
-    <>
+    <MotionPermissionGate>
       <Preloader />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/intake" element={<IntakePage />} />
-      </Routes>
-    </>
+      <ScrollProgress />
+      <DepthOverlay />
+      <SmoothScroll>
+        <AnimatedRoutes />
+      </SmoothScroll>
+    </MotionPermissionGate>
   )
 }

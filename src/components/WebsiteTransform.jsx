@@ -1,18 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
+import {
+  motion,
+  useTransform,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+} from 'framer-motion'
 import { AnimateIn } from './useScrollAnimation'
-
-// Animation phases
-const PHASE_UGLY = 0
-const PHASE_WIPE = 1
-const PHASE_BEAUTIFUL = 2
-const PHASE_RESET = 3
-
-const TIMING = {
-  [PHASE_UGLY]: 2800,
-  [PHASE_WIPE]: 1800,
-  [PHASE_BEAUTIFUL]: 4000,
-  [PHASE_RESET]: 1000,
-}
+import { useInViewPaused } from '../hooks/useInViewPaused'
+import { useScrollProgress } from '../hooks/useScrollProgress'
 
 // ─── Ugly Website Mockup ────────────────────────────────
 function UglyWebsite() {
@@ -194,36 +190,39 @@ function BeautifulWebsite() {
   )
 }
 
-// ─── Wipe Transition Effect ─────────────────────────────
-function WipeTransition({ active, children }) {
+// ─── Wipe Transition Effect (scroll-scrubbed) ───────────
+// `progress` (MotionValue 0..1) sweeps a gradient band across the screen,
+// peaking the title at the midpoint.
+function WipeTransition({ progress, children }) {
+  const bandX = useTransform(progress, [0, 1], ['-110%', '110%'])
+  const overlayOpacity = useTransform(
+    progress,
+    [0, 0.08, 0.92, 1],
+    [0, 1, 1, 0]
+  )
+  const textOpacity = useTransform(
+    progress,
+    [0.15, 0.4, 0.6, 0.85],
+    [0, 1, 1, 0]
+  )
+  const textScale = useTransform(progress, [0.2, 0.5], [0.85, 1])
+
   return (
-    <div
+    <motion.div
       className="absolute inset-0 z-[10] pointer-events-none flex items-center justify-center"
-      style={{
-        opacity: active ? 1 : 0,
-        transition: 'opacity 0.3s ease',
-      }}
+      style={{ opacity: overlayOpacity }}
     >
-      {/* Sweeping gradient overlay */}
-      <div
+      <motion.div
         className="absolute inset-0 bg-gradient-to-r from-accent via-primary to-accent"
-        style={{
-          transform: active ? 'translateX(0)' : 'translateX(-110%)',
-          transition: 'transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)',
-        }}
+        style={{ x: bandX }}
       />
-      {/* Title text centered */}
-      <div
+      <motion.div
         className="relative z-10 text-center"
-        style={{
-          opacity: active ? 1 : 0,
-          transform: active ? 'scale(1)' : 'scale(0.8)',
-          transition: 'opacity 0.4s ease 0.3s, transform 0.4s ease 0.3s',
-        }}
+        style={{ opacity: textOpacity, scale: textScale }}
       >
         {children}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -289,163 +288,201 @@ function SparkleCanvas({ active }) {
   )
 }
 
-// ─── Main Component ─────────────────────────────────────
-export default function WebsiteTransform() {
-  const [phase, setPhase] = useState(PHASE_UGLY)
-  const [inView, setInView] = useState(false)
-  const sectionRef = useRef(null)
-  const timeoutRef = useRef(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting && !inView) setInView(true) },
-      { threshold: 0.3 }
-    )
-    if (sectionRef.current) observer.observe(sectionRef.current)
-    return () => observer.disconnect()
-  }, [inView])
-
-  useEffect(() => {
-    if (!inView) return
-    const advancePhase = () => {
-      setPhase(prev => {
-        const next = prev >= PHASE_RESET ? PHASE_UGLY : prev + 1
-        timeoutRef.current = setTimeout(advancePhase, TIMING[next] || TIMING[PHASE_UGLY])
-        return next
-      })
-    }
-    timeoutRef.current = setTimeout(advancePhase, TIMING[PHASE_UGLY])
-    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current) }
-  }, [inView])
-
-  const showUgly = phase === PHASE_UGLY
-  const showWipe = phase === PHASE_WIPE
-  const showBeautiful = phase === PHASE_BEAUTIFUL
-  const showSparkles = phase === PHASE_BEAUTIFUL
-
+// ─── The laptop (shared by scrub + reduced-motion paths) ─
+function Laptop({ uglyOpacity, beautifulOpacity, beautifulRingOpacity, sparkleActive, wipeProgress }) {
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
-      {/* Background */}
+    <div className="max-w-2xl mx-auto">
+      <div className="relative">
+        {/* Screen bezel */}
+        <div className="bg-[#1a1a2e] rounded-t-2xl p-2 sm:p-3 pb-0 border border-dark-border border-b-0">
+          <div className="flex justify-center mb-1.5 sm:mb-2">
+            <div className="w-2 h-2 rounded-full bg-gray-700 ring-1 ring-gray-600" />
+          </div>
+
+          {/* Screen */}
+          <div className="relative aspect-[16/10] rounded-sm overflow-hidden bg-[#0a0a0f]">
+            <motion.div className="absolute inset-0 z-[1]" style={{ opacity: uglyOpacity }}>
+              <UglyWebsite />
+            </motion.div>
+
+            <motion.div className="absolute inset-0 z-[2]" style={{ opacity: beautifulOpacity }}>
+              <BeautifulWebsite />
+            </motion.div>
+
+            <SparkleCanvas active={sparkleActive} />
+
+            <WipeTransition progress={wipeProgress}>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <svg width="28" height="28" viewBox="0 0 36 36" fill="none" className="drop-shadow-lg">
+                  <rect width="36" height="36" rx="8" fill="white" fillOpacity="0.2"/>
+                  <path d="M10 18C10 18 14 11 18 11C22 11 26 18 26 18C26 18 22 25 18 25C14 25 10 18 10 18Z" stroke="white" strokeWidth="1.5" fill="none"/>
+                  <circle cx="18" cy="18" r="3" fill="white"/>
+                </svg>
+                <div>
+                  <div className="text-[8px] sm:text-[10px] text-white/60 tracking-[0.3em] uppercase font-medium">Introducing</div>
+                  <div className="text-lg sm:text-2xl font-black text-white tracking-tight">
+                    The EYE<span className="text-white/80">uni</span> Effect
+                  </div>
+                </div>
+              </div>
+            </WipeTransition>
+
+            {/* Glow ring during beautiful phase */}
+            <motion.div className="absolute inset-0 z-[4] pointer-events-none" style={{ opacity: beautifulRingOpacity }}>
+              <div className="absolute inset-[-2px] rounded-sm ring-1 ring-blue-500/30 animate-[pulse-glow_2s_ease-in-out_infinite]" />
+            </motion.div>
+
+            {/* Screen reflection */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none z-[50]" />
+          </div>
+        </div>
+
+        {/* Laptop base */}
+        <div className="bg-[#1a1a2e] border border-dark-border border-t-[#2a2a3e] rounded-b-lg h-3 sm:h-4 flex items-center justify-center">
+          <div className="w-16 sm:w-24 h-1 rounded-full bg-gray-700" />
+        </div>
+        <div className="mx-8 h-2 bg-black/40 rounded-full blur-md -mt-1" />
+      </div>
+    </div>
+  )
+}
+
+function Heading() {
+  return (
+    <AnimateIn className="text-center mb-10 md:mb-14">
+      <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4">
+        Before & After —{' '}
+        <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          The EYEuni Effect
+        </span>
+      </h2>
+      <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
+        Scroll to watch us transform an outdated website into a high-performing, professional experience.
+      </p>
+    </AnimateIn>
+  )
+}
+
+function Labels({ beforeOpacity, effectOpacity, afterOpacity }) {
+  return (
+    <div className="flex justify-center gap-6 sm:gap-8 mt-8">
+      <motion.div className="flex items-center gap-2" style={{ opacity: beforeOpacity }}>
+        <div className="w-3 h-3 rounded-full bg-red-500/80" />
+        <span className="text-sm text-gray-400 font-medium">Before</span>
+      </motion.div>
+      <motion.div className="flex items-center gap-2" style={{ opacity: effectOpacity }}>
+        <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-accent" />
+        <span className="text-sm font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">The EYEuni Effect</span>
+      </motion.div>
+      <motion.div className="flex items-center gap-2" style={{ opacity: afterOpacity }}>
+        <div className="w-3 h-3 rounded-full bg-green-500/80" />
+        <span className="text-sm text-gray-400 font-medium">After</span>
+      </motion.div>
+    </div>
+  )
+}
+
+function BgLayers() {
+  return (
+    <>
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark-card/50 to-dark" />
       <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-[pulse-glow_6s_ease-in-out_infinite]" />
       <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-[pulse-glow_8s_ease-in-out_infinite_1s]" />
+    </>
+  )
+}
 
+const Keyframes = () => (
+  <style>{`
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  `}</style>
+)
+
+// ─── Reduced-motion: simple one-shot crossfade, no pin ───
+function ReducedTransform() {
+  const ref = useRef(null)
+  const revealed = useInViewPaused(ref, { threshold: 0.4 })
+  // WipeTransition runs useTransform on this, so it must be a MotionValue.
+  const wipeProgress = useMotionValue(0)
+  return (
+    <section id="transform" ref={ref} className="py-24 md:py-32 relative overflow-hidden">
+      <BgLayers />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Heading */}
-        <AnimateIn className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
-            Before & After —{' '}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              The EYEuni Effect
-            </span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            See how we transform outdated websites into high-performing, professional online experiences.
-          </p>
-        </AnimateIn>
-
-        {/* The Laptop Animation */}
-        <AnimateIn delay={200}>
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              {/* Screen bezel */}
-              <div className="bg-[#1a1a2e] rounded-t-2xl p-2 sm:p-3 pb-0 border border-dark-border border-b-0">
-                <div className="flex justify-center mb-1.5 sm:mb-2">
-                  <div className="w-2 h-2 rounded-full bg-gray-700 ring-1 ring-gray-600" />
-                </div>
-
-                {/* Screen */}
-                <div className="relative aspect-[16/10] rounded-sm overflow-hidden bg-[#0a0a0f]">
-                  {/* Ugly website */}
-                  <div
-                    className="absolute inset-0 z-[1]"
-                    style={{
-                      opacity: showUgly ? 1 : 0,
-                      transition: 'opacity 0.5s ease',
-                    }}
-                  >
-                    <UglyWebsite />
-                  </div>
-
-                  {/* Beautiful website */}
-                  <div
-                    className="absolute inset-0 z-[2]"
-                    style={{
-                      opacity: showBeautiful ? 1 : 0,
-                      transition: 'opacity 0.6s ease 0.8s',
-                    }}
-                  >
-                    <BeautifulWebsite />
-                  </div>
-
-                  {/* Sparkle particles on reveal */}
-                  <SparkleCanvas active={showSparkles} />
-
-                  {/* Wipe transition with "The EYEuni Effect" */}
-                  <WipeTransition active={showWipe}>
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <svg width="28" height="28" viewBox="0 0 36 36" fill="none" className="drop-shadow-lg">
-                        <rect width="36" height="36" rx="8" fill="white" fillOpacity="0.2"/>
-                        <path d="M10 18C10 18 14 11 18 11C22 11 26 18 26 18C26 18 22 25 18 25C14 25 10 18 10 18Z" stroke="white" strokeWidth="1.5" fill="none"/>
-                        <circle cx="18" cy="18" r="3" fill="white"/>
-                      </svg>
-                      <div>
-                        <div className="text-[8px] sm:text-[10px] text-white/60 tracking-[0.3em] uppercase font-medium">Introducing</div>
-                        <div className="text-lg sm:text-2xl font-black text-white tracking-tight">
-                          The EYE<span className="text-white/80">uni</span> Effect
-                        </div>
-                      </div>
-                    </div>
-                  </WipeTransition>
-
-                  {/* Glow ring during beautiful phase */}
-                  {showBeautiful && (
-                    <div className="absolute inset-0 z-[4] pointer-events-none">
-                      <div className="absolute inset-[-2px] rounded-sm ring-1 ring-blue-500/30 animate-[pulse-glow_2s_ease-in-out_infinite]" />
-                    </div>
-                  )}
-
-                  {/* Screen reflection */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none z-[50]" />
-                </div>
-              </div>
-
-              {/* Laptop base */}
-              <div className="bg-[#1a1a2e] border border-dark-border border-t-[#2a2a3e] rounded-b-lg h-3 sm:h-4 flex items-center justify-center">
-                <div className="w-16 sm:w-24 h-1 rounded-full bg-gray-700" />
-              </div>
-              <div className="mx-8 h-2 bg-black/40 rounded-full blur-md -mt-1" />
-            </div>
-
-            {/* Before/After labels */}
-            <div className="flex justify-center gap-8 mt-8">
-              <div className={`flex items-center gap-2 transition-all duration-500 ${showUgly ? 'opacity-100 scale-100' : 'opacity-30 scale-95'}`}>
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <span className="text-sm text-gray-400 font-medium">Before</span>
-              </div>
-              <div className={`flex items-center gap-2 transition-all duration-500 ${showWipe ? 'opacity-100 scale-110' : showBeautiful ? 'opacity-30 scale-95' : 'opacity-30 scale-95'}`}>
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-accent" />
-                <span className="text-sm font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">The EYEuni Effect</span>
-              </div>
-              <div className={`flex items-center gap-2 transition-all duration-500 ${showBeautiful ? 'opacity-100 scale-100' : 'opacity-30 scale-95'}`}>
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="text-sm text-gray-400 font-medium">After</span>
-              </div>
-            </div>
-          </div>
-        </AnimateIn>
+        <Heading />
+        <Laptop
+          uglyOpacity={revealed ? 0 : 1}
+          beautifulOpacity={revealed ? 1 : 0}
+          beautifulRingOpacity={revealed ? 1 : 0}
+          sparkleActive={false}
+          wipeProgress={wipeProgress}
+        />
+        <Labels
+          beforeOpacity={revealed ? 0.3 : 1}
+          effectOpacity={0.3}
+          afterOpacity={revealed ? 1 : 0.3}
+        />
       </div>
+      <Keyframes />
+    </section>
+  )
+}
 
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
+// ─── Main Component (scroll-scrubbed, pinned) ───────────
+export default function WebsiteTransform() {
+  const reduce = useReducedMotion()
+  const wrapRef = useRef(null)
+  const [sparkleActive, setSparkleActive] = useState(false)
+
+  const scrollYProgress = useScrollProgress(wrapRef)
+
+  // Scrub mappings (must be called unconditionally — hooks rules).
+  const uglyOpacity = useTransform(scrollYProgress, [0, 0.3, 0.42], [1, 1, 0])
+  const beautifulOpacity = useTransform(scrollYProgress, [0.45, 0.62], [0, 1])
+  const beautifulRingOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1])
+  const wipeProgress = useTransform(scrollYProgress, [0.28, 0.55], [0, 1])
+  const beforeOpacity = useTransform(scrollYProgress, [0, 0.3, 0.42], [1, 1, 0.3])
+  const effectOpacity = useTransform(scrollYProgress, [0.28, 0.4, 0.6, 0.7], [0.3, 1, 1, 0.3])
+  const afterOpacity = useTransform(scrollYProgress, [0.5, 0.62], [0.3, 1])
+
+  // Sparkles fire during the reveal window only.
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const on = v > 0.5 && v < 0.85
+    setSparkleActive((prev) => (prev === on ? prev : on))
+  })
+
+  if (reduce) return <ReducedTransform />
+
+  return (
+    <section id="transform" className="relative">
+      <div ref={wrapRef} className="relative h-[300vh]">
+        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+          <BgLayers />
+
+          {/* Thin scrub progress affordance */}
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-[3px] origin-left bg-gradient-to-r from-primary via-blue-400 to-accent z-20"
+            style={{ scaleX: scrollYProgress }}
+          />
+
+          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+            <Heading />
+            <Laptop
+              uglyOpacity={uglyOpacity}
+              beautifulOpacity={beautifulOpacity}
+              beautifulRingOpacity={beautifulRingOpacity}
+              sparkleActive={sparkleActive}
+              wipeProgress={wipeProgress}
+            />
+            <Labels
+              beforeOpacity={beforeOpacity}
+              effectOpacity={effectOpacity}
+              afterOpacity={afterOpacity}
+            />
+          </div>
+        </div>
+      </div>
+      <Keyframes />
     </section>
   )
 }
