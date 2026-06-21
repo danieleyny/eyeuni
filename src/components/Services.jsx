@@ -48,11 +48,30 @@ function CodeDemo() {
         ))}
         <span className="svc-caret inline-block w-1.5 h-3 bg-primary align-middle" />
       </pre>
-      <div className="rounded-lg bg-gradient-to-br from-dark-card to-black border border-white/10 p-2.5 flex flex-col gap-2 justify-center">
-        <div className="svc-render h-2.5 w-3/4 rounded bg-primary/70" style={{ animationDelay: '0.6s' }} />
-        <div className="svc-render h-1.5 w-full rounded bg-white/15" style={{ animationDelay: '1.1s' }} />
-        <div className="svc-render h-1.5 w-5/6 rounded bg-white/15" style={{ animationDelay: '1.4s' }} />
-        <div className="svc-render h-5 w-1/2 rounded bg-accent mt-1" style={{ animationDelay: '1.8s' }} />
+      {/* Live preview — renders exactly what the code types: a "Grow."
+          headline and a "Start" button, each appearing as its line is typed. */}
+      <div className="relative rounded-lg bg-gradient-to-br from-dark-card to-black border border-white/10 overflow-hidden flex flex-col items-center justify-center gap-2.5">
+        {/* ambient glow + faux browser dots for a "real page" feel */}
+        <div className="pointer-events-none absolute -top-8 -right-6 w-24 h-24 rounded-full bg-accent/25 blur-2xl" />
+        <div className="absolute top-2 left-2 flex gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+        </div>
+        <div
+          className="svc-render text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-primary via-blue-300 to-accent bg-clip-text text-transparent"
+          style={{ animationDelay: '0.6s' }}
+        >
+          Grow.
+        </div>
+        <button
+          type="button"
+          tabIndex={-1}
+          className="svc-render px-4 py-1.5 rounded-full text-[11px] font-bold text-white bg-gradient-to-r from-accent to-blue-600 shadow-lg shadow-accent/30 ring-1 ring-white/10"
+          style={{ animationDelay: '1.1s' }}
+        >
+          Start
+        </button>
       </div>
     </div>
   )

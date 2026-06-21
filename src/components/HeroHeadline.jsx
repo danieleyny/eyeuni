@@ -7,32 +7,26 @@ import { useIntroDone } from '../hooks/useIntroHandoff'
 const GLYPHS = '01<>/{}[]=+*#$%01ABCDEF01·:•01'.split('')
 const rand = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)] || '0'
 
-// Renders a single highlighted word as a cinematic decode:
-//   • characters shimmer through code-glyphs, then lock left-to-right
-//   • each lock fires a scale-pop + bloom flash (CSS .is-locked)
-//   • once the word is fully locked, a white overlay wipes away L→R to reveal
-//     the gradient underneath, which flashes bright as it lands
-// The real word is shown statically until the intro hands off (start), so it is
-// never missing and degrades gracefully under reduced motion.
-function DecodeWord({ text, start, gradientClass, delay = 0 }) {
+// Renders a single highlighted word. The decode (shimmer → per-character lock)
+// resolves the word in WHITE; it only takes on its gradient when `colorize`
+// flips true — which the parent times to the moment the highlight sweep passes
+// over it, so the blue lands exactly under the light bar.
+function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
   const reduce = useReducedMotion()
   const chars = text.split('')
-  // `glyphs` holds the current shimmer character per index; `locked` is how many
-  // leading characters have settled; `resolved` flips when the word is complete.
+  // `glyphs` = current shimmer char per index; `locked` = how many leading
+  // characters have settled into their real (white) letter.
   const [glyphs, setGlyphs] = useState(chars)
   const [locked, setLocked] = useState(reduce || !start ? chars.length : 0)
-  const [resolved, setResolved] = useState(reduce || !start)
   const rafRef = useRef(null)
 
   useEffect(() => {
     if (reduce || !start) {
       setGlyphs(chars)
       setLocked(text.length)
-      setResolved(true)
       return
     }
 
-    setResolved(false)
     setLocked(0)
 
     const per = 150 // ms between characters locking in
@@ -47,27 +41,21 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
 
     const tick = (now) => {
       const t = now - startT
-
-      // Refresh shimmer glyphs only on the flicker cadence.
       if (now - lastFlip >= flicker) {
         for (let i = 0; i < chars.length; i++) pool[i] = rand()
         setGlyphs([...pool])
         lastFlip = now
       }
-
-      // Count how many leading characters have settled.
       const lc = settleAt.reduce((n, s) => (t >= s ? n + 1 : n), 0)
       if (lc !== prevLocked) {
         setLocked(lc)
         prevLocked = lc
       }
-
       if (t < total) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setGlyphs(chars)
         setLocked(text.length)
-        setResolved(true)
       }
     }
     rafRef.current = requestAnimationFrame(tick)
@@ -76,7 +64,6 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
     const safety = setTimeout(() => {
       setGlyphs(chars)
       setLocked(text.length)
-      setResolved(true)
     }, total + 700)
 
     return () => {
@@ -86,11 +73,23 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, text, delay, reduce])
 
-  // Three stacked layers share one grid cell (no layout shift):
+  // Before the intro hands off (or under reduced motion), just show the final
+  // gradient word — never missing, no animation.
+  if (reduce || !start) {
+    return (
+      <span className="relative inline-grid align-baseline">
+        <span className={`whitespace-pre ${gradientClass}`} aria-hidden>
+          {text}
+        </span>
+      </span>
+    )
+  }
+
+  // Active path: three stacked layers in one grid cell (no layout shift):
   //   1. invisible spacer — reserves the final width
-  //   2. gradient layer — the payoff, hidden until the word resolves
-  //   3. white/shimmer layer on top — carries the per-character decode, then
-  //      wipes itself away to unveil the gradient.
+  //   2. gradient payoff — hidden until the highlight colorizes the word
+  //   3. white decode layer on top — carries the shimmer/lock, then wipes away
+  //      left→right (in the highlight's wake) to unveil the gradient.
   return (
     <span className="relative inline-grid align-baseline">
       <span className="invisible col-start-1 row-start-1" aria-hidden>
@@ -99,9 +98,9 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
 
       <span
         className={`col-start-1 row-start-1 whitespace-pre ${gradientClass} ${
-          resolved ? 'hh-word-flash' : ''
+          colorize ? 'hh-word-flash' : ''
         }`}
-        style={{ opacity: resolved ? 1 : 0 }}
+        style={{ opacity: colorize ? 1 : 0 }}
         aria-hidden
       >
         {text}
@@ -109,7 +108,7 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
 
       <span
         className={`col-start-1 row-start-1 whitespace-pre text-white ${
-          resolved ? 'hh-wipe' : ''
+          colorize ? 'hh-wipe' : ''
         }`}
         aria-hidden
       >
@@ -120,7 +119,7 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
               key={i}
               className={`hh-char ${isLocked ? 'is-locked' : 'is-scramble'}`}
             >
-              {ch === ' ' ? ' ' : isLocked ? ch : glyphs[i]}
+              {ch === ' ' ? ' ' : isLocked ? ch : glyphs[i]}
             </span>
           )
         })}
@@ -129,24 +128,51 @@ function DecodeWord({ text, start, gradientClass, delay = 0 }) {
   )
 }
 
+// Choreography (ms from the intro handoff):
+//   0 ............. words shimmer + lock into place, in WHITE
+//   ~SWEEP_AT ..... a single highlight bar starts sweeping left→right
+//   ~COLOR_AT ..... bar reaches the highlighted words → they turn blue together,
+//                   each wiping its gradient in under the bar's trailing edge
+const SWEEP_AT = 1350
+const COLOR_AT = 1900
+
 export default function HeroHeadline() {
   const start = useIntroDone()
   const reduce = useReducedMotion()
+  const [sweep, setSweep] = useState(false)
+  const [colorize, setColorize] = useState(false)
+
+  useEffect(() => {
+    if (!start) return
+    if (reduce) {
+      setColorize(true)
+      return
+    }
+    setSweep(false)
+    setColorize(false)
+    const t1 = setTimeout(() => setSweep(true), SWEEP_AT)
+    const t2 = setTimeout(() => setColorize(true), COLOR_AT)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [start, reduce])
 
   return (
     <h1
       className="relative text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.05] tracking-tight"
       aria-label="You Dream It, We Build It."
     >
-      {/* Scanline sweep — runs once across the whole headline as it decodes. */}
-      {start && !reduce && <span className="hh-scanline" aria-hidden />}
+      {/* Single highlight bar — sweeps across once and paints the words blue. */}
+      {sweep && !reduce && <span className="hh-scanline" aria-hidden />}
 
       <span aria-hidden>
         You{' '}
         <DecodeWord
           text="Dream"
           start={start}
-          delay={300}
+          delay={250}
+          colorize={colorize}
           gradientClass="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent"
         />{' '}
         It,
@@ -155,7 +181,8 @@ export default function HeroHeadline() {
         <DecodeWord
           text="Build"
           start={start}
-          delay={1700}
+          delay={600}
+          colorize={colorize}
           gradientClass="bg-gradient-to-r from-accent via-blue-400 to-primary bg-clip-text text-transparent"
         />{' '}
         It.
