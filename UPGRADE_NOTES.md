@@ -60,3 +60,63 @@ presentation/animation.
 The preview tool throttles `requestAnimationFrame` (background tab) and can't capture
 WebGL, so rAF/WebGL motion was verified via headless Chrome (`?nointro`) and DOM
 assertions; layout/static via the preview. `npm run build` passes clean.
+
+---
+
+# Pass 2 — "The EYEuni Lens" + "Into the Eye" intro
+
+Mobile-first, touch + auto-play, reduced-motion fallbacks, RAF paused
+offscreen/tab-hidden, zero layout shift.
+
+## Part A — "The EYEuni Lens" (replaces the capabilities section)
+Replaces the old `CapabilityConstellation` (read as an empty black box on mobile)
+with a dormant mock business site + a glowing **eye-shaped lens** that reveals
+live capability widgets only where it passes. Demos itself (auto-drift) so a phone
+visitor sees value with zero interaction.
+
+**New files**
+- `src/components/CapabilityLens.jsx` — `<section id="capabilities">`: heading,
+  screen-reader capability list, picks interactive panel vs. static grid.
+- `src/components/effects/LensReveal.jsx` — interactive panel: dormant base + live
+  (revealed) layers, the lens, the single RAF loop, drag/tap/auto-drift, and the
+  "Reveal everything" climax.
+- `src/components/effects/lens/LensWidgets.jsx` — 6 widgets (Booking, AI
+  Assistant, Payments, Live Analytics, Storefront, Notifications), `MockSite`
+  (base/live), `StaticLensGrid` (reduced-motion fallback).
+
+**Removed:** `<CapabilityConstellation />` usage + import in `App.jsx` (swapped
+for `<CapabilityLens />` in the same slot). `CapabilityConstellation.jsx` left on
+disk, now unused.
+
+**How:** live layer masked via `clip-path: circle()` driven by a ref in one RAF
+loop (no per-frame React state); widget activation flips state only on change.
+Lens eases toward the pointer (desktop), the drag point (touch — the lens is the
+only `touch-action:none` handle, no scroll-jacking), a panel tap, or an auto-drift
+tour of the hotspots when idle. RAF gated by `useInViewPaused`. Reduced motion /
+no pointer → `StaticLensGrid` (all six lit, no masking/loops).
+
+**Tunables** (top of `LensReveal.jsx`): `LENS_R`, `LENS_BOX`, `PROX`, `SMOOTH`,
+`R_SMOOTH`, `DWELL`, `RESUME_DELAY`, `TAP_SLOP`, `HOTSPOTS`.
+
+## Part B — "Into the Eye" cinematic intro + readiness gate
+The preloader's flat aperture wipe is replaced by a dive **into the pupil** that
+lands inside the site; the slow load is hidden behind the animation.
+
+**New file:** `src/hooks/useAppReady.js` — resolves when the fold is paintable:
+`document.fonts.ready` **and** the Hero's `eyeuni:hero-ready` event (with a
+`HERO_FALLBACK_MS` grace timeout).
+
+**Changed**
+- `src/components/Preloader.jsx` — meter climbs to ~85%, holds until the gate
+  (`appReady && elapsed ≥ MIN_INTRO`, hard `MAX_CAP` backstop), snaps to 100%,
+  then dives: brand/grid/glow fade, eye SVG scales ~34× into the pupil (easeIn)
+  with a blue bloom rush, overlay cross-fades to the (already-dark) site.
+  `emitIntroDone()` fires at the start of the settle. Tunables: `MIN_INTRO`,
+  `MIN_INTRO_RM`, `MAX_CAP`, `METER_RAMP`, `DIVE_MS`, `EYE_SCALE`.
+- `src/components/Hero.jsx` — dispatches `eyeuni:hero-ready` after first paint
+  (double-rAF); scales `1.05 → 1` + fades in on intro handoff ("land and settle").
+
+**New signal:** `eyeuni:hero-ready` (window event) → consumed by `useAppReady`.
+`?nointro` and reduced-motion paths preserved (calm quick fade, shorter gate).
+
+**CSS:** added `.lens-pulse` keyframe (lens ring shimmer) to `src/index.css`.

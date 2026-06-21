@@ -196,6 +196,21 @@ body {
   49%, 100% { opacity: 0; }
 }
 
+/* Gentle shimmer/pulse on the EYEuni Lens ring. */
+.lens-pulse {
+  transform-origin: center;
+  animation: lens-pulse 3.2s ease-in-out infinite;
+}
+@keyframes lens-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(179, 200, 244, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 11px rgba(179, 200, 244, 0.85));
+  }
+}
+
 /* Tap ripple for magnetic buttons on touch devices. */
 .eyeuni-ripple {
   position: absolute;

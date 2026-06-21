@@ -1,12 +1,13 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowDown } from 'lucide-react'
-import { useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import AuroraFallback from './effects/AuroraFallback'
 import Magnetic from './effects/Magnetic'
 import { useDeviceTilt } from '../hooks/useDeviceTilt'
 import { useGyroEnabled } from './effects/MotionPermissionGate'
 import { useLenisScrollTo } from './effects/SmoothScroll'
+import { useIntroDone } from '../hooks/useIntroHandoff'
 import HeroHeadline from './HeroHeadline'
 
 // ogl lands in its own lazy chunk so it never blocks first paint.
@@ -17,6 +18,33 @@ export default function Hero() {
   const gyroEnabled = useGyroEnabled()
   const pointer = useDeviceTilt({ maxDeg: 8, gyroEnabled })
   const scrollTo = useLenisScrollTo()
+  const introDone = useIntroDone()
+
+  // Signal the preloader's readiness gate once the hero has actually painted,
+  // so the "Into the Eye" dive only lands when the fold is ready.
+  useEffect(() => {
+    let raf1
+    let raf2
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('eyeuni:hero-ready'))
+      })
+    })
+    return () => {
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
+    }
+  }, [])
+
+  // As the intro hands off, the hero scales from a touch oversized down to 1 and
+  // fades in — so it feels like we land and settle inside the eye.
+  const settle = reduce
+    ? { initial: false, animate: { opacity: 1 } }
+    : {
+        initial: { scale: 1.05, opacity: 0 },
+        animate: introDone ? { scale: 1, opacity: 1 } : { scale: 1.05, opacity: 0 },
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      }
 
   return (
     <section
@@ -38,7 +66,7 @@ export default function Hero() {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-[pulse-glow_6s_ease-in-out_infinite] z-[1] pointer-events-none" />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <motion.div className="relative z-10 text-center px-6 max-w-4xl mx-auto" {...settle}>
         <HeroHeadline />
 
         <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -55,7 +83,7 @@ export default function Hero() {
             </Link>
           </Magnetic>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <button

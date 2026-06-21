@@ -12,7 +12,7 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import CostOfBadWebsite from './components/CostOfBadWebsite'
 import Services from './components/Services'
-import CapabilityConstellation from './components/CapabilityConstellation'
+import CapabilityLens from './components/CapabilityLens'
 import WebsiteTransform from './components/WebsiteTransform'
 import SpeedRace from './components/SpeedRace'
 import CaseStudyImpact from './components/CaseStudyImpact'
@@ -36,7 +36,7 @@ function HomePage() {
         <CostOfBadWebsite />
         <Services />
         <StatsStrip />
-        <CapabilityConstellation />
+        <CapabilityLens />
         <WebsiteTransform />
         <SpeedRace />
         <CaseStudyImpact />
