@@ -429,10 +429,17 @@ function ReducedTransform() {
 }
 
 // ─── Main Component (scroll-scrubbed, pinned) ───────────
+const STAGE_TEXT = [
+  'An outdated, slow website',
+  'Rebuilding it the EYEuni way…',
+  'A fast, beautiful new site ✦',
+]
+
 export default function WebsiteTransform() {
   const reduce = useReducedMotion()
   const wrapRef = useRef(null)
   const [sparkleActive, setSparkleActive] = useState(false)
+  const [stage, setStage] = useState(0)
 
   const scrollYProgress = useScrollProgress(wrapRef)
 
@@ -444,41 +451,74 @@ export default function WebsiteTransform() {
   const beforeOpacity = useTransform(scrollYProgress, [0, 0.3, 0.42], [1, 1, 0.3])
   const effectOpacity = useTransform(scrollYProgress, [0.28, 0.4, 0.6, 0.7], [0.3, 1, 1, 0.3])
   const afterOpacity = useTransform(scrollYProgress, [0.5, 0.62], [0.3, 1])
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0])
 
-  // Sparkles fire during the reveal window only.
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const on = v > 0.5 && v < 0.85
     setSparkleActive((prev) => (prev === on ? prev : on))
+    const st = v < 0.28 ? 0 : v < 0.62 ? 1 : 2
+    setStage((prev) => (prev === st ? prev : st))
   })
 
   if (reduce) return <ReducedTransform />
 
   return (
     <section id="transform" className="relative">
-      <div ref={wrapRef} className="relative h-[300vh]">
-        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+      <div ref={wrapRef} className="relative h-[250vh]">
+        <div className="sticky top-0 h-svh overflow-hidden">
           <BgLayers />
 
-          {/* Thin scrub progress affordance */}
+          {/* Scrub progress bar */}
           <motion.div
-            className="absolute top-0 left-0 right-0 h-[3px] origin-left bg-gradient-to-r from-primary via-blue-400 to-accent z-20"
+            className="absolute top-0 left-0 right-0 h-1 origin-left bg-gradient-to-r from-primary via-blue-400 to-accent z-20"
             style={{ scaleX: scrollYProgress }}
           />
 
-          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
-            <Heading />
-            <Laptop
-              uglyOpacity={uglyOpacity}
-              beautifulOpacity={beautifulOpacity}
-              beautifulRingOpacity={beautifulRingOpacity}
-              sparkleActive={sparkleActive}
-              wipeProgress={wipeProgress}
-            />
+          {/* Heading pinned to the top */}
+          <div className="absolute top-0 inset-x-0 z-10 px-6 pt-16 sm:pt-20 text-center">
+            <h2 className="text-2xl sm:text-4xl font-bold">
+              Before &amp; After —{' '}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                The EYEuni Effect
+              </span>
+            </h2>
+            <motion.p
+              key={stage}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-sm sm:text-base text-gray-300 mt-2 font-medium"
+            >
+              {STAGE_TEXT[stage]}
+            </motion.p>
+          </div>
+
+          {/* Laptop centered in the viewport */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
+            <div className="w-full max-w-2xl">
+              <Laptop
+                uglyOpacity={uglyOpacity}
+                beautifulOpacity={beautifulOpacity}
+                beautifulRingOpacity={beautifulRingOpacity}
+                sparkleActive={sparkleActive}
+                wipeProgress={wipeProgress}
+              />
+            </div>
+          </div>
+
+          {/* Labels + scroll hint pinned to the bottom */}
+          <div className="absolute bottom-0 inset-x-0 z-10 px-6 pb-8 sm:pb-10">
             <Labels
               beforeOpacity={beforeOpacity}
               effectOpacity={effectOpacity}
               afterOpacity={afterOpacity}
             />
+            <motion.div
+              style={{ opacity: hintOpacity }}
+              className="mt-4 flex items-center justify-center gap-2 text-xs text-primary/80"
+            >
+              <span>Scroll to transform</span>
+              <span className="animate-bounce">↓</span>
+            </motion.div>
           </div>
         </div>
       </div>

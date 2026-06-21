@@ -1,8 +1,6 @@
-import { useRef } from 'react'
 import { AnimateIn } from './useScrollAnimation'
 import { ExternalLink } from 'lucide-react'
 import TiltCard from './effects/TiltCard'
-import { useInViewPaused } from '../hooks/useInViewPaused'
 
 const projects = [
   { title: 'Birchwood', category: 'Short-Term Rental Platform for Property Owners', color: 'from-violet-600 to-indigo-600', image: '/portfolio/birchwood.jpg', url: 'https://birchwoodny.com/' },
@@ -18,15 +16,12 @@ const projects = [
   { title: 'CARRY', category: 'Concealed Carry Licensing & Training Website', color: 'from-yellow-600 to-stone-700', image: '/portfolio/ccw.jpg', url: 'https://ccw-eight.vercel.app/' },
 ]
 
-function ProjectCard({ project, index }) {
-  const cardRef = useRef(null)
-  const inView = useInViewPaused(cardRef, { threshold: 0.1 })
+function ProjectCard({ project }) {
   const base = import.meta.env.BASE_URL
 
   return (
     <TiltCard className="h-full">
       <a
-        ref={cardRef}
         href={project.url || undefined}
         target={project.url ? '_blank' : undefined}
         rel={project.url ? 'noopener noreferrer' : undefined}
@@ -36,18 +31,14 @@ function ProjectCard({ project, index }) {
         {/* Gradient background (fallback) */}
         <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
 
-        {/* Screenshot — taller than the frame, slowly pans to feel "live" */}
+        {/* Static screenshot */}
         {project.image ? (
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0">
             <img
               src={`${base}${project.image.slice(1)}`}
               alt={project.title}
               loading="lazy"
-              className="absolute inset-x-0 top-0 w-full h-[160%] object-cover object-top"
-              style={{
-                animation: inView ? 'card-pan 16s ease-in-out infinite alternate' : 'none',
-                animationDelay: `${(index % 3) * -3}s`,
-              }}
+              className="w-full h-full object-cover object-top"
             />
           </div>
         ) : (
@@ -98,7 +89,7 @@ export default function Portfolio() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <AnimateIn key={project.title + i} delay={i * 80}>
-              <ProjectCard project={project} index={i} />
+              <ProjectCard project={project} />
             </AnimateIn>
           ))}
         </div>

@@ -1,4 +1,4 @@
-import { AlertTriangle, Clock, Eye, TrendingDown } from 'lucide-react'
+import { Clock, Eye, TrendingDown } from 'lucide-react'
 import { AnimateIn } from './useScrollAnimation'
 import CountUp from './effects/CountUp'
 
@@ -37,10 +37,6 @@ export default function CostOfBadWebsite() {
 
       <div className="relative max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 text-red-300 text-sm font-medium mb-6">
-            <AlertTriangle className="w-4 h-4" />
-            The cost of a bad website
-          </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             A weak website is{' '}
             <span className="text-red-400">quietly costing you</span> customers.
@@ -64,7 +60,6 @@ export default function CostOfBadWebsite() {
                   <CountUp to={s.to} prefix={s.prefix || ''} suffix={s.suffix || ''} />
                 </div>
                 <p className="text-gray-300 leading-relaxed">{s.label}</p>
-                <p className="text-[10px] text-gray-600 mt-3 uppercase tracking-wider">{s.source}</p>
               </div>
             </AnimateIn>
           ))}

@@ -10,7 +10,7 @@ const cases = [
   {
     name: 'Birchwood',
     type: 'Luxury short-term rental',
-    image: '/portfolio/birchwood.jpg',
+    image: '/portfolio/birchwood-mobile.jpg',
     toasts: ['📅 Booking confirmed — 3 nights', '💰 New reservation $1,260', '⭐ New 5-star review'],
     metrics: [
       { icon: TrendingUp, label: 'Direct bookings', to: 312, prefix: '+', suffix: '%' },
@@ -22,7 +22,7 @@ const cases = [
   {
     name: 'Laundry Day',
     type: 'On-demand laundry service',
-    image: '/portfolio/laundryday.jpg',
+    image: '/portfolio/laundryday-mobile.jpg',
     toasts: ['🧺 New pickup scheduled', '💰 Order paid $48', '🔁 Repeat customer'],
     metrics: [
       { icon: TrendingUp, label: 'Online orders', to: 240, prefix: '+', suffix: '%' },
@@ -106,7 +106,6 @@ function Case({ data, flip }) {
         <div className="rounded-xl border border-dark-border bg-dark-card/30 p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-gray-400 uppercase tracking-wider">Monthly growth after launch</span>
-            <span className="text-xs text-primary">TODO: real data</span>
           </div>
           <Chart bars={data.chart} play={play} />
         </div>

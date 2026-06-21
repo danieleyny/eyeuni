@@ -102,8 +102,6 @@ export default function AuroraBackground({ pointer }) {
         dpr,
         alpha: false,
         antialias: false,
-        // Lets headless/preview screenshot tools capture the GL surface.
-        preserveDrawingBuffer: true,
       })
       gl = renderer.gl
       if (!gl) throw new Error('no webgl')
@@ -125,22 +123,37 @@ export default function AuroraBackground({ pointer }) {
       mesh = new Mesh(gl, { geometry: new Triangle(gl), program })
 
       const resize = () => {
-        const w = canvas.clientWidth || window.innerWidth
-        const h = canvas.clientHeight || window.innerHeight
+        // Measure the PARENT (full-bleed hero), not the canvas — ogl.setSize
+        // writes inline px styles onto the canvas, which would otherwise feed
+        // back and shrink it into a small box. Force the style back to 100%.
+        const parent = canvas.parentElement
+        const w = (parent && parent.clientWidth) || window.innerWidth
+        const h = (parent && parent.clientHeight) || window.innerHeight
         renderer.setSize(w, h)
+        canvas.style.width = '100%'
+        canvas.style.height = '100%'
         program.uniforms.uResolution.value.set(
           gl.drawingBufferWidth,
           gl.drawingBufferHeight
         )
+        // Paint a frame immediately — resizing clears the buffer, and the rAF
+        // loop may be paused (offscreen/throttled), so never leave it empty.
+        renderer.render({ scene: mesh })
       }
       resize()
       window.addEventListener('resize', resize)
+      // ResizeObserver fires on initial layout (and any later size change), so
+      // the canvas is sized correctly even if mounted before layout settles.
+      const ro =
+        typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null
+      if (ro && canvas.parentElement) ro.observe(canvas.parentElement)
 
       stateRef.current = { renderer, program, mesh, gl, resize }
       setReady(true)
 
       return () => {
         window.removeEventListener('resize', resize)
+        ro?.disconnect()
         const ext = gl.getExtension('WEBGL_lose_context')
         ext?.loseContext()
         stateRef.current = null

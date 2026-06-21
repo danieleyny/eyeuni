@@ -93,12 +93,6 @@ body {
   100% { background-position: 200% 0; }
 }
 
-/* In-card "live page" auto-scroll — pans a tall screenshot. */
-@keyframes card-pan {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-37.5%); }
-}
-
 /* Tap ripple for magnetic buttons on touch devices. */
 .eyeuni-ripple {
   position: absolute;

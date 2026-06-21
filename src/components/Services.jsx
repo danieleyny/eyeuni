@@ -58,27 +58,64 @@ function CodeDemo() {
   )
 }
 
-// 2. Grey wireframe morphs into a polished, colored UI (crossfade loop).
+// 2. A grey low-fi wireframe morphs into a polished, branded UI. Same layout in
+//    both states, so the "level-up" reads clearly.
 function DesignDemo() {
   return (
-    <div className="relative h-full rounded-lg overflow-hidden border border-white/10 bg-black/30">
-      {/* wireframe */}
-      <div className="svc-wire absolute inset-0 p-3 flex flex-col gap-2">
-        <div className="h-3 w-1/3 rounded-sm bg-white/20" />
-        <div className="h-12 w-full rounded-sm border-2 border-dashed border-white/20 flex items-center justify-center">
-          <span className="text-[8px] text-white/30">image</span>
+    <div className="relative h-full rounded-xl overflow-hidden border border-white/10 bg-[#0b0b12]">
+      {/* ── Wireframe (before) ── */}
+      <div className="svc-wire absolute inset-0 p-3">
+        {/* nav */}
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="h-2.5 w-10 rounded bg-white/25" />
+          <div className="flex gap-1.5">
+            <div className="h-2 w-6 rounded bg-white/15" />
+            <div className="h-2 w-6 rounded bg-white/15" />
+            <div className="h-2 w-8 rounded border border-dashed border-white/25" />
+          </div>
         </div>
-        <div className="h-2 w-full rounded-sm bg-white/15" />
-        <div className="h-2 w-2/3 rounded-sm bg-white/15" />
-        <div className="h-4 w-1/3 rounded-sm bg-white/25 mt-1" />
+        {/* hero placeholder */}
+        <div className="h-16 w-full rounded-md border-2 border-dashed border-white/15 flex items-center justify-center mb-2">
+          <span className="text-[8px] text-white/25 tracking-wider">HERO IMAGE</span>
+        </div>
+        <div className="h-2 w-2/3 rounded bg-white/20 mb-1.5" />
+        <div className="h-2 w-1/2 rounded bg-white/12 mb-2.5" />
+        <div className="flex gap-1.5">
+          <div className="h-5 w-16 rounded border border-dashed border-white/25" />
+          <div className="h-5 w-12 rounded bg-white/10" />
+        </div>
       </div>
-      {/* polished UI */}
-      <div className="svc-ui absolute inset-0 p-3 flex flex-col gap-2 bg-gradient-to-br from-dark-card to-black">
-        <div className="h-3 w-1/3 rounded-sm bg-gradient-to-r from-primary to-accent" />
-        <div className="h-12 w-full rounded-md bg-gradient-to-br from-accent/60 to-primary/30" />
-        <div className="h-2 w-full rounded-sm bg-white/30" />
-        <div className="h-2 w-2/3 rounded-sm bg-white/20" />
-        <div className="h-4 w-1/3 rounded-md bg-accent mt-1 shadow-lg shadow-accent/40" />
+
+      {/* ── Polished UI (after) ── */}
+      <div className="svc-ui absolute inset-0 p-3 bg-gradient-to-br from-[#11121d] via-[#0d0e18] to-black">
+        {/* nav */}
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-1.5">
+            <div className="h-3.5 w-3.5 rounded-md bg-gradient-to-br from-primary to-accent" />
+            <div className="h-2 w-9 rounded bg-white/80" />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-1.5 w-5 rounded bg-white/35" />
+            <div className="h-1.5 w-5 rounded bg-white/35" />
+            <div className="h-4 w-10 rounded-full bg-accent shadow-md shadow-accent/40" />
+          </div>
+        </div>
+        {/* hero with image + glass headline */}
+        <div className="relative h-16 w-full rounded-lg overflow-hidden mb-2">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent via-blue-600 to-primary/70" />
+          <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 75% 30%, rgba(255,255,255,0.6), transparent 45%)' }} />
+          <div className="absolute bottom-1.5 left-2 right-2">
+            <div className="h-2 w-2/3 rounded bg-white/95 mb-1" />
+            <div className="h-1.5 w-1/2 rounded bg-white/60" />
+          </div>
+        </div>
+        <div className="h-2 w-3/4 rounded bg-white/85 mb-1.5" />
+        <div className="h-1.5 w-1/2 rounded bg-white/40 mb-2.5" />
+        <div className="flex gap-1.5 items-center">
+          <div className="h-5 w-16 rounded-md bg-gradient-to-r from-primary to-accent shadow-md shadow-accent/40" />
+          <div className="h-5 w-12 rounded-md border border-white/25" />
+          <div className="ml-auto h-6 w-6 rounded-full bg-gradient-to-br from-primary/80 to-accent ring-2 ring-white/10" />
+        </div>
       </div>
     </div>
   )

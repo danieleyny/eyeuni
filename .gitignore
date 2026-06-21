@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Lead-gen spreadsheets and office lock files (local business data)
+*.xlsx
+.~lock.*#
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
