@@ -269,12 +269,16 @@ export default function LensReveal() {
         onPointerDown={onPanelPointerDown}
         onPointerUp={onPanelPointerUp}
       >
-        {/* Base dormant layer */}
-        <div className="absolute inset-0 opacity-60 grayscale-[0.35]">
+        {/* Front "cover": the dormant site, dimmed. It's what you see OUTSIDE the
+            lens; the lens X-rays straight through it. */}
+        <div className="absolute inset-0 opacity-50 grayscale-[0.4]">
           <MockSite />
         </div>
 
-        {/* Live layer, clipped to the lens */}
+        {/* The "inside" layer, clipped to the lens — a dark X-ray view BEHIND the
+            front cover: an opaque dark interior (so the site text is hidden where
+            the lens passes — no overlap) with a faint tech grid + glow, plus the
+            glowing capability widgets. */}
         <div
           ref={liveRef}
           className="absolute inset-0"
@@ -284,12 +288,24 @@ export default function LensReveal() {
             willChange: 'clip-path',
           }}
         >
-          <MockSite live />
-          {/* Reveal-all scrim: dims/blurs the site so the six widgets read as a
-              clean grid instead of overlapping the mock-site text on mobile. */}
+          {/* opaque dark interior — hides the front cover under the lens */}
+          <div className="absolute inset-0 bg-[#080810]" />
+          {/* faint blueprint grid */}
           <div
-            className="pointer-events-none absolute inset-0 bg-dark/80 backdrop-blur-[2px] transition-opacity duration-500"
-            style={{ opacity: revealAll ? 1 : 0 }}
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(179,200,244,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(179,200,244,0.08) 1px, transparent 1px)',
+              backgroundSize: '26px 26px',
+            }}
+          />
+          {/* soft brand glow so the interior reads as "alive" */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(circle at 50% 42%, rgba(15,49,184,0.22), transparent 68%)',
+            }}
           />
           {HOTSPOTS.map((hsp, i) => {
             const W = WIDGETS[hsp.id]
