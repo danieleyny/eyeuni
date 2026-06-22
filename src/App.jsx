@@ -27,9 +27,10 @@ import Footer from './components/Footer'
 // Intake flow (form steps + confetti) is its own chunk — loaded only on /intake.
 const IntakePage = lazy(() => import('./components/intake/IntakePage'))
 
-// V2 (private, served at /V2.html) is a lighter cut of the site: several heavy
-// sections are removed to reduce jank. Pass `v2` to omit them.
-function HomePage({ v2 = false }) {
+// The public site (main page) is the TRIMMED cut — several heavy sections are
+// removed to reduce jank. The full original lives privately at /V2.html.
+// Pass `trimmed` to omit those sections.
+function HomePage({ trimmed = false }) {
   return (
     <>
       <Header />
@@ -37,11 +38,11 @@ function HomePage({ v2 = false }) {
         <Hero />
         <CostOfBadWebsite />
         <Services />
-        {!v2 && <StatsStrip />}
-        {!v2 && <CapabilityLens />}
-        {!v2 && <WebsiteTransform />}
-        {!v2 && <SpeedRace />}
-        {!v2 && <CaseStudyImpact />}
+        {!trimmed && <StatsStrip />}
+        {!trimmed && <CapabilityLens />}
+        {!trimmed && <WebsiteTransform />}
+        {!trimmed && <SpeedRace />}
+        {!trimmed && <CaseStudyImpact />}
         <Portfolio />
         <IntegrationsMarquee />
         <Testimonials />
@@ -56,15 +57,16 @@ function HomePage({ v2 = false }) {
 }
 
 // Animated route transitions (home ↔ intake). Quick aperture-fade, <600ms.
-function AnimatedRoutes({ v2 = false }) {
+function AnimatedRoutes({ trimmed = false, wildcardHome = false }) {
   const location = useLocation()
   const reduce = useReducedMotion()
 
   const routes = (
     <Suspense fallback={<div className="min-h-screen bg-dark" />}>
       <Routes location={location}>
-        {/* V2 is served from /V2.html, so its home must match any non-intake path */}
-        <Route path={v2 ? '*' : '/'} element={<HomePage v2={v2} />} />
+        {/* When served from a non-root .html (e.g. /V2.html), home must match any
+            non-intake path; the public index is served from "/". */}
+        <Route path={wildcardHome ? '*' : '/'} element={<HomePage trimmed={trimmed} />} />
         <Route path="/intake" element={<IntakePage />} />
       </Routes>
     </Suspense>
@@ -87,14 +89,14 @@ function AnimatedRoutes({ v2 = false }) {
   )
 }
 
-export default function App({ v2 = false }) {
+export default function App({ trimmed = false, wildcardHome = false }) {
   return (
     <MotionPermissionGate>
       <Preloader />
       <ScrollProgress />
       <DepthOverlay />
       <SmoothScroll>
-        <AnimatedRoutes v2={v2} />
+        <AnimatedRoutes trimmed={trimmed} wildcardHome={wildcardHome} />
       </SmoothScroll>
     </MotionPermissionGate>
   )

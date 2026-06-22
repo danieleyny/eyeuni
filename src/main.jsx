@@ -4,10 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 
+// Public site (main page) = the trimmed, lighter cut.
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter basename="/">
-      <App />
+      <App trimmed />
     </BrowserRouter>
   </StrictMode>,
 )

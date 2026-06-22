@@ -4,11 +4,12 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 
-// Private V2 build — a lighter cut of the site, served at /V2.html.
+// Private V2 build, served at /V2.html — the full original site (all sections).
+// wildcardHome lets its home route match the /V2.html path.
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter basename="/">
-      <App v2 />
+      <App wildcardHome />
     </BrowserRouter>
   </StrictMode>,
 )
