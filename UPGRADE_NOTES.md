@@ -279,10 +279,12 @@ glow (`--shadow-md`). Clean/Apple-light, just with depth.
 
 ## Sequenced highlighter
 Each service gains a `highlightPhrase`; the description is split before/phrase/
-after so only the phrase highlights. When a card is **activated**, a soft
-indigo→violet→cyan **marker wash** sweeps left→right (animating `background-size`
-0%→100% only) across the phrase, then each feature `<li>` text in order, ~`STAGGER`
-(240ms) apart — the whole card finishes lighting in ~1.6s — text strengthening to
+after so only the phrase highlights. When a card is **activated**, an airbrushed
+indigo→violet→cyan **spray-paint sweep** mists in left→right (animating
+`background-size` only) — a feathered/soft leading edge, mottled paint density
+(soft color clouds), and a fine SVG-noise speckle grain (`background-blend-mode:
+soft-light`) — across the phrase, then each feature `<li>` text in order, ~`STAGGER`
+(240ms) apart — the whole card finishes lighting in ~1.7s — text strengthening to
 ink, check icons untouched. Cumulative:
 items go "lit" and never un-light; once a card starts it runs to completion and
 **stays lit until page refresh** (in-memory React state — no storage).

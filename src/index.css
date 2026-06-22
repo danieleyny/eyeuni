@@ -382,28 +382,38 @@ html[data-theme='light'] body {
   opacity: 1;
 }
 
-/* Marker-sweep highlight: a soft indigo→violet→cyan wash wipes in left→right and
-   stays; the text strengthens to ink. Only background-size animates (one-shot,
-   compositor-cheap) — never layout properties. */
+/* Spray-paint sweep: an airbrushed indigo→violet→cyan wash mists in left→right
+   with a soft feathered leading edge + mottled (uneven) paint density, and stays.
+   The text strengthens to ink. Only background-size animates (one-shot, cheap). */
 .svc-hl {
-  border-radius: 3px;
-  padding: 0 0.12em;
-  margin: 0 -0.12em;
-  background-image: linear-gradient(
-    120deg,
-    rgba(15, 49, 184, 0.16),
-    rgba(124, 58, 237, 0.16),
-    rgba(34, 211, 238, 0.14)
-  );
+  border-radius: 4px;
+  padding: 0.04em 0.16em;
+  margin: 0 -0.16em;
+  background-image:
+    /* fine speckle grain → spray-paint texture */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='40'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.55'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    /* uneven paint clouds → mottled airbrush density */
+    radial-gradient(72% 140% at 22% 32%, rgba(124, 58, 237, 0.16), transparent 70%),
+    radial-gradient(60% 150% at 60% 68%, rgba(34, 211, 238, 0.15), transparent 72%),
+    /* base wash, feathered to transparent at the leading (right) edge = spray mist */
+    linear-gradient(
+      108deg,
+      rgba(15, 49, 184, 0.22) 0%,
+      rgba(124, 58, 237, 0.24) 46%,
+      rgba(34, 211, 238, 0.18) 74%,
+      rgba(34, 211, 238, 0) 100%
+    );
+  background-blend-mode: soft-light, normal, normal, normal;
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 0% 100%;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+  transition: background-size 0.5s cubic-bezier(0.16, 0.84, 0.44, 1), color 0.34s ease;
 }
 .svc-hl.is-lit {
-  background-size: 100% 100%;
+  /* slight overshoot so the soft feathered edge sweeps fully past the text */
+  background-size: 114% 100%;
   color: #0a0e27;
   font-weight: 500;
 }
