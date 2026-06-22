@@ -337,27 +337,31 @@ html[data-theme='light'] body {
 }
 
 /* ---- Services (light, main page): richer card + marker-sweep highlight ---- */
-/* Subtle gradient surface + faint dot-grid texture + accent top line + glow. */
+/* Cool light gradient surface + soft corner color glows + accent top line. */
 .svc3-card {
   position: relative;
   isolation: isolate;
   border-radius: 16px;
-  background-image: linear-gradient(180deg, #ffffff, #f7f8ff);
+  background-image: linear-gradient(135deg, #ffffff 0%, #f5f7ff 58%, #eef1ff 100%);
   border: 1px solid var(--hairline-color);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
 }
 .svc3-card::before {
-  /* faint dark dot-grid, faded toward the edges — depth without losing contrast */
+  /* soft indigo (top-right) + cyan (bottom-left) color glows — premium depth */
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-image: radial-gradient(rgba(13, 18, 40, 0.05) 1px, transparent 1.6px);
-  background-size: 16px 16px;
-  -webkit-mask-image: radial-gradient(130% 90% at 50% 0%, #000 35%, transparent 78%);
-  mask-image: radial-gradient(130% 90% at 50% 0%, #000 35%, transparent 78%);
+  background-image:
+    radial-gradient(115% 80% at 100% 0%, rgba(79, 70, 229, 0.13), transparent 60%),
+    radial-gradient(100% 80% at 0% 100%, rgba(34, 211, 238, 0.1), transparent 58%);
+  opacity: 0.9;
+  transition: opacity 0.5s ease;
+}
+.svc3-card:hover::before {
+  opacity: 1;
 }
 .svc3-card::after {
   /* thin --grad-accent top line, brightens on hover */
@@ -396,7 +400,7 @@ html[data-theme='light'] body {
   background-size: 0% 100%;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  transition: background-size 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.45s ease;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
 }
 .svc-hl.is-lit {
   background-size: 100% 100%;

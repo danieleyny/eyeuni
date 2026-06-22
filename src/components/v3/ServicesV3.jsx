@@ -5,7 +5,8 @@ import { useReducedMotion } from 'framer-motion'
 import { AnimateIn } from '../useScrollAnimation'
 
 // ---- Tunables --------------------------------------------------------------
-const STAGGER = 1200 // ms between each item lighting up (phrase → features)
+// 6 items (phrase + 5 features) lit ~240ms apart → whole sequence in ~1.6s.
+const STAGGER = 240 // ms between each item lighting up (phrase → features)
 
 const services = [
   {

@@ -272,17 +272,18 @@ Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
 ## Card visual upgrade (`.svc3-card`)
-Subtle light gradient surface (`#ffffff → #f7f8ff`), a faint dark dot-grid
-texture masked to fade toward the edges (depth without losing contrast), a thin
-`--grad-accent` top accent line that brightens on hover, and a stronger hover
-lift + soft indigo glow (`--shadow-md`). Still clean/Apple-light, just less flat.
+Cool light gradient surface (`135deg #ffffff → #f5f7ff → #eef1ff`) with soft
+corner color glows (indigo top-right, cyan bottom-left), a thin `--grad-accent`
+top accent line that brightens on hover, and a stronger hover lift + soft indigo
+glow (`--shadow-md`). Clean/Apple-light, just with depth.
 
 ## Sequenced highlighter
 Each service gains a `highlightPhrase`; the description is split before/phrase/
 after so only the phrase highlights. When a card is **activated**, a soft
 indigo→violet→cyan **marker wash** sweeps left→right (animating `background-size`
 0%→100% only) across the phrase, then each feature `<li>` text in order, ~`STAGGER`
-(1200ms) apart, text strengthening to ink — check icons untouched. Cumulative:
+(240ms) apart — the whole card finishes lighting in ~1.6s — text strengthening to
+ink, check icons untouched. Cumulative:
 items go "lit" and never un-light; once a card starts it runs to completion and
 **stays lit until page refresh** (in-memory React state — no storage).
 
