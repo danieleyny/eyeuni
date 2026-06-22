@@ -27,7 +27,9 @@ import Footer from './components/Footer'
 // Intake flow (form steps + confetti) is its own chunk — loaded only on /intake.
 const IntakePage = lazy(() => import('./components/intake/IntakePage'))
 
-function HomePage() {
+// V2 (private, served at /V2.html) is a lighter cut of the site: several heavy
+// sections are removed to reduce jank. Pass `v2` to omit them.
+function HomePage({ v2 = false }) {
   return (
     <>
       <Header />
@@ -35,11 +37,11 @@ function HomePage() {
         <Hero />
         <CostOfBadWebsite />
         <Services />
-        <StatsStrip />
-        <CapabilityLens />
-        <WebsiteTransform />
-        <SpeedRace />
-        <CaseStudyImpact />
+        {!v2 && <StatsStrip />}
+        {!v2 && <CapabilityLens />}
+        {!v2 && <WebsiteTransform />}
+        {!v2 && <SpeedRace />}
+        {!v2 && <CaseStudyImpact />}
         <Portfolio />
         <IntegrationsMarquee />
         <Testimonials />
@@ -54,14 +56,15 @@ function HomePage() {
 }
 
 // Animated route transitions (home ↔ intake). Quick aperture-fade, <600ms.
-function AnimatedRoutes() {
+function AnimatedRoutes({ v2 = false }) {
   const location = useLocation()
   const reduce = useReducedMotion()
 
   const routes = (
     <Suspense fallback={<div className="min-h-screen bg-dark" />}>
       <Routes location={location}>
-        <Route path="/" element={<HomePage />} />
+        {/* V2 is served from /V2.html, so its home must match any non-intake path */}
+        <Route path={v2 ? '*' : '/'} element={<HomePage v2={v2} />} />
         <Route path="/intake" element={<IntakePage />} />
       </Routes>
     </Suspense>
@@ -84,14 +87,14 @@ function AnimatedRoutes() {
   )
 }
 
-export default function App() {
+export default function App({ v2 = false }) {
   return (
     <MotionPermissionGate>
       <Preloader />
       <ScrollProgress />
       <DepthOverlay />
       <SmoothScroll>
-        <AnimatedRoutes />
+        <AnimatedRoutes v2={v2} />
       </SmoothScroll>
     </MotionPermissionGate>
   )
