@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Code2, Layout, Server, Plus, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AnimateIn } from './useScrollAnimation'
 import { useReducedMotion } from 'framer-motion'
-import { useActiveWhenVisible } from '../hooks/useActiveWhenVisible'
 
 const services = [
   {
@@ -243,10 +242,8 @@ function ServiceTile({ service, index, large }) {
 }
 
 export default function Services() {
-  const sectionRef = useRef(null)
-  const active = useActiveWhenVisible(sectionRef)
   return (
-    <section ref={sectionRef} id="services" className={`py-24 md:py-32 relative ${active ? '' : 'svc-paused'}`}>
+    <section id="services" className="py-24 md:py-32 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark-card/50 to-dark" />
       <div className="relative max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
@@ -294,11 +291,6 @@ export default function Services() {
         .svc-dial { animation: svc-sweep 5s ease-out infinite; }
         @keyframes svc-score-up { 0% { opacity:0.3 } 60%,100% { opacity:1 } }
         .svc-score { animation: svc-score-up 5s ease-out infinite; }
-        /* Freeze the looping demos when the section is off-screen / tab hidden. */
-        .svc-paused .svc-code-line, .svc-paused .svc-render, .svc-paused .svc-caret,
-        .svc-paused .svc-wire, .svc-paused .svc-ui, .svc-paused .svc-dial, .svc-paused .svc-score {
-          animation-play-state: paused;
-        }
       `}</style>
     </section>
   )

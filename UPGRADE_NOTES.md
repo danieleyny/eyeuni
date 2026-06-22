@@ -220,10 +220,12 @@ light-skinned) — a follow-up.
 
 ---
 
-# Pass 5 — Pause animations off-screen / when tab hidden (efficiency)
+# Pass 5 — Pause animations off-screen / when tab hidden (MAIN PAGE only)
 
-Every continuous animation now pauses when it's off-screen OR the tab is hidden,
-and resumes seamlessly (no restart / pop), cutting idle CPU/battery use.
+Scope: the public main page (`index.html → HomeV3`, `src/components/v3/*`). The
+dark V2-only components and the `/V2.html` / `/V3.html` entry pages are untouched.
+Every continuous animation on the main page now pauses when it's off-screen OR
+the tab is hidden, and resumes seamlessly (no restart / pop), cutting idle CPU.
 
 ## New hook
 - `src/hooks/useActiveWhenVisible.js` — `true` only while the element is near/in
@@ -231,17 +233,15 @@ and resumes seamlessly (no restart / pop), cutting idle CPU/battery use.
   already running ~200px before they're seen) **and** the tab is visible
   (`visibilitychange`). Single source of truth for "should this loop run."
 
-## Wired up
-- **Light V3:** `HeroV3` (screenshot cycle `setInterval` + the gradient ribbon's
-  `animation-play-state`), `TestimonialsV3` (autoplay interval), `LogoCloudV3`
-  (both marquees — pause via `animation-play-state`, keeping hover-pause).
-- **Dark V2:** `IntegrationsMarquee` (marquees), `Services` (the looping
-  typing-code / wireframe-morph / speed-dial CSS demos via a `.svc-paused`
-  class), `Testimonials` (autoplay interval).
-- **Already gated (no change):** RAF/canvas loops via `useRafLoop`, which already
-  stops when `active` is false AND when the tab is hidden — `AuroraBackground`,
-  `LensReveal`, `WebsiteTransform` SparkleCanvas. `SpeedRace` is in-view gated.
-  Count-ups are one-shot.
+## Wired up (main page)
+- `HeroV3` — screenshot cycle `setInterval` + the gradient ribbon's
+  `animation-play-state`.
+- `TestimonialsV3` — autoplay interval.
+- `LogoCloudV3` — both marquees, paused via `animation-play-state` (keeping the
+  existing hover-pause).
+- Already efficient on the main page: RAF loops use `useRafLoop` (stops off-screen
+  AND tab-hidden); `ScrollProgress`/`AnimateIn`/`CountUp` are one-shot or
+  scroll-driven (no persistent loop). The dark V2-only components were left as-is.
 
 ## Technique notes
 - CSS keyframes are paused with `animation-play-state: paused` (freezes in place,
@@ -254,12 +254,12 @@ and resumes seamlessly (no restart / pop), cutting idle CPU/battery use.
 ## Small fix
 - `index.html`: the light-theme pre-paint background was `#0a0a0f` (dark); changed
   to `#ffffff` so there's no dark flash / dark mobile-overscroll edge under the
-  light theme. `/V2.html` (no `data-theme`) keeps the dark default.
+  light theme. `/V2.html` (no `data-theme`) keeps the dark default; `V3.html` /
+  `V2.html` documents untouched.
 
 ## Verification
-Confirmed in-preview: hero ribbon runs on load and pauses once scrolled past;
-the marquee resumes when scrolled into view (play-state toggling, seamless); the
-dark `Services` demos get `.svc-paused` off-screen. Tab-hidden pausing is via the
-standard `visibilitychange` flag (the preview can't toggle real tab visibility);
-the IntersectionObserver path is the same one the live LensReveal/Aurora already
-rely on. `npm run build` passes; `/V2.html` still renders dark.
+Confirmed in-preview: hero ribbon runs on load and pauses once scrolled past; the
+marquee resumes when scrolled into view (play-state toggling, seamless). Tab-hidden
+pausing is via the standard `visibilitychange` flag (the preview can't toggle real
+tab visibility); the IntersectionObserver path is the same one the live
+LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
