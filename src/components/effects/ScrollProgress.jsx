@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 // Uses a scroll listener + interval fallback (robust under smooth scroll) and
 // rAF for smoothness; CSS handles reduced motion (no animation needed — it's a
 // position indicator, not motion).
-export default function ScrollProgress() {
+export default function ScrollProgress({ theme = 'dark' }) {
   const barRef = useRef(null)
 
   useEffect(() => {
@@ -30,7 +30,9 @@ export default function ScrollProgress() {
     <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] pointer-events-none">
       <div
         ref={barRef}
-        className="h-full w-full origin-left bg-gradient-to-r from-primary via-blue-400 to-accent"
+        className={`h-full w-full origin-left ${
+          theme === 'light' ? 'v3-grad-bg' : 'bg-gradient-to-r from-primary via-blue-400 to-accent'
+        }`}
         style={{ transform: 'scaleX(0)' }}
       />
     </div>

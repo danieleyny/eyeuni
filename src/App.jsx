@@ -23,6 +23,7 @@ import DemoWebsiteCTA from './components/DemoWebsiteCTA'
 import FAQ from './components/FAQ'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import HomeV3 from './components/v3/HomeV3'
 
 // Intake flow (form steps + confetti) is its own chunk — loaded only on /intake.
 const IntakePage = lazy(() => import('./components/intake/IntakePage'))
@@ -57,16 +58,17 @@ function HomePage({ trimmed = false }) {
 }
 
 // Animated route transitions (home ↔ intake). Quick aperture-fade, <600ms.
-function AnimatedRoutes({ trimmed = false, wildcardHome = false }) {
+function AnimatedRoutes({ trimmed = false, wildcardHome = false, theme = 'dark' }) {
   const location = useLocation()
   const reduce = useReducedMotion()
+  const Home = theme === 'light' ? HomeV3 : HomePage
 
   const routes = (
-    <Suspense fallback={<div className="min-h-screen bg-dark" />}>
+    <Suspense fallback={<div className="min-h-screen" style={{ background: theme === 'light' ? '#fff' : '#0a0a0f' }} />}>
       <Routes location={location}>
-        {/* When served from a non-root .html (e.g. /V2.html), home must match any
-            non-intake path; the public index is served from "/". */}
-        <Route path={wildcardHome ? '*' : '/'} element={<HomePage trimmed={trimmed} />} />
+        {/* When served from a non-root .html (e.g. /V2.html, /V3.html), home must
+            match any non-intake path; the public index is served from "/". */}
+        <Route path={wildcardHome ? '*' : '/'} element={<Home trimmed={trimmed} />} />
         <Route path="/intake" element={<IntakePage />} />
       </Routes>
     </Suspense>
@@ -89,15 +91,17 @@ function AnimatedRoutes({ trimmed = false, wildcardHome = false }) {
   )
 }
 
-export default function App({ trimmed = false, wildcardHome = false }) {
+export default function App({ trimmed = false, wildcardHome = false, theme = 'dark' }) {
   return (
     <MotionPermissionGate>
-      <Preloader />
-      <ScrollProgress />
-      <DepthOverlay />
-      <SmoothScroll>
-        <AnimatedRoutes trimmed={trimmed} wildcardHome={wildcardHome} />
-      </SmoothScroll>
+      <div data-theme={theme === 'light' ? 'light' : undefined}>
+        <Preloader theme={theme} />
+        <ScrollProgress theme={theme} />
+        <DepthOverlay theme={theme} />
+        <SmoothScroll>
+          <AnimatedRoutes trimmed={trimmed} wildcardHome={wildcardHome} theme={theme} />
+        </SmoothScroll>
+      </div>
     </MotionPermissionGate>
   )
 }

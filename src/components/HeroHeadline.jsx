@@ -82,7 +82,12 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
   if (reduce || !start) {
     return (
       <span className="relative inline-grid align-baseline">
-        <span className={`whitespace-pre ${gradientClass || 'text-white'}`} aria-hidden>
+        <span
+          className={`whitespace-pre hh-fallback ${
+            gradientClass ? `${gradientClass} hh-grad` : 'text-white'
+          }`}
+          aria-hidden
+        >
           {text}
         </span>
       </span>
@@ -102,7 +107,7 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
 
       {gradientClass && (
         <span
-          className={`col-start-1 row-start-1 whitespace-pre ${gradientClass} ${
+          className={`col-start-1 row-start-1 whitespace-pre hh-grad ${gradientClass} ${
             colorize ? 'hh-word-flash' : ''
           }`}
           style={{ opacity: colorize ? 1 : 0 }}

@@ -14,7 +14,7 @@ const METER_RAMP = 1600 // ms — phase-1 climb toward ~85%
 const DIVE_MS = 700 // ms — eye flies into the pupil before the settle cross-fade
 const EYE_SCALE = 34 // how far we dive into the pupil
 
-export default function Preloader() {
+export default function Preloader({ theme = 'dark' }) {
   const reduceMotion = useReducedMotion()
   const appReady = useAppReady()
   const [show, setShow] = useState(false)
@@ -268,6 +268,22 @@ export default function Preloader() {
               </span>
             </motion.div>
           </motion.div>
+
+          {/* Light theme only: as the dive completes, a soft white bloom expands
+              from center so we emerge from the dark pupil INTO the light page —
+              no harsh flash. (Dark theme lands on the dark site, so no bloom.) */}
+          {theme === 'light' && diving && !reduceMotion && (
+            <motion.div
+              className="pointer-events-none absolute left-1/2 top-1/2 z-20 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
+              style={{
+                background:
+                  'radial-gradient(circle, #ffffff 0%, #ffffff 45%, rgba(246,248,252,0.65) 72%, transparent 88%)',
+              }}
+              initial={{ scale: 0.2, opacity: 0 }}
+              animate={{ scale: 26, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.28, ease: [0.4, 0, 0.2, 1] }}
+            />
+          )}
         </motion.div>
       )}
     </AnimatePresence>

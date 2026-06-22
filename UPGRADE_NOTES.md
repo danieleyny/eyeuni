@@ -168,3 +168,52 @@ events don't fire), then run to completion uncancelled, with a safety timeout
 that always lands on the exact target. Reduced motion shows the final value.
 Verified: Cost of a Bad Website → 53% / 75% / −7%; Stats strip → 200+ / ~0.8s /
 3× / 100%.
+
+---
+
+# Pass 4 — V3 (light, Stripe/Apple-grade site at /V3.html)
+
+A new private build served at `/V3.html` (mirrors `/V2.html`): the trimmed
+section set in a polished LIGHT theme. The public dark site and V2 are untouched.
+
+## Entry / wiring
+- `V3.html` (root, `noindex`, `data-theme="light"`, inline dark bg so the dark
+  intro doesn't flash white) → `src/main-v3.jsx` → `<App trimmed theme="light"
+  wildcardHome />`.
+- `vite.config.js` — added `v3` input.
+- `src/App.jsx` — `theme` prop (default `dark`, dark site identical). When light:
+  wraps in `data-theme="light"`, renders `HomeV3`, passes `theme` to Preloader /
+  ScrollProgress / DepthOverlay.
+
+## Light design system (`src/index.css`, scoped to `[data-theme="light"]`)
+Semantic tokens (`--bg`, `--bg-subtle`, `--ink`/`--ink-muted`/`--ink-faint`,
+`--accent`, `--grad-accent` indigo→violet→cyan, hairlines, layered soft shadows)
++ helper classes (`.v3-grad-text`, `.v3-grad-bg`, `.v3-card`, `.v3-btn-primary`,
+`.v3-btn-ghost`, `.v3-ribbon`) + light overrides for the headline `.hh-*` classes.
+
+## Light sections (`src/components/v3/`)
+`HomeV3` composes: `HeaderV3` (transparent→white-on-scroll, gradient pill),
+`HeroV3` (white hero, drifting gradient ribbon, decoded headline, two CTAs,
+floating browser mockup with `portfolio/birchwood.jpg`, dispatches
+`eyeuni:hero-ready`), `CostV3` (CountUp 53/75/−7, amber accent), `ServicesV3`
+(refined feature cards), `PortfolioV3` (browser-framed screenshots),
+`LogoCloudV3` (greyscale marquee), `TestimonialsV3` (editorial quote),
+`DemoCTAV3` (gradient-tinted CTA band), `FAQV3` (hairline accordion), `ContactV3`
+(light form, accent focus ring), `FooterV3`, `StickyMobileCTAV3`. Reuses the dark
+sections' data + `AnimateIn` + `CountUp` + `HeroHeadline`.
+
+## Theme-aware shared infra
+- `Preloader` — same dark into-the-eye intro; on light, a soft white bloom
+  expands from center at the end of the dive so we "step into the light."
+- `ScrollProgress` — `--grad-accent` bar on light. `DepthOverlay` — skipped on
+  light (its dark grain/vignette is wrong for a bright page).
+- `HeroHeadline` — added `hh-grad`/`hh-fallback` hook classes so light overrides
+  can repaint the gradient/fallback; timing/logic unchanged.
+
+## Tunables
+`HeroV3` (`MOCKUP_IMG`, `MOCKUP_TILT`), `index.css` (`--grad-accent`, shadow
+vars, `.v3-ribbon` drift speed). Preloader bloom timing in `Preloader.jsx`.
+
+## Known limitation
+`/intake` from V3 still uses the existing dark intake (functional, not yet
+light-skinned) — a follow-up.
