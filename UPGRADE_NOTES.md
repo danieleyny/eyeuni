@@ -263,3 +263,36 @@ marquee resumes when scrolled into view (play-state toggling, seamless). Tab-hid
 pausing is via the standard `visibilitychange` flag (the preview can't toggle real
 tab visibility); the IntersectionObserver path is the same one the live
 LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
+
+---
+
+# Pass 6 — Services cards: richer look + sequenced highlighter (MAIN PAGE / light)
+
+Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
+The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
+
+## Card visual upgrade (`.svc3-card`)
+Subtle light gradient surface (`#ffffff → #f7f8ff`), a faint dark dot-grid
+texture masked to fade toward the edges (depth without losing contrast), a thin
+`--grad-accent` top accent line that brightens on hover, and a stronger hover
+lift + soft indigo glow (`--shadow-md`). Still clean/Apple-light, just less flat.
+
+## Sequenced highlighter
+Each service gains a `highlightPhrase`; the description is split before/phrase/
+after so only the phrase highlights. When a card is **activated**, a soft
+indigo→violet→cyan **marker wash** sweeps left→right (animating `background-size`
+0%→100% only) across the phrase, then each feature `<li>` text in order, ~`STAGGER`
+(1200ms) apart, text strengthening to ink — check icons untouched. Cumulative:
+items go "lit" and never un-light; once a card starts it runs to completion and
+**stays lit until page refresh** (in-memory React state — no storage).
+
+- **Trigger — desktop:** first `pointerenter` on a fine-pointer device starts it
+  (latches; never auto-starts without hover).
+- **Trigger — mobile:** one shared `IntersectionObserver` (threshold 0.4) starts
+  each card as it enters view, then stops observing it.
+- **Reduced motion:** cards render fully lit from mount (no sweep/timers).
+
+## Performance
+One-shot `setTimeout` chain per active card (~6 steps), cleared on unmount — no
+rAF, no loops, no per-frame React state. Only `background-size`/`color`/`transform`
+animate. One shared IO for mobile. No new deps.

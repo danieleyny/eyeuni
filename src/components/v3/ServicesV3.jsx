@@ -1,6 +1,11 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Code2, Layout, Server, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useReducedMotion } from 'framer-motion'
 import { AnimateIn } from '../useScrollAnimation'
+
+// ---- Tunables --------------------------------------------------------------
+const STAGGER = 1200 // ms between each item lighting up (phrase → features)
 
 const services = [
   {
@@ -8,23 +13,135 @@ const services = [
     title: 'Custom Built Websites',
     description:
       "We don't use templates. Every website is built from scratch — tailored to your business, your goals, and designed to perform.",
+    highlightPhrase: 'tailored to your business, your goals, and designed to perform',
     features: ['Fully custom-built websites', 'E-commerce & booking systems', 'Easy content management', 'Seamless tool integrations', 'Built to convert visitors'],
   },
   {
     icon: Layout,
     title: 'Design & User Experience',
     description: 'Every design choice is made to capture attention, build trust, and drive results.',
+    highlightPhrase: 'capture attention, build trust, and drive results',
     features: ['Modern design', 'Mobile-friendly', 'Easy navigation', 'Smooth interactions', 'Conversion-focused'],
   },
   {
     icon: Server,
     title: 'Infrastructure & Reliability',
     description: 'We build websites that are fast, stable, and ready to handle growth as your business expands.',
+    highlightPhrase: 'fast, stable, and ready to handle growth',
     features: ['High-speed performance', 'Secure infrastructure', 'Scalable systems', 'Reliable performance', 'Optimized for speed'],
   },
 ]
 
+function finePointer() {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(hover: hover) and (pointer: fine)').matches
+  )
+}
+
+// One card. The highlighter sequence latches on first trigger (hover on desktop,
+// scroll-into-view on mobile) and runs once to completion, staying lit until the
+// page refreshes. A single setTimeout chain per active card — no loops.
+function ServiceCard({ service, reduce, register }) {
+  const { icon: Icon, title, description, highlightPhrase, features } = service
+  const total = 1 + features.length // index 0 = phrase, then each feature
+  const [lit, setLit] = useState(reduce ? total : 0)
+  const startedRef = useRef(false)
+  const timerRef = useRef(null)
+  const cardRef = useRef(null)
+
+  const start = useCallback(() => {
+    if (startedRef.current) return
+    startedRef.current = true
+    if (reduce) {
+      setLit(total)
+      return
+    }
+    // Light the phrase now, then each feature STAGGER ms after the previous.
+    const tick = (i) => {
+      setLit(i)
+      if (i < total) timerRef.current = setTimeout(() => tick(i + 1), STAGGER)
+    }
+    tick(1)
+  }, [reduce, total])
+
+  // Register with the parent's shared IntersectionObserver (mobile trigger).
+  useEffect(() => {
+    const entry = { el: cardRef.current, start }
+    const unregister = register(entry)
+    return () => {
+      unregister?.()
+      clearTimeout(timerRef.current)
+    }
+  }, [register, start])
+
+  const onPointerEnter = () => {
+    if (finePointer()) start() // desktop: hover starts it; latches
+  }
+
+  const pi = description.indexOf(highlightPhrase)
+  const before = pi >= 0 ? description.slice(0, pi) : description
+  const after = pi >= 0 ? description.slice(pi + highlightPhrase.length) : ''
+  const phraseLit = lit >= 1
+  const featureLit = (i) => lit >= i + 2
+
+  return (
+    <div ref={cardRef} onPointerEnter={onPointerEnter} className="svc3-card group flex h-full flex-col p-8">
+      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0fe] text-[#4f46e5] transition-colors duration-300 group-hover:bg-[#4f46e5] group-hover:text-white">
+        <Icon className="h-6 w-6" />
+      </div>
+      <h3 className="mb-2.5 text-xl font-bold text-[#0a0e27]">{title}</h3>
+      <p className="mb-6 leading-relaxed text-[#4b5568]">
+        {before}
+        {pi >= 0 && <span className={`svc-hl ${phraseLit ? 'is-lit' : ''}`}>{highlightPhrase}</span>}
+        {after}
+      </p>
+      <ul className="mt-auto space-y-2.5">
+        {features.map((f, i) => (
+          <li key={f} className="flex items-center gap-2.5 text-sm text-[#4b5568]">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
+              <Check className="h-3 w-3 text-[#4f46e5]" strokeWidth={3} />
+            </span>
+            <span className={`svc-hl ${featureLit(i) ? 'is-lit' : ''}`}>{f}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function ServicesV3() {
+  const reduce = useReducedMotion()
+  const registryRef = useRef([])
+
+  const register = useCallback((entry) => {
+    registryRef.current.push(entry)
+    return () => {
+      registryRef.current = registryRef.current.filter((e) => e !== entry)
+    }
+  }, [])
+
+  // Mobile / touch trigger: ONE shared IntersectionObserver starts each card the
+  // first time it's ~40% visible, then stops observing it. Desktop (fine pointer)
+  // uses hover instead, so cards never auto-start there. Reduced motion skips it
+  // (cards render fully lit from mount).
+  useEffect(() => {
+    if (reduce || finePointer()) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            registryRef.current.find((r) => r.el === e.target)?.start()
+            io.unobserve(e.target)
+          }
+        })
+      },
+      { threshold: 0.4 }
+    )
+    registryRef.current.forEach((r) => r.el && io.observe(r.el))
+    return () => io.disconnect()
+  }, [reduce])
+
   return (
     <section id="services" className="bg-white py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -39,23 +156,7 @@ export default function ServicesV3() {
         <div className="grid gap-6 md:grid-cols-3">
           {services.map((service, i) => (
             <AnimateIn key={service.title} delay={i * 120} className="h-full">
-              <div className="v3-card group flex h-full flex-col p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-md)]">
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0fe] text-[#4f46e5] transition-colors duration-300 group-hover:bg-[#4f46e5] group-hover:text-white">
-                  <service.icon className="h-6 w-6" />
-                </div>
-                <h3 className="mb-2.5 text-xl font-bold text-[#0a0e27]">{service.title}</h3>
-                <p className="mb-6 leading-relaxed text-[#4b5568]">{service.description}</p>
-                <ul className="mt-auto space-y-2.5">
-                  {service.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-[#4b5568]">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eef0fe]">
-                        <Check className="h-3 w-3 text-[#4f46e5]" strokeWidth={3} />
-                      </span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ServiceCard service={service} reduce={reduce} register={register} />
             </AnimateIn>
           ))}
         </div>

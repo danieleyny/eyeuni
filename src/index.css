@@ -336,6 +336,74 @@ html[data-theme='light'] body {
   will-change: transform;
 }
 
+/* ---- Services (light, main page): richer card + marker-sweep highlight ---- */
+/* Subtle gradient surface + faint dot-grid texture + accent top line + glow. */
+.svc3-card {
+  position: relative;
+  isolation: isolate;
+  border-radius: 16px;
+  background-image: linear-gradient(180deg, #ffffff, #f7f8ff);
+  border: 1px solid var(--hairline-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+}
+.svc3-card::before {
+  /* faint dark dot-grid, faded toward the edges — depth without losing contrast */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(13, 18, 40, 0.05) 1px, transparent 1.6px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(130% 90% at 50% 0%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(130% 90% at 50% 0%, #000 35%, transparent 78%);
+}
+.svc3-card::after {
+  /* thin --grad-accent top line, brightens on hover */
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background-image: var(--grad-accent);
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+.svc3-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(79, 70, 229, 0.35);
+  box-shadow: var(--shadow-md), 0 20px 50px -26px rgba(79, 70, 229, 0.5);
+}
+.svc3-card:hover::after {
+  opacity: 1;
+}
+
+/* Marker-sweep highlight: a soft indigo→violet→cyan wash wipes in left→right and
+   stays; the text strengthens to ink. Only background-size animates (one-shot,
+   compositor-cheap) — never layout properties. */
+.svc-hl {
+  border-radius: 3px;
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  background-image: linear-gradient(
+    120deg,
+    rgba(15, 49, 184, 0.16),
+    rgba(124, 58, 237, 0.16),
+    rgba(34, 211, 238, 0.14)
+  );
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-size 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.45s ease;
+}
+.svc-hl.is-lit {
+  background-size: 100% 100%;
+  color: #0a0e27;
+  font-weight: 500;
+}
+
 /* ---- Headline decode, retuned for light ---- */
 [data-theme='light'] .hh-char {
   color: var(--ink);
