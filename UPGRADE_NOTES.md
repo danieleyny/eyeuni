@@ -271,31 +271,39 @@ LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
 Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
-## Card visual upgrade (`.svc3-card`)
-Cool light gradient surface (`135deg #ffffff → #f5f7ff → #eef1ff`) with soft
-corner color glows (indigo top-right, cyan bottom-left), a thin `--grad-accent`
-top accent line that brightens on hover, and a stronger hover lift + soft indigo
-glow (`--shadow-md`). Clean/Apple-light, just with depth.
+## Card visual — moving gradient surface (`.svc3-card`)
+A pale aurora gradient (`120deg #ffffff → #f3f5ff → #f7f2ff → #eef7ff`) sized
+`200% 200%` and slowly drifted by the `svc-bg-drift` keyframe (~14s loop), with
+each card phase-offset (`animation-delay` 0 / -4.5 / -9s) so they don't move in
+lockstep. The border is a soft `--grad-accent` gradient hairline **ring** (mask
+trick) that brightens on hover; hover keeps the lift + `--shadow-md`. The drift is
+the only continuous animation added and is **paused off-screen** (via
+`useActiveWhenVisible` → inline `animation-play-state`) and under reduced motion.
 
-## Sequenced highlighter
+## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/
-after so only the phrase highlights. When a card is **activated**, an airbrushed
-indigo→violet→cyan **spray-paint sweep** mists in left→right (animating
-`background-size` only) — a feathered/soft leading edge, mottled paint density
-(soft color clouds), and a fine SVG-noise speckle grain (`background-blend-mode:
-soft-light`) — across the phrase, then each feature `<li>` text in order, ~`STAGGER`
-(240ms) apart — the whole card finishes lighting in ~1.7s — text strengthening to
-ink, check icons untouched. Cumulative:
+after so only the phrase underlines. When a card is **activated**, a glowing
+`--grad-accent` **underline** (`linear-gradient(90deg,#0f31b8,#7c3aed,#22d3ee)`,
+~2.5px, soft `drop-shadow` glow) draws in left→right beneath the text (animating a
+bottom `background-size` width 0%→100%) and the text shifts grey→ink — across the
+phrase, then each feature in order, ~`STAGGER` (240ms) apart, the whole card
+finishing in ~1.6s. `box-decoration-break: clone` underlines **every wrapped line**
+of the multi-line phrase. Check icons untouched. Cumulative:
 items go "lit" and never un-light; once a card starts it runs to completion and
 **stays lit until page refresh** (in-memory React state — no storage).
+
+(Per the standing request the sequence is fast — `STAGGER` 240ms, ~1.6s total —
+rather than the 1200ms the spec mentions.)
 
 - **Trigger — desktop:** first `pointerenter` on a fine-pointer device starts it
   (latches; never auto-starts without hover).
 - **Trigger — mobile:** one shared `IntersectionObserver` (threshold 0.4) starts
   each card as it enters view, then stops observing it.
-- **Reduced motion:** cards render fully lit from mount (no sweep/timers).
+- **Reduced motion:** cards render fully lit from mount, gradient drift off.
 
 ## Performance
 One-shot `setTimeout` chain per active card (~6 steps), cleared on unmount — no
-rAF, no loops, no per-frame React state. Only `background-size`/`color`/`transform`
-animate. One shared IO for mobile. No new deps.
+rAF, no per-frame React state. The drifting card gradient is a single
+`background-position` keyframe loop, paused off-screen + reduced-motion. Only
+`background-size`/`background-position`/`color`/`transform` animate. One shared IO
+for mobile. No new deps.

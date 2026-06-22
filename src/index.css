@@ -336,86 +336,69 @@ html[data-theme='light'] body {
   will-change: transform;
 }
 
-/* ---- Services (light, main page): richer card + marker-sweep highlight ---- */
-/* Cool light gradient surface + soft corner color glows + accent top line. */
+/* ---- Services (light, main page): moving-gradient card + underline sweep ---- */
+/* Slowly-drifting pale aurora surface + soft --grad-accent hairline ring. The
+   drift pauses off-screen (inline animation-play-state) and under reduced motion. */
 .svc3-card {
   position: relative;
-  isolation: isolate;
   border-radius: 16px;
-  background-image: linear-gradient(135deg, #ffffff 0%, #f5f7ff 58%, #eef1ff 100%);
-  border: 1px solid var(--hairline-color);
+  background-image: linear-gradient(120deg, #ffffff, #f3f5ff, #f7f2ff, #eef7ff);
+  background-size: 200% 200%;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+  animation: svc-bg-drift 14s ease-in-out infinite;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
-.svc3-card::before {
-  /* soft indigo (top-right) + cyan (bottom-left) color glows — premium depth */
+.svc3-card::after {
+  /* soft --grad-accent gradient hairline ring (mask trick), brightens on hover */
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background-image:
-    radial-gradient(115% 80% at 100% 0%, rgba(79, 70, 229, 0.13), transparent 60%),
-    radial-gradient(100% 80% at 0% 100%, rgba(34, 211, 238, 0.1), transparent 58%);
-  opacity: 0.9;
-  transition: opacity 0.5s ease;
-}
-.svc3-card:hover::before {
-  opacity: 1;
-}
-.svc3-card::after {
-  /* thin --grad-accent top line, brightens on hover */
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 2px;
-  background-image: var(--grad-accent);
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--grad-accent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0.4;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
 }
 .svc3-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(79, 70, 229, 0.35);
   box-shadow: var(--shadow-md), 0 20px 50px -26px rgba(79, 70, 229, 0.5);
 }
 .svc3-card:hover::after {
-  opacity: 1;
+  opacity: 0.85;
+}
+@keyframes svc-bg-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svc3-card { animation: none; }
 }
 
-/* Spray-paint sweep: an airbrushed indigo→violet→cyan wash mists in left→right
-   with a soft feathered leading edge + mottled (uneven) paint density, and stays.
-   The text strengthens to ink. Only background-size animates (one-shot, cheap). */
+/* Underline sweep (Style B): a glowing --grad-accent line draws in left→right
+   beneath the text and stays; the text shifts grey → ink. Bottom background-image
+   + background-size width animates (one-shot, compositor-cheap). box-decoration-
+   break: clone underlines EVERY wrapped line of the multi-line phrase. */
 .svc-hl {
-  border-radius: 4px;
-  padding: 0.04em 0.16em;
-  margin: 0 -0.16em;
-  background-image:
-    /* fine speckle grain → spray-paint texture */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='40'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.55'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    /* uneven paint clouds → mottled airbrush density */
-    radial-gradient(72% 140% at 22% 32%, rgba(124, 58, 237, 0.16), transparent 70%),
-    radial-gradient(60% 150% at 60% 68%, rgba(34, 211, 238, 0.15), transparent 72%),
-    /* base wash, feathered to transparent at the leading (right) edge = spray mist */
-    linear-gradient(
-      108deg,
-      rgba(15, 49, 184, 0.22) 0%,
-      rgba(124, 58, 237, 0.24) 46%,
-      rgba(34, 211, 238, 0.18) 74%,
-      rgba(34, 211, 238, 0) 100%
-    );
-  background-blend-mode: soft-light, normal, normal, normal;
+  color: #4b5568;
+  padding-bottom: 0.08em;
+  background-image: linear-gradient(90deg, #0f31b8, #7c3aed, #22d3ee);
   background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 0% 100%;
+  background-position: 0 100%;
+  background-size: 0% 2.5px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  transition: background-size 0.5s cubic-bezier(0.16, 0.84, 0.44, 1), color 0.34s ease;
+  transition: background-size 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease;
 }
 .svc-hl.is-lit {
-  /* slight overshoot so the soft feathered edge sweeps fully past the text */
-  background-size: 114% 100%;
   color: #0a0e27;
-  font-weight: 500;
+  background-size: 100% 2.5px;
+  filter: drop-shadow(0 1px 1.5px rgba(124, 58, 237, 0.45));
 }
 
 /* ---- Headline decode, retuned for light ---- */
