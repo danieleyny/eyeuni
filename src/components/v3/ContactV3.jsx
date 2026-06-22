@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import { AnimateIn } from '../useScrollAnimation'
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'charlieeyny@gmail.com', href: 'mailto:charlieeyny@gmail.com' },
+  { icon: Mail, label: 'Email', value: 'eyeuni.design@gmail.com', href: 'mailto:eyeuni.design@gmail.com' },
   { icon: Phone, label: 'Phone', value: '(917) 847-4664', href: 'tel:9178474664' },
   { icon: MapPin, label: 'Location', value: 'New York, NY', href: '#' },
 ]

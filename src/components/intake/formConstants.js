@@ -29,6 +29,7 @@ export const WEBSITE_GOALS = [
   { label: 'Accept Bookings', icon: '📅' },
   { label: 'Build Brand Awareness', icon: '📢' },
   { label: 'Showcase Portfolio', icon: '💼' },
+  { label: 'Product Engagement', icon: '📈' },
 ]
 
 export const VISITOR_ACTIONS = [
@@ -129,6 +130,8 @@ export const INITIAL_FORM_DATA = {
   // Step 7 — Timeline
   timeline: '',
   anythingElse: '',
+  // Step 8 — Review: free-text, the lead's vision in their own words
+  inOwnWords: '',
 }
 
 export const REQUIRED_FIELDS_PER_STEP = [

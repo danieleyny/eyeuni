@@ -132,6 +132,9 @@ export function useIntakeForm() {
           // — Timeline & Notes —
           'Timeline': d.timeline || '(not selected)',
           'Additional Notes': d.anythingElse || '(none)',
+
+          // — In their own words —
+          'In Their Own Words': d.inOwnWords || '(not provided)',
         }),
       })
       dispatch({ type: 'SUBMIT_SUCCESS' })

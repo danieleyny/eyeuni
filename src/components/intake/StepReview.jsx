@@ -31,7 +31,7 @@ function ReviewSection({ title, stepIndex, entries, onEdit }) {
   )
 }
 
-export default function StepReview({ formData, onGoToStep }) {
+export default function StepReview({ formData, onGoToStep, updateField }) {
   return (
     <div>
       <div className="mb-8">
@@ -43,6 +43,20 @@ export default function StepReview({ formData, onGoToStep }) {
         </div>
         <p className="text-gray-400">Please review your responses before submitting. Click "Edit" on any section to make changes.</p>
       </div>
+
+      {/* Free-text: the lead describes, in their own words, what they want. */}
+      <motion.div variants={item} initial="hidden" animate="show" custom={0} className="mb-6">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          In your own words, what are you looking for? <span className="text-gray-500">(optional)</span>
+        </label>
+        <textarea
+          rows={4}
+          placeholder="Tell us about your vision, the must-haves, the vibe you're going for — anything that helps us nail it."
+          className="w-full px-4 py-3.5 bg-dark-card/50 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 transition-all duration-300 resize-none"
+          value={formData.inOwnWords}
+          onChange={(e) => updateField('inOwnWords', e.target.value)}
+        />
+      </motion.div>
 
       <div className="space-y-4">
         <motion.div variants={item} initial="hidden" animate="show" custom={0}>

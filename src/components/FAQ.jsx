@@ -16,6 +16,10 @@ const faqs = [
     a: 'Yes! We offer monthly maintenance plans that include updates, security patches, performance monitoring, and content changes to keep your site running smoothly.',
   },
   {
+    q: 'Is my website secure?',
+    a: "Security is built in from day one. Every site ships with HTTPS/SSL, secure hosting, and ongoing security updates by default. For sites handling payments, logins, or customer data, we add hardened authentication and follow industry best practices to keep your data — and your customers' — safe.",
+  },
+  {
     q: 'Can you redesign my existing website?',
     a: 'Absolutely. We specialize in modern redesigns that transform outdated sites into sleek, high-performing websites while preserving your existing content and SEO rankings.',
   },

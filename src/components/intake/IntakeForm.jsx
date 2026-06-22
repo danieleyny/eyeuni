@@ -128,7 +128,7 @@ export default function IntakeForm({ onSubmitted }) {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             {isReviewStep ? (
-              <StepReview formData={formData} onGoToStep={goToStep} />
+              <StepReview formData={formData} onGoToStep={goToStep} updateField={updateField} />
             ) : (
               <StepComponent
                 formData={formData}

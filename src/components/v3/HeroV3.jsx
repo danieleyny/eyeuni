@@ -1,18 +1,39 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useIntroDone } from '../../hooks/useIntroHandoff'
+import { useLenisScrollTo } from '../effects/SmoothScroll'
 import HeroHeadline from '../HeroHeadline'
 
 // ---- Tunables --------------------------------------------------------------
-const MOCKUP_IMG = 'portfolio/birchwood.jpg' // reused screenshot in the browser frame
 const MOCKUP_TILT = { rotateX: 6, rotateY: -9 } // resting 3D angle (deg)
+const CYCLE_MS = 3200 // how long each portfolio screenshot is shown
+// Real sites we've built — the mockup rotates through them to show more work.
+const SITES = [
+  { img: 'portfolio/birchwood.jpg', host: 'birchwoodny.com' },
+  { img: 'portfolio/fleurfund.jpg', host: 'fleurfund.com' },
+  { img: 'portfolio/laundryday.jpg', host: 'laundryday.nyc' },
+  { img: 'portfolio/nyapts.jpg', host: 'ny-apts.com' },
+  { img: 'portfolio/safeconsulting.jpg', host: 'safeconsulting.shop' },
+  { img: 'portfolio/rentovercharge.jpg', host: 'rentoverchargenyc.com' },
+]
 
 export default function HeroV3() {
   const reduce = useReducedMotion()
   const introDone = useIntroDone()
   const base = import.meta.env.BASE_URL
+  const scrollTo = useLenisScrollTo()
+  const [siteIdx, setSiteIdx] = useState(0)
+
+  // Rotate the mockup through our portfolio sites (static under reduced motion).
+  useEffect(() => {
+    if (reduce) return
+    const t = setInterval(() => setSiteIdx((i) => (i + 1) % SITES.length), CYCLE_MS)
+    return () => clearInterval(t)
+  }, [reduce])
+
+  const site = SITES[siteIdx]
 
   // Signal the preloader's readiness gate once the hero has painted, so the
   // into-the-eye dive only lands when the fold (incl. the mockup) is ready.
@@ -64,15 +85,19 @@ export default function HeroV3() {
           </div>
         </motion.div>
 
-        {/* Floating browser mockup */}
+        {/* Floating browser mockup — rotates through our work; click to jump to
+            the portfolio. */}
         <motion.div
           className="mt-16 [perspective:1400px]"
           initial={reduce ? false : { opacity: 0, y: 40 }}
           animate={introDone || reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div
-            className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-[color:var(--hairline-color)] bg-white shadow-[var(--shadow-lg)]"
+          <button
+            type="button"
+            onClick={() => scrollTo('#portfolio')}
+            aria-label="See our portfolio"
+            className="group mx-auto block w-full max-w-3xl cursor-pointer select-none overflow-hidden rounded-2xl border border-[color:var(--hairline-color)] bg-white text-left shadow-[var(--shadow-lg)] transition-shadow duration-500 hover:shadow-[0_36px_80px_-24px_rgba(13,18,40,0.30)]"
             style={reduce ? undefined : { transform: `rotateX(${MOCKUP_TILT.rotateX}deg) rotateY(${MOCKUP_TILT.rotateY}deg)` }}
           >
             {/* browser chrome */}
@@ -80,20 +105,40 @@ export default function HeroV3() {
               <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
               <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
               <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-              <div className="mx-auto flex w-1/2 max-w-[260px] items-center justify-center rounded-md border border-[color:var(--hairline-color)] bg-white px-3 py-1 text-[11px] text-[#8a93a6]">
-                eye-uni.com
+              <div className="relative mx-auto flex h-[22px] w-1/2 max-w-[260px] items-center justify-center overflow-hidden rounded-md border border-[color:var(--hairline-color)] bg-white px-3 text-[11px] text-[#8a93a6]">
+                {/* host crossfades in lockstep with the screenshot below */}
+                <AnimatePresence initial={false}>
+                  <motion.span
+                    key={site.host}
+                    className="absolute"
+                    initial={reduce ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ duration: 0.7, ease: 'easeInOut' }}
+                  >
+                    {site.host}
+                  </motion.span>
+                </AnimatePresence>
               </div>
             </div>
-            {/* screenshot */}
-            <div className="aspect-[16/10] w-full overflow-hidden bg-[#f6f8fc]">
-              <img
-                src={`${base}${MOCKUP_IMG}`}
-                alt="A website we built"
-                loading="eager"
-                className="h-full w-full object-cover object-top"
-              />
+            {/* cycling screenshots (crossfade) — not draggable */}
+            <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f6f8fc]">
+              <AnimatePresence initial={false}>
+                <motion.img
+                  key={site.img}
+                  src={`${base}${site.img}`}
+                  alt="A website we built"
+                  draggable={false}
+                  loading="eager"
+                  className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-top"
+                  initial={reduce ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+                  transition={{ duration: 0.7, ease: 'easeInOut' }}
+                />
+              </AnimatePresence>
             </div>
-          </div>
+          </button>
         </motion.div>
       </div>
     </section>
