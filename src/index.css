@@ -225,23 +225,6 @@ body {
   }
 }
 
-/* Pulsing halo that highlights the real site element a capability powers. */
-.lens-halo {
-  box-shadow: 0 0 14px rgba(179, 200, 244, 0.6), inset 0 0 8px rgba(179, 200, 244, 0.4);
-  animation: lens-halo 1.6s ease-in-out infinite;
-}
-@keyframes lens-halo {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  50% {
-    transform: scale(1.18);
-    opacity: 1;
-  }
-}
-
 /* Tap ripple for magnetic buttons on touch devices. */
 .eyeuni-ripple {
   position: absolute;

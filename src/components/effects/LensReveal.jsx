@@ -300,17 +300,6 @@ export default function LensReveal() {
             }}
           />
 
-          {/* halos marking the real element each widget powers */}
-          {HOTSPOTS.filter((a) => a.src).map((a) => (
-            <div
-              key={`${a.id}-halo`}
-              className="absolute"
-              style={{ left: `${a.src.x * 100}%`, top: `${a.src.y * 100}%`, transform: 'translate(-50%, -50%)' }}
-            >
-              <span className="lens-halo block h-10 w-10 rounded-full border-2 border-primary/80" />
-            </div>
-          ))}
-
           {/* the labeled capability widgets */}
           {HOTSPOTS.map((hsp, i) => {
             const W = WIDGETS[hsp.id]
