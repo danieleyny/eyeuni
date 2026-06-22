@@ -11,7 +11,9 @@ export default function IntakePage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-dark">
+    // text-white keeps the dark intake self-contained even when the site runs
+    // under the light theme (data-theme="light" sets a dark default text color).
+    <div className="min-h-screen bg-dark text-white">
       {/* Minimal Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-xl border-b border-dark-border">
         <nav className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">

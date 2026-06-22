@@ -9,12 +9,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // Public site
+        // Public site — now the light V3 (Stripe/Apple-grade) build
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
-        // Private V2 preview (full original dark site), served at /V2.html
+        // Private V2 archive (full original dark site), served at /V2.html
         v2: fileURLToPath(new URL('./V2.html', import.meta.url)),
-        // Private V3 preview (light Stripe/Apple-grade site), served at /V3.html
-        v3: fileURLToPath(new URL('./V3.html', import.meta.url)),
       },
     },
   },
