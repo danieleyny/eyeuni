@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useIntroDone } from '../../hooks/useIntroHandoff'
+import { useActiveWhenVisible } from '../../hooks/useActiveWhenVisible'
 import { useLenisScrollTo } from '../effects/SmoothScroll'
 import HeroHeadline from '../HeroHeadline'
 
@@ -27,14 +28,17 @@ export default function HeroV3() {
   const introDone = useIntroDone()
   const base = import.meta.env.BASE_URL
   const scrollTo = useLenisScrollTo()
+  const sectionRef = useRef(null)
+  const active = useActiveWhenVisible(sectionRef)
   const [siteIdx, setSiteIdx] = useState(0)
 
   // Rotate the mockup through our portfolio sites (static under reduced motion).
+  // Pauses when off-screen / tab hidden; resumes from the current image.
   useEffect(() => {
-    if (reduce) return
+    if (reduce || !active) return
     const t = setInterval(() => setSiteIdx((i) => (i + 1) % SITES.length), CYCLE_MS)
     return () => clearInterval(t)
-  }, [reduce])
+  }, [reduce, active])
 
   const site = SITES[siteIdx]
 
@@ -61,11 +65,11 @@ export default function HeroV3() {
       }
 
   return (
-    <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white pt-28 pb-16">
+    <section ref={sectionRef} id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white pt-28 pb-16">
       {/* Soft drifting gradient ribbon/aura behind the headline */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <div className={`absolute left-1/2 top-[18%] h-[34rem] w-[44rem] -translate-x-1/2 rounded-[50%] ${reduce ? '' : 'v3-ribbon'}`}
-          style={reduce ? { backgroundImage: 'var(--grad-accent)', filter: 'blur(80px)', opacity: 0.16 } : undefined} />
+          style={reduce ? { backgroundImage: 'var(--grad-accent)', filter: 'blur(80px)', opacity: 0.16 } : { animationPlayState: active ? 'running' : 'paused' }} />
         {/* fade the ribbon into the page bottom */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
       </div>

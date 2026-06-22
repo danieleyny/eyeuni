@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { AnimateIn } from './useScrollAnimation'
+import { useActiveWhenVisible } from '../hooks/useActiveWhenVisible'
 
 const testimonials = [
   {
@@ -32,6 +33,8 @@ const testimonials = [
 export default function Testimonials() {
   const [current, setCurrent] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
+  const sectionRef = useRef(null)
+  const active = useActiveWhenVisible(sectionRef)
 
   const next = () => {
     if (isAnimating) return
@@ -47,15 +50,18 @@ export default function Testimonials() {
     setTimeout(() => setIsAnimating(false), 500)
   }
 
+  // Auto-advance only while on-screen and the tab is visible.
   useEffect(() => {
+    if (!active) return
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
-  }, [isAnimating])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAnimating, active])
 
   const t = testimonials[current]
 
   return (
-    <section id="testimonials" className="py-24 md:py-32 bg-dark-card/30">
+    <section ref={sectionRef} id="testimonials" className="py-24 md:py-32 bg-dark-card/30">
       <div className="max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">What Our Clients Are Saying</h2>

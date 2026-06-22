@@ -1,4 +1,6 @@
+import { useRef, useState } from 'react'
 import { AnimateIn } from './useScrollAnimation'
+import { useActiveWhenVisible } from '../hooks/useActiveWhenVisible'
 
 // TODO(client): swap these text wordmarks for real monochrome SVG brand logos.
 const ROW_A = ['Stripe', 'Calendly', 'Google', 'Instagram', 'Shopify', 'Mailchimp', 'Square', 'QuickBooks']
@@ -14,14 +16,25 @@ function Pill({ label }) {
   )
 }
 
-function Row({ items, dir }) {
+// Pauses on hover (existing) AND off-screen / tab hidden (efficiency), via
+// animation-play-state — freezes in place, resumes seamlessly.
+function Row({ items, dir, active }) {
+  const [hover, setHover] = useState(false)
   const doubled = [...items, ...items]
   return (
-    <div className="group flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div
+      className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <div
-        className="flex items-center py-2 group-hover:[animation-play-state:paused]"
+        className="flex items-center py-2"
         style={{
-          animation: `${dir === 'right' ? 'marquee-right' : 'marquee-left'} 38s linear infinite`,
+          animationName: dir === 'right' ? 'marquee-right' : 'marquee-left',
+          animationDuration: '38s',
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+          animationPlayState: active && !hover ? 'running' : 'paused',
           width: 'max-content',
         }}
       >
@@ -34,8 +47,10 @@ function Row({ items, dir }) {
 }
 
 export default function IntegrationsMarquee() {
+  const sectionRef = useRef(null)
+  const active = useActiveWhenVisible(sectionRef)
   return (
-    <section id="integrations" className="py-20 md:py-28 relative">
+    <section ref={sectionRef} id="integrations" className="py-20 md:py-28 relative">
       <div className="max-w-7xl mx-auto px-6">
         <AnimateIn className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -49,8 +64,8 @@ export default function IntegrationsMarquee() {
       </div>
 
       <AnimateIn delay={150} className="space-y-4">
-        <Row items={ROW_A} dir="left" />
-        <Row items={ROW_B} dir="right" />
+        <Row items={ROW_A} dir="left" active={active} />
+        <Row items={ROW_B} dir="right" active={active} />
       </AnimateIn>
     </section>
   )

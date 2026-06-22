@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { AnimateIn } from '../useScrollAnimation'
+import { useActiveWhenVisible } from '../../hooks/useActiveWhenVisible'
 
 const testimonials = [
   { name: 'Sarah Mitchell', role: 'CEO, Bloom Boutique', text: 'EYEuni transformed our outdated website into a stunning, modern storefront. Our online sales increased by 200% within the first month. Their attention to detail is unmatched.' },
@@ -12,6 +13,8 @@ const testimonials = [
 export default function TestimonialsV3() {
   const [current, setCurrent] = useState(0)
   const [fading, setFading] = useState(false)
+  const sectionRef = useRef(null)
+  const active = useActiveWhenVisible(sectionRef)
 
   const go = (idx) => {
     setFading(true)
@@ -19,16 +22,18 @@ export default function TestimonialsV3() {
     setTimeout(() => setFading(false), 400)
   }
 
+  // Auto-advance only while on-screen and the tab is visible.
   useEffect(() => {
+    if (!active) return
     const t = setInterval(() => go(current + 1), 5500)
     return () => clearInterval(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current])
+  }, [current, active])
 
   const t = testimonials[current]
 
   return (
-    <section id="testimonials" className="bg-[#f6f8fc] py-24 md:py-32">
+    <section ref={sectionRef} id="testimonials" className="bg-[#f6f8fc] py-24 md:py-32">
       <div className="mx-auto max-w-4xl px-6">
         <AnimateIn className="mb-12 text-center">
           <div className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#4f46e5]">Testimonials</div>
