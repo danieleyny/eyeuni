@@ -5,6 +5,7 @@ const projects = [
   { title: 'Birchwood', category: 'Short-Term Rental Platform', image: '/portfolio/birchwood.jpg', url: 'https://birchwoodny.com/' },
   { title: 'Fleur Fund', category: 'Real Estate Investment Platform', image: '/portfolio/fleurfund.jpg', url: 'https://fleurfund.com/' },
   { title: 'Laundry Day', category: 'On-Demand Laundry Service', image: '/portfolio/laundryday.jpg', url: 'https://laundryday.nyc/' },
+  { title: 'Laundry Day App', category: 'On-Demand Laundry Booking App', image: '/portfolio/laundrydayapp.jpg', url: 'https://app.laundryday.app/' },
   { title: 'NY Apts', category: 'Property Management for NYC Rentals', image: '/portfolio/nyapts.jpg', url: 'https://ny-apts.com/' },
   { title: 'Rent Overcharge', category: 'Automated Tenant Dispute Platform', image: '/portfolio/rentovercharge.jpg', url: 'https://www.rentoverchargenyc.com/' },
   { title: 'Safe Consulting', category: 'Custom Merchandise & Swag Store', image: '/portfolio/safeconsulting.jpg', url: 'https://safeconsulting.shop' },

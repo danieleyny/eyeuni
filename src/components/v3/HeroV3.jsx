@@ -14,7 +14,10 @@ const SITES = [
   { img: 'portfolio/birchwood.jpg', host: 'birchwoodny.com' },
   { img: 'portfolio/fleurfund.jpg', host: 'fleurfund.com' },
   { img: 'portfolio/laundryday.jpg', host: 'laundryday.nyc' },
+  { img: 'portfolio/laundrydayapp.jpg', host: 'app.laundryday.app' },
   { img: 'portfolio/nyapts.jpg', host: 'ny-apts.com' },
+  { img: 'portfolio/propertyos.jpg', host: 'propertyos.app' },
+  { img: 'portfolio/contractorco.jpg', host: 'contractorco.app' },
   { img: 'portfolio/safeconsulting.jpg', host: 'safeconsulting.shop' },
   { img: 'portfolio/rentovercharge.jpg', host: 'rentoverchargenyc.com' },
 ]
