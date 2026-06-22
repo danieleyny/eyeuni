@@ -119,13 +119,25 @@ function DecodeWord({ text, start, gradientClass, delay = 0, colorize }) {
         aria-hidden
       >
         {chars.map((ch, i) => {
+          if (ch === ' ') {
+            return (
+              <span key={i} className="hh-char">
+                {' '}
+              </span>
+            )
+          }
           const isLocked = i < locked
+          // Each character is a FIXED-WIDTH slot: an invisible copy of the final
+          // letter holds the width, while the glyph is overlaid centered. This
+          // keeps the word's width constant no matter which glyph is showing, so
+          // the headline never reflows / shakes while decoding.
           return (
             <span
               key={i}
               className={`hh-char ${isLocked ? 'is-locked' : 'is-scramble'}`}
             >
-              {ch === ' ' ? ' ' : isLocked ? ch : glyphs[i]}
+              <span className="hh-char-w">{ch}</span>
+              <span className="hh-glyph">{isLocked ? ch : glyphs[i]}</span>
             </span>
           )
         })}

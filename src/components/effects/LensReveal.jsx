@@ -14,14 +14,15 @@ const RESUME_DELAY = 2.2 // seconds after release before auto-drift resumes
 const TAP_SLOP = 12 // px of movement under which a touch counts as a tap
 
 // Hotspots in panel fractions, ordered so the auto-drift sweeps a clean loop.
-// Kept inside ~[0.28, 0.72] × [0.24, 0.78] so the lens ring never clips the edge.
+// Two columns / three rows: the lens stays clear of the edges, and in
+// "reveal everything" the six widgets land as a tidy non-overlapping grid.
 const HOTSPOTS = [
-  { id: 'booking', x: 0.28, y: 0.26 },
-  { id: 'chat', x: 0.72, y: 0.24 },
-  { id: 'pay', x: 0.72, y: 0.54 },
-  { id: 'notify', x: 0.71, y: 0.78 },
-  { id: 'store', x: 0.29, y: 0.78 },
-  { id: 'analytics', x: 0.28, y: 0.55 },
+  { id: 'booking', x: 0.27, y: 0.25 },
+  { id: 'chat', x: 0.73, y: 0.25 },
+  { id: 'pay', x: 0.73, y: 0.54 },
+  { id: 'notify', x: 0.73, y: 0.79 },
+  { id: 'store', x: 0.27, y: 0.79 },
+  { id: 'analytics', x: 0.27, y: 0.54 },
 ]
 
 // The lens visual: an eye/portal (reveal ring, iris, eyelid arcs, crosshair).
@@ -284,6 +285,12 @@ export default function LensReveal() {
           }}
         >
           <MockSite live />
+          {/* Reveal-all scrim: dims/blurs the site so the six widgets read as a
+              clean grid instead of overlapping the mock-site text on mobile. */}
+          <div
+            className="pointer-events-none absolute inset-0 bg-dark/80 backdrop-blur-[2px] transition-opacity duration-500"
+            style={{ opacity: revealAll ? 1 : 0 }}
+          />
           {HOTSPOTS.map((hsp, i) => {
             const W = WIDGETS[hsp.id]
             return (

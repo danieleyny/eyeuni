@@ -20,7 +20,7 @@ import {
 // Shared shell: glowing capability label + a dark glassy card.
 function WidgetShell({ icon: Icon, label, children }) {
   return (
-    <div className="w-[148px] sm:w-[160px]">
+    <div className="w-[140px] sm:w-[156px]">
       <div className="mb-1.5 flex items-center gap-1.5">
         <span className="flex h-4 w-4 items-center justify-center rounded-[5px] bg-primary/20 text-primary">
           <Icon size={11} strokeWidth={2.5} />

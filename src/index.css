@@ -97,11 +97,24 @@ body {
    Hero headline cinematic decode ("You Dream It, We Build It.")
    ============================================================ */
 
-/* Each character animates as its own inline-block so it can pop + bloom. */
+/* Each character is a fixed-width slot so the headline never reflows while it
+   decodes: an invisible copy of the final letter (.hh-char-w) holds the width,
+   and the live glyph (.hh-glyph) is overlaid centered on top of it. */
 .hh-char {
+  position: relative;
   display: inline-block;
   white-space: pre;
   will-change: transform, filter, opacity;
+}
+.hh-char-w {
+  visibility: hidden;
+}
+.hh-glyph {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: pre;
 }
 
 /* Pre-lock: the glyph flickers like decrypting data — electric blue glow. */
@@ -111,21 +124,22 @@ body {
   text-shadow: 0 0 8px rgba(179, 200, 244, 0.55), 0 0 20px rgba(70, 120, 255, 0.35);
 }
 
-/* The moment a character locks in: a scale pop + bright bloom that settles. */
+/* The moment a character locks in: a gentle scale pop + bright bloom that
+   settles. Kept modest (1.28×) so the line reads as a clean decode, not a jitter. */
 .hh-char.is-locked {
   animation: hh-lock 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes hh-lock {
   0% {
-    transform: translateY(0.04em) scale(1.55);
-    filter: brightness(2.8);
+    transform: scale(1.28);
+    filter: brightness(2.6);
     text-shadow: 0 0 26px rgba(179, 200, 244, 0.95), 0 0 52px rgba(179, 200, 244, 0.55);
   }
   50% {
     text-shadow: 0 0 16px rgba(179, 200, 244, 0.7), 0 0 30px rgba(179, 200, 244, 0.35);
   }
   100% {
-    transform: translateY(0) scale(1);
+    transform: scale(1);
     filter: brightness(1);
     text-shadow: 0 0 0 rgba(179, 200, 244, 0);
   }
