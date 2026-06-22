@@ -48,12 +48,6 @@ export default function HeroV3() {
 
       <div className="relative z-10 mx-auto w-full max-w-5xl px-6 text-center">
         <motion.div {...settle}>
-          {/* eyebrow */}
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[color:var(--hairline-color)] bg-white/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-[#4b5568] shadow-[var(--shadow-sm)] backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full v3-grad-bg" />
-            Custom websites, built from scratch
-          </div>
-
           <HeroHeadline />
 
           <p className="mx-auto mt-2 max-w-2xl text-lg leading-relaxed text-[#4b5568] md:text-xl">
