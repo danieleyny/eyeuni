@@ -120,3 +120,48 @@ lands inside the site; the slow load is hidden behind the animation.
 `?nointro` and reduced-motion paths preserved (calm quick fade, shorter gate).
 
 **CSS:** added `.lens-pulse` keyframe (lens ring shimmer) to `src/index.css`.
+
+---
+
+# Pass 3 — Lens redesign + count-up bug fix
+
+## Lens redesign (replaces the X-ray dark-interior version)
+The lens now reveals the *same beautiful site coming alive* instead of a dark
+interior. The base is a genuinely attractive, **full-color luxury restaurant
+("Maison")** — serif wordmark, gold (`#c8a97e`) Reserve buttons, a real hero
+photo (`mockup/hotel-hero.jpg`), "Fine dining, reimagined", and a 3-dish menu
+with prices. The lens reveals that page **humming with six labeled, concrete
+capability widgets** pinned to real elements, with a blue "scanner" tint and
+glowing halos on the elements they power.
+
+- `src/components/effects/lens/LensWidgets.jsx` — rewritten: `MaisonSite`
+  (full-color, responsive), the six widgets (`AnalyticsWidget`, `BookingWidget`,
+  `PaymentsWidget`, `ConciergeWidget`, `NotificationsWidget`, `OrderingWidget`),
+  the exported `ANCHORS` (single source of truth for positions + labels + source
+  elements), and `StaticLensReveal` (reduced-motion: site + all six labeled).
+  Capabilities: Live analytics, Booking system, Secure payments, AI concierge,
+  Instant notifications, Online ordering.
+- `src/components/effects/LensReveal.jsx` — base layer now the full-color
+  `MaisonSite` (no grayscale/opacity dim); reveal layer = scanner tint + source
+  halos + the labeled widgets, clipped to the lens. Uses `ANCHORS`. Tunables at
+  top: `LENS_R`, `LENS_BOX`, `PROX`, `SMOOTH`, `R_SMOOTH`, `DWELL`,
+  `RESUME_DELAY`, `TAP_SLOP`.
+- `src/components/CapabilityLens.jsx` — new copy ("Your site, but alive."),
+  imports `StaticLensReveal` for the reduced-motion / no-pointer fallback.
+- `src/index.css` — added `.lens-halo` keyframe (pulsing element highlight).
+- TODO(client): swap `mockup/room-*.jpg` for real food photography in the menu.
+
+Auto-drift visits all six anchors; "Reveal everything" lights all six (verified
+zero overlap, a clean 2×3 grid); reduced motion shows them statically; RAF
+paused offscreen via `useInViewPaused`.
+
+## Count-up bug fix
+`src/components/effects/CountUp.jsx` froze near zero because it was tied to a
+pause-on-exit IntersectionObserver — scrolling past quickly cancelled the rAF
+**and** the safety timeout. Rewritten to trigger ONCE via a
+`getBoundingClientRect` poll (scroll + resize + interval — the same robust
+pattern as `useScrollAnimation`, reliable under Lenis where IO / native scroll
+events don't fire), then run to completion uncancelled, with a safety timeout
+that always lands on the exact target. Reduced motion shows the final value.
+Verified: Cost of a Bad Website → 53% / 75% / −7%; Stats strip → 200+ / ~0.8s /
+3× / 100%.

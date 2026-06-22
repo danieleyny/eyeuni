@@ -1,48 +1,178 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   Calendar,
-  MessageSquare,
   CreditCard,
-  TrendingUp,
+  MessageSquare,
   ShoppingBag,
+  TrendingUp,
   Bell,
   Check,
+  Lock,
+  Plus,
 } from 'lucide-react'
 
+const BASE = import.meta.env.BASE_URL
+
 // ============================================================================
-// Capability widgets for "The EYEuni Lens".
-// Each is a compact, real-looking UI card with a glowing label. An `active`
-// prop (driven by the lens proximity) triggers its micro-animation. They're
-// reused both inside the masked panel (absolutely positioned) and in the
-// reduced-motion StaticLensGrid (all lit), so they're purely presentational.
+// "The EYEuni Lens" — the dormant site is a genuinely beautiful, full-color
+// luxury restaurant ("Maison"). The lens reveals the SAME site coming alive:
+// concrete, labeled capability widgets anchored to real elements of the page.
 // ============================================================================
 
-// Shared shell: glowing capability label + a dark glassy card.
-function WidgetShell({ icon: Icon, label, children }) {
+// Anchors: capability id → where its widget sits + the label + (optional) the
+// source element it's powering (for the halo). x/y are panel fractions.
+// Ordered so the auto-drift sweeps a clean loop across all six.
+export const ANCHORS = [
+  { id: 'analytics', x: 0.22, y: 0.13, label: 'Live analytics' },
+  { id: 'booking', x: 0.74, y: 0.17, label: 'Booking system', src: { x: 0.85, y: 0.07 } },
+  { id: 'payments', x: 0.74, y: 0.46, label: 'Secure payments', src: { x: 0.5, y: 0.4 } },
+  { id: 'concierge', x: 0.74, y: 0.84, label: 'AI concierge' },
+  { id: 'notify', x: 0.24, y: 0.85, label: 'Instant notifications' },
+  { id: 'ordering', x: 0.24, y: 0.55, label: 'Online ordering', src: { x: 0.22, y: 0.66 } },
+]
+
+// ── The base Maison site (full color, attractive, static) ──────────────────
+export function MaisonSite() {
+  // TODO(client): swap room-*.jpg for real food / interior photography.
+  const dishes = [
+    { name: 'Seared Scallops', price: '$32', img: 'room-1.jpg' },
+    { name: 'Wagyu Tartare', price: '$28', img: 'room-2.jpg' },
+    { name: 'Truffle Tagliatelle', price: '$36', img: 'room-3.jpg' },
+  ]
   return (
-    <div className="w-[140px] sm:w-[156px]">
-      <div className="mb-1.5 flex items-center gap-1.5">
-        <span className="flex h-4 w-4 items-center justify-center rounded-[5px] bg-primary/20 text-primary">
-          <Icon size={11} strokeWidth={2.5} />
+    <div className="absolute inset-0 overflow-hidden bg-[#0c0c0c] text-white">
+      {/* Hero with real photo */}
+      <div className="relative h-[47%]">
+        <img src={`${BASE}mockup/hotel-hero.jpg`} alt="" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0c0c0c] to-transparent" />
+
+        {/* Nav */}
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between px-3 py-2.5 sm:px-5">
+          <span
+            className="text-[13px] tracking-[0.22em] text-white sm:text-[15px]"
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
+            MAISON
+          </span>
+          <div className="hidden gap-3 text-[8px] uppercase tracking-wider text-white/55 sm:flex">
+            <span>Menu</span>
+            <span>About</span>
+            <span>Book</span>
+          </div>
+          <span className="rounded-[3px] bg-[#c8a97e] px-2.5 py-1 text-[8px] font-semibold uppercase tracking-wider text-[#0c0c0c]">
+            Reserve
+          </span>
+        </div>
+
+        {/* Hero copy */}
+        <div className="absolute inset-x-0 bottom-2.5 px-4 text-center">
+          <div className="mb-1 text-[7px] uppercase tracking-[0.3em] text-[#c8a97e]">
+            Hudson Valley
+          </div>
+          <div className="text-[19px] leading-tight sm:text-[24px]" style={{ fontFamily: 'Georgia, serif' }}>
+            Fine dining, <span className="italic text-[#c8a97e]">reimagined</span>
+          </div>
+          <div className="mx-auto mt-1 max-w-[220px] text-[9px] leading-snug text-white/55">
+            Seasonal tasting menus & natural wine, moments from the river.
+          </div>
+          <span className="mt-2 inline-block rounded-[3px] bg-[#c8a97e] px-3 py-1 text-[8px] font-semibold uppercase tracking-wider text-[#0c0c0c]">
+            Reserve a table
+          </span>
+        </div>
+      </div>
+
+      {/* Menu */}
+      <div className="px-3 pt-3 sm:px-5">
+        <div className="mb-1.5 flex items-end justify-between">
+          <div>
+            <div className="text-[6px] uppercase tracking-[0.3em] text-[#c8a97e]">The Menu</div>
+            <div className="text-[11px]" style={{ fontFamily: 'Georgia, serif' }}>
+              Signature plates
+            </div>
+          </div>
+          <div className="text-[7px] uppercase tracking-wider text-[#c8a97e]/70">View all →</div>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          {dishes.map((d) => (
+            <div key={d.name} className="overflow-hidden rounded-[3px]">
+              <div className="relative aspect-[3/2]">
+                <img src={`${BASE}mockup/${d.img}`} alt="" className="h-full w-full object-cover" />
+                <div className="absolute inset-x-0 bottom-0 h-[72%] bg-gradient-to-t from-black/85 to-transparent" />
+                <div className="absolute inset-x-1 bottom-1">
+                  <div className="text-[6px] font-medium leading-tight sm:text-[7px]">{d.name}</div>
+                  <div className="text-[6px] text-[#c8a97e] sm:text-[7px]">{d.price}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-white/10 px-3 py-2 text-[7px] uppercase tracking-wider text-white/40 sm:px-5">
+        <span className="normal-case tracking-[0.2em]" style={{ fontFamily: 'Georgia, serif' }}>
+          © Maison
         </span>
-        <span className="text-xs font-semibold tracking-wide text-primary drop-shadow-[0_0_8px_rgba(179,200,244,0.7)]">
+        <span className="flex gap-2">
+          <span>Reservations</span>
+          <span className="hidden sm:inline">Private events</span>
+        </span>
+      </div>
+    </div>
+  )
+}
+
+// ── Shared widget shell: a glowing name pill + a bright card ────────────────
+function WidgetShell({ icon: Icon, label, children, w = 'w-[144px] sm:w-[160px]' }) {
+  return (
+    <div className={w}>
+      <div className="mb-1.5 flex w-max items-center gap-1.5">
+        <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] bg-primary/25 text-primary">
+          <Icon size={12} strokeWidth={2.5} />
+        </span>
+        <span className="whitespace-nowrap rounded-full bg-dark/85 px-2 py-0.5 text-xs font-semibold tracking-wide text-primary shadow-[0_0_12px_rgba(15,49,184,0.5)] ring-1 ring-primary/30">
           {label}
         </span>
       </div>
-      <div className="rounded-lg border border-primary/25 bg-dark/85 p-2 shadow-[0_0_26px_rgba(15,49,184,0.4)] backdrop-blur-sm">
+      <div className="rounded-lg border border-primary/40 bg-[#0b1020]/95 p-2 shadow-[0_0_30px_rgba(15,49,184,0.5)] backdrop-blur-sm">
         {children}
       </div>
     </div>
   )
 }
 
-// 1 — Booking: a week strip with one date highlighted + a Book now button.
+// 1 — Live analytics → top-left HUD: a chart that draws + bookings delta.
+export function AnalyticsWidget({ active }) {
+  const bars = [0.4, 0.6, 0.5, 0.74, 0.66, 0.92, 1]
+  return (
+    <WidgetShell icon={TrendingUp} label="Live analytics">
+      <div className="flex h-9 items-end justify-between gap-[3px]">
+        {bars.map((b, i) => (
+          <div key={i} className="relative h-full flex-1">
+            <motion.div
+              className="absolute bottom-0 w-full rounded-t-[2px] bg-gradient-to-t from-accent to-primary"
+              initial={false}
+              animate={{ height: active ? `${b * 100}%` : '8%' }}
+              transition={{ duration: 0.5, delay: active ? i * 0.05 : 0, ease: 'easeOut' }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-1 text-[10px] font-bold text-primary">
+        +24% <span className="font-normal text-gray-400">bookings today</span>
+      </div>
+    </WidgetShell>
+  )
+}
+
+// 2 — Booking system → the nav "Reserve" button: calendar + time + confirm.
 export function BookingWidget({ active }) {
   const reduce = useReducedMotion()
   const loop = active && !reduce
-  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
   return (
-    <WidgetShell icon={Calendar} label="Booking">
+    <WidgetShell icon={Calendar} label="Booking system">
       <div className="grid grid-cols-7 gap-[3px]">
         {days.map((d, i) => (
           <div key={`d${i}`} className="text-center text-[7px] text-gray-500">
@@ -60,33 +190,63 @@ export function BookingWidget({ active }) {
               animate={loop && hot ? { scale: [1, 1.18, 1] } : { scale: 1 }}
               transition={{ duration: 0.6, repeat: loop ? Infinity : 0, repeatDelay: 0.7 }}
             >
-              {12 + i}
+              {18 + i}
             </motion.div>
           )
         })}
       </div>
+      <div className="mt-1.5 flex items-center gap-1">
+        <span className="rounded-[4px] bg-primary/15 px-1.5 py-0.5 text-[8px] font-semibold text-primary">
+          7:30 PM
+        </span>
+        <motion.span
+          className="flex-1 rounded-[4px] bg-accent py-0.5 text-center text-[8px] font-bold text-white"
+          animate={loop ? { opacity: [0.85, 1, 0.85] } : { opacity: 1 }}
+          transition={{ duration: 1.4, repeat: loop ? Infinity : 0 }}
+        >
+          Confirm
+        </motion.span>
+      </div>
+    </WidgetShell>
+  )
+}
+
+// 3 — Secure payments → the hero CTA: a Stripe-style deposit card.
+export function PaymentsWidget({ active }) {
+  const reduce = useReducedMotion()
+  const loop = active && !reduce
+  return (
+    <WidgetShell icon={CreditCard} label="Secure payments">
+      <div className="flex items-center justify-between rounded-[5px] bg-white/5 px-2 py-1">
+        <span className="flex items-center gap-1 text-[8px] text-gray-200">
+          <Lock size={8} /> •••• 4242
+        </span>
+        <span className="text-[8px] text-gray-500">12/27</span>
+      </div>
       <motion.div
-        className="mt-1.5 rounded-[5px] bg-accent py-1 text-center text-[9px] font-bold text-white"
-        animate={
-          loop
-            ? { boxShadow: ['0 0 0 rgba(15,49,184,0)', '0 0 14px rgba(15,49,184,0.85)', '0 0 0 rgba(15,49,184,0)'] }
-            : {}
-        }
-        transition={{ duration: 1.5, repeat: loop ? Infinity : 0 }}
+        className="mt-1.5 flex items-center justify-center gap-1 rounded-[5px] bg-accent py-1 text-[9px] font-bold text-white"
+        animate={loop ? { scale: [1, 1.04, 1] } : { scale: 1 }}
+        transition={{ duration: 1.3, repeat: loop ? Infinity : 0 }}
       >
-        Book now
+        {active ? (
+          <>
+            <Check size={9} strokeWidth={3} /> Deposit paid · $25
+          </>
+        ) : (
+          'Pay deposit · $25'
+        )}
       </motion.div>
     </WidgetShell>
   )
 }
 
-// 2 — AI assistant: an incoming question; the reply types in when active.
-export function ChatWidget({ active }) {
+// 4 — AI concierge → bottom-right: a chat that types its reply.
+export function ConciergeWidget({ active }) {
   return (
-    <WidgetShell icon={MessageSquare} label="AI Assistant">
+    <WidgetShell icon={MessageSquare} label="AI concierge">
       <div className="space-y-1">
         <div className="max-w-[85%] rounded-lg rounded-tl-sm bg-white/10 px-2 py-1 text-[8px] leading-tight text-gray-200">
-          Need a table for 2?
+          Table for two tonight?
         </div>
         <motion.div
           className="ml-auto max-w-[85%] rounded-lg rounded-tr-sm bg-accent px-2 py-1 text-[8px] leading-tight text-white"
@@ -94,96 +254,17 @@ export function ChatWidget({ active }) {
           animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
           transition={{ duration: 0.4, delay: active ? 0.35 : 0 }}
         >
-          Tonight at 7 ✓
+          Booked for 7:30 ✓
         </motion.div>
       </div>
     </WidgetShell>
   )
 }
 
-// 3 — Payments: a saved card row + a Stripe-style pay button → Paid on active.
-export function PaymentsWidget({ active }) {
-  const reduce = useReducedMotion()
-  const loop = active && !reduce
-  return (
-    <WidgetShell icon={CreditCard} label="Payments">
-      <div className="flex items-center justify-between rounded-[5px] bg-white/5 px-2 py-1">
-        <span className="text-[8px] text-gray-300">•••• 4242</span>
-        <span className="text-[8px] text-gray-500">12/27</span>
-      </div>
-      <motion.div
-        className="mt-1.5 flex items-center justify-center gap-1 rounded-[5px] bg-accent py-1 text-[9px] font-bold text-white"
-        animate={loop ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-        transition={{ duration: 1.3, repeat: loop ? Infinity : 0 }}
-      >
-        {active ? (
-          <>
-            <Check size={9} strokeWidth={3} /> Paid $48.00
-          </>
-        ) : (
-          'Pay $48.00'
-        )}
-      </motion.div>
-    </WidgetShell>
-  )
-}
-
-// 4 — Live analytics: bars that draw upward when active + a delta readout.
-export function AnalyticsWidget({ active }) {
-  const bars = [0.4, 0.62, 0.5, 0.82, 0.7, 1]
-  return (
-    <WidgetShell icon={TrendingUp} label="Live Analytics">
-      <div className="flex h-9 items-end justify-between gap-[3px]">
-        {bars.map((b, i) => (
-          <div key={i} className="relative h-full flex-1">
-            <motion.div
-              className="absolute bottom-0 w-full rounded-t-[2px] bg-gradient-to-t from-accent to-primary"
-              initial={false}
-              animate={{ height: active ? `${b * 100}%` : '8%' }}
-              transition={{ duration: 0.5, delay: active ? i * 0.06 : 0, ease: 'easeOut' }}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="mt-1 text-[9px] font-bold text-primary">
-        +24% <span className="font-normal text-gray-500">today</span>
-      </div>
-    </WidgetShell>
-  )
-}
-
-// 5 — Storefront: a product list with live stock counts; rows slide in.
-export function StoreWidget({ active }) {
-  const items = [
-    ['Linen Shirt', '12'],
-    ['Suede Boots', '3'],
-    ['Wool Scarf', '8'],
-  ]
-  return (
-    <WidgetShell icon={ShoppingBag} label="Storefront">
-      <div className="space-y-1">
-        {items.map(([name, stock], i) => (
-          <motion.div
-            key={name}
-            className="flex items-center gap-1.5"
-            initial={false}
-            animate={active ? { opacity: 1, x: 0 } : { opacity: 0.25, x: -6 }}
-            transition={{ duration: 0.35, delay: active ? i * 0.08 : 0 }}
-          >
-            <span className="h-3 w-3 shrink-0 rounded-[3px] bg-gradient-to-br from-primary to-accent" />
-            <span className="flex-1 truncate text-[8px] text-gray-200">{name}</span>
-            <span className="text-[7px] text-gray-500">{stock} left</span>
-          </motion.div>
-        ))}
-      </div>
-    </WidgetShell>
-  )
-}
-
-// 6 — Notifications: an order toast that springs in when active.
+// 5 — Instant notifications → footer: a reservation toast springs in.
 export function NotificationsWidget({ active }) {
   return (
-    <WidgetShell icon={Bell} label="Notifications">
+    <WidgetShell icon={Bell} label="Instant notifications">
       <motion.div
         className="flex items-center gap-1.5 rounded-[5px] border border-primary/20 bg-white/5 px-2 py-1.5"
         initial={false}
@@ -194,131 +275,80 @@ export function NotificationsWidget({ active }) {
           <Bell size={9} />
         </span>
         <div className="min-w-0">
-          <div className="truncate text-[8px] font-semibold text-white">New order #1043</div>
-          <div className="text-[7px] text-gray-400">Just now · $48.00</div>
+          <div className="truncate text-[8px] font-semibold text-white">New reservation</div>
+          <div className="text-[7px] text-gray-400">Table 7 · 7:30 PM</div>
         </div>
       </motion.div>
     </WidgetShell>
   )
 }
 
-// Registry keyed by hotspot id.
-export const WIDGETS = {
-  booking: BookingWidget,
-  chat: ChatWidget,
-  pay: PaymentsWidget,
-  analytics: AnalyticsWidget,
-  store: StoreWidget,
-  notify: NotificationsWidget,
-}
-
-// ============================================================================
-// The dormant mock site (rendered twice: muted base + full-color live layer).
-// Both variants share identical box layout so the clipped live layer overlays
-// the base pixel-for-pixel.
-// ============================================================================
-export function MockSite({ live = false }) {
+// 6 — Online ordering → the first dish card: add to order + cart ticks up.
+export function OrderingWidget({ active }) {
+  const reduce = useReducedMotion()
   return (
-    <div className="absolute inset-0 flex flex-col">
-      {/* nav */}
-      <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
-        <div className="flex items-center gap-1.5">
-          <span
-            className={`h-3.5 w-3.5 rounded-full ${
-              live ? 'bg-gradient-to-br from-primary to-accent' : 'bg-gray-500'
-            }`}
-          />
-          <span className={`text-[11px] font-bold ${live ? 'text-white' : 'text-gray-400'}`}>
-            Maison
+    <WidgetShell icon={ShoppingBag} label="Online ordering">
+      <div className="flex items-center gap-1.5">
+        <div className="h-7 w-7 shrink-0 overflow-hidden rounded-[4px]">
+          <img src={`${BASE}mockup/room-1.jpg`} alt="" className="h-full w-full object-cover" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[8px] font-medium text-gray-100">Seared Scallops</div>
+          <div className="text-[7px] text-[#c8a97e]">$32</div>
+        </div>
+        <div className="relative">
+          <span className="flex items-center gap-0.5 rounded-[4px] bg-accent px-1.5 py-1 text-[8px] font-bold text-white">
+            <Plus size={9} strokeWidth={3} /> Add
           </span>
+          <motion.span
+            key={active ? 'on' : 'off'}
+            className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[7px] font-bold text-dark"
+            initial={reduce ? false : { scale: 0.4 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 14 }}
+          >
+            {active ? 2 : 1}
+          </motion.span>
         </div>
-        <div className="hidden gap-3 text-[9px] text-gray-400 sm:flex">
-          <span>Menu</span>
-          <span>About</span>
-          <span>Book</span>
-        </div>
-        <span
-          className={`rounded-md px-2 py-1 text-[9px] font-semibold ${
-            live ? 'bg-accent text-white' : 'bg-white/10 text-gray-400'
-          }`}
-        >
-          Reserve
-        </span>
       </div>
-
-      {/* hero band */}
-      <div className="relative flex flex-1 flex-col items-center justify-center px-4 text-center">
-        {/* hero "image" fill — vivid when live, muted when dormant */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: live
-              ? 'linear-gradient(135deg, rgba(15,49,184,0.45), rgba(179,200,244,0.18) 60%, transparent), radial-gradient(circle at 70% 20%, rgba(179,200,244,0.25), transparent 55%)'
-              : 'linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
-          }}
-        />
-        <div className={`relative text-lg font-bold sm:text-xl ${live ? 'text-white' : 'text-gray-500'}`}>
-          Fine dining, reimagined
-        </div>
-        <div className="relative mt-1 max-w-[230px] text-[10px] leading-snug text-gray-400">
-          Seasonal plates & natural wine in the heart of the city.
-        </div>
-        <span
-          className={`relative mt-3 rounded-lg px-3 py-1.5 text-[10px] font-bold ${
-            live ? 'bg-primary text-dark' : 'bg-white/10 text-gray-400'
-          }`}
-        >
-          Reserve a table
-        </span>
-      </div>
-
-      {/* 3-card grid */}
-      <div className="grid grid-cols-3 gap-2 px-4 pb-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="overflow-hidden rounded-lg border border-white/5">
-            <div
-              className={`h-8 ${
-                live
-                  ? [
-                      'bg-gradient-to-br from-primary/60 to-accent/60',
-                      'bg-gradient-to-br from-accent/60 to-primary/40',
-                      'bg-gradient-to-br from-primary/40 to-accent/50',
-                    ][i]
-                  : 'bg-white/10'
-              }`}
-            />
-            <div className="p-1.5">
-              <div className={`h-1.5 w-3/4 rounded ${live ? 'bg-primary/60' : 'bg-white/15'}`} />
-              <div className="mt-1 h-1 w-1/2 rounded bg-white/10" />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* footer */}
-      <div className="flex items-center justify-between border-t border-white/5 px-4 py-2 text-[8px] text-gray-500">
-        <span>© Maison</span>
-        <span className="flex gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-        </span>
-      </div>
-    </div>
+    </WidgetShell>
   )
 }
 
-// ============================================================================
-// Reduced-motion / no-pointer fallback: all six capabilities lit in a grid.
-// ============================================================================
-const STATIC_ORDER = ['booking', 'chat', 'pay', 'analytics', 'store', 'notify']
+export const WIDGETS = {
+  analytics: AnalyticsWidget,
+  booking: BookingWidget,
+  payments: PaymentsWidget,
+  concierge: ConciergeWidget,
+  notify: NotificationsWidget,
+  ordering: OrderingWidget,
+}
 
-export function StaticLensGrid() {
+// ── Reduced-motion / no-pointer fallback: the beautiful site with every
+//    capability shown statically and labeled, pinned at its anchor. ─────────
+export function StaticLensReveal() {
   return (
-    <div className="grid grid-cols-2 place-items-center gap-5 rounded-2xl border border-dark-border bg-dark-card/30 p-6 sm:grid-cols-3">
-      {STATIC_ORDER.map((id) => {
-        const W = WIDGETS[id]
-        return <W key={id} active />
+    <div className="relative h-[560px] overflow-hidden rounded-2xl border border-dark-border bg-dark-card/30 sm:h-[600px]">
+      <MaisonSite />
+      {/* activated scanner tint over the whole site */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: 'radial-gradient(circle at 50% 45%, rgba(15,49,184,0.16), transparent 75%)',
+          mixBlendMode: 'screen',
+        }}
+      />
+      {ANCHORS.map((a) => {
+        const W = WIDGETS[a.id]
+        return (
+          <div
+            key={a.id}
+            className="absolute"
+            style={{ left: `${a.x * 100}%`, top: `${a.y * 100}%`, transform: 'translate(-50%, -50%)' }}
+          >
+            <W active />
+          </div>
+        )
       })}
     </div>
   )

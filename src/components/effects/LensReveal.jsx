@@ -1,29 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInViewPaused } from '../../hooks/useInViewPaused'
 import { useRafLoop } from '../../hooks/useRafLoop'
-import { MockSite, WIDGETS } from './lens/LensWidgets'
+import { MaisonSite, WIDGETS, ANCHORS } from './lens/LensWidgets'
 
 // ---- Tunables (easy to adjust) --------------------------------------------
-const LENS_R = 84 // lens reveal radius (px) — matches the eye ring below
-const LENS_BOX = 190 // size of the lens DOM box (must fit the ring + crosshair)
-const PROX = 132 // distance (px) at which a hotspot's widget animates
+const LENS_R = 88 // lens reveal radius (px) — matches the eye ring below
+const LENS_BOX = 200 // size of the lens DOM box (must fit the ring + crosshair)
+const PROX = 140 // distance (px) at which an anchor's widget animates
 const SMOOTH = 0.16 // lens easing toward its target (higher = snappier)
 const R_SMOOTH = 0.2 // reveal-radius easing (for the "reveal everything" grow)
-const DWELL = 0.65 // seconds the auto-drift pauses on each hotspot
+const DWELL = 0.7 // seconds the auto-drift pauses on each anchor
 const RESUME_DELAY = 2.2 // seconds after release before auto-drift resumes
 const TAP_SLOP = 12 // px of movement under which a touch counts as a tap
 
-// Hotspots in panel fractions, ordered so the auto-drift sweeps a clean loop.
-// Two columns / three rows: the lens stays clear of the edges, and in
-// "reveal everything" the six widgets land as a tidy non-overlapping grid.
-const HOTSPOTS = [
-  { id: 'booking', x: 0.27, y: 0.25 },
-  { id: 'chat', x: 0.73, y: 0.25 },
-  { id: 'pay', x: 0.73, y: 0.54 },
-  { id: 'notify', x: 0.73, y: 0.79 },
-  { id: 'store', x: 0.27, y: 0.79 },
-  { id: 'analytics', x: 0.27, y: 0.54 },
-]
+// The six capability anchors come from LensWidgets (single source of truth so
+// the widgets and the auto-drift path stay in sync).
+const HOTSPOTS = ANCHORS
 
 // The lens visual: an eye/portal (reveal ring, iris, eyelid arcs, crosshair).
 function LensEye() {
@@ -33,32 +25,32 @@ function LensEye() {
         className="absolute inset-0 rounded-full"
         style={{ boxShadow: '0 0 55px 8px rgba(15,49,184,0.5)' }}
       />
-      <svg viewBox="0 0 190 190" className="lens-pulse absolute inset-0 h-full w-full">
+      <svg viewBox="0 0 200 200" className="lens-pulse absolute inset-0 h-full w-full">
         {/* soft accent halo just inside the ring */}
-        <circle cx="95" cy="95" r="84" fill="none" stroke="#0f31b8" strokeWidth="7" opacity="0.25" />
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#0f31b8" strokeWidth="7" opacity="0.25" />
         {/* primary reveal ring (radius matches LENS_R) */}
-        <circle cx="95" cy="95" r="84" fill="none" stroke="#b3c8f4" strokeWidth="2.5" opacity="0.95" />
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#b3c8f4" strokeWidth="2.5" opacity="0.95" />
         {/* iris ring */}
-        <circle cx="95" cy="95" r="56" fill="none" stroke="#b3c8f4" strokeWidth="1.5" opacity="0.4" />
+        <circle cx="100" cy="100" r="58" fill="none" stroke="#b3c8f4" strokeWidth="1.5" opacity="0.4" />
         {/* eyelid arcs → reads as the eye logo, not a magnifier */}
         <path
-          d="M17 95 C 17 95, 50 60, 95 60 C 140 60, 173 95, 173 95"
+          d="M18 100 C 18 100, 52 62, 100 62 C 148 62, 182 100, 182 100"
           fill="none"
           stroke="#b3c8f4"
           strokeWidth="1.5"
           opacity="0.5"
         />
         <path
-          d="M17 95 C 17 95, 50 130, 95 130 C 140 130, 173 95, 173 95"
+          d="M18 100 C 18 100, 52 138, 100 138 C 148 138, 182 100, 182 100"
           fill="none"
           stroke="#b3c8f4"
           strokeWidth="1.5"
           opacity="0.5"
         />
         {/* crosshair + center */}
-        <line x1="95" y1="78" x2="95" y2="112" stroke="#b3c8f4" strokeWidth="1" opacity="0.3" />
-        <line x1="78" y1="95" x2="112" y2="95" stroke="#b3c8f4" strokeWidth="1" opacity="0.3" />
-        <circle cx="95" cy="95" r="2.5" fill="#b3c8f4" opacity="0.7" />
+        <line x1="100" y1="82" x2="100" y2="118" stroke="#b3c8f4" strokeWidth="1" opacity="0.3" />
+        <line x1="82" y1="100" x2="118" y2="100" stroke="#b3c8f4" strokeWidth="1" opacity="0.3" />
+        <circle cx="100" cy="100" r="2.5" fill="#b3c8f4" opacity="0.7" />
       </svg>
     </div>
   )
@@ -269,16 +261,15 @@ export default function LensReveal() {
         onPointerDown={onPanelPointerDown}
         onPointerUp={onPanelPointerUp}
       >
-        {/* Front "cover": the dormant site, dimmed. It's what you see OUTSIDE the
-            lens; the lens X-rays straight through it. */}
-        <div className="absolute inset-0 opacity-50 grayscale-[0.4]">
-          <MockSite />
+        {/* Base layer: the beautiful Maison site — full colour, always visible. */}
+        <div className="absolute inset-0">
+          <MaisonSite />
         </div>
 
-        {/* The "inside" layer, clipped to the lens — a dark X-ray view BEHIND the
-            front cover: an opaque dark interior (so the site text is hidden where
-            the lens passes — no overlap) with a faint tech grid + glow, plus the
-            glowing capability widgets. */}
+        {/* Reveal layer, clipped to the lens: the SAME site, scanned — a subtle
+            blue "activated" tint plus the labeled capability widgets pinned to
+            their anchors, each with a glowing halo on the element it powers. The
+            base site shows straight through, so it reads as the page humming. */}
         <div
           ref={liveRef}
           className="absolute inset-0"
@@ -288,25 +279,28 @@ export default function LensReveal() {
             willChange: 'clip-path',
           }}
         >
-          {/* opaque dark interior — hides the front cover under the lens */}
-          <div className="absolute inset-0 bg-[#080810]" />
-          {/* faint blueprint grid */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(179,200,244,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(179,200,244,0.08) 1px, transparent 1px)',
-              backgroundSize: '26px 26px',
-            }}
-          />
-          {/* soft brand glow so the interior reads as "alive" */}
+          {/* scanner tint — brightens + blues whatever the lens is over */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(circle at 50% 42%, rgba(15,49,184,0.22), transparent 68%)',
+                'radial-gradient(circle at 50% 45%, rgba(15,49,184,0.20), rgba(15,49,184,0.06) 55%, transparent 72%)',
+              mixBlendMode: 'screen',
             }}
           />
+
+          {/* halos highlighting the real element each widget powers */}
+          {HOTSPOTS.filter((a) => a.src).map((a) => (
+            <div
+              key={`${a.id}-halo`}
+              className="absolute"
+              style={{ left: `${a.src.x * 100}%`, top: `${a.src.y * 100}%`, transform: 'translate(-50%, -50%)' }}
+            >
+              <span className="lens-halo block h-10 w-10 rounded-full border-2 border-primary/80" />
+            </div>
+          ))}
+
+          {/* the labeled capability widgets */}
           {HOTSPOTS.map((hsp, i) => {
             const W = WIDGETS[hsp.id]
             return (
@@ -342,8 +336,8 @@ export default function LensReveal() {
         </div>
 
         {/* Hint */}
-        <div className="pointer-events-none absolute bottom-3 left-0 right-0 text-center text-[11px] text-gray-500">
-          Drag the lens — or watch it explore
+        <div className="pointer-events-none absolute bottom-3 left-0 right-0 text-center text-[11px] font-medium text-white/70 [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
+          Drag to explore — or watch it
         </div>
       </div>
 

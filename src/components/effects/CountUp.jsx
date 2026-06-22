@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
-import { useInViewPaused } from '../../hooks/useInViewPaused'
 
-// Counts from `from` to `to` when scrolled into view. Time-based (real ms) so
-// it completes even under rAF throttling, with a safety snap. Reduced motion →
-// final value immediately.
+// Counts from `from` to `to` the first time it scrolls into view, then runs to
+// completion. Visibility is detected with a getBoundingClientRect poll (scroll +
+// resize + a periodic interval) — the same proven approach as useScrollAnimation
+// — because IntersectionObserver and native scroll events are unreliable under
+// Lenis smooth-scroll / headless. Once started it is never cancelled by scrolling
+// away, and a safety timeout guarantees it lands exactly on the target even if
+// rAF is throttled. Reduced motion → final value immediately.
 export default function CountUp({
   to,
   from = 0,
@@ -15,32 +18,57 @@ export default function CountUp({
   className = '',
 }) {
   const ref = useRef(null)
-  const inView = useInViewPaused(ref, { threshold: 0.4 })
   const reduce = useReducedMotion()
-  const [val, setVal] = useState(from)
+  const [val, setVal] = useState(reduce ? to : from)
 
   useEffect(() => {
     if (reduce) {
       setVal(to)
       return
     }
-    if (!inView) return
-    const startT = performance.now()
-    let raf
-    const tick = (now) => {
-      const t = Math.min(1, (now - startT) / duration)
-      const eased = 1 - Math.pow(1 - t, 3)
-      setVal(from + (to - from) * eased)
-      if (t < 1) raf = requestAnimationFrame(tick)
-      else setVal(to)
+    const el = ref.current
+    if (!el) return
+
+    let raf = null
+    let safety = null
+    let started = false
+
+    const run = () => {
+      if (started) return
+      started = true
+      const startT = performance.now()
+      const tick = (now) => {
+        const t = Math.min(1, (now - startT) / duration)
+        const eased = 1 - Math.pow(1 - t, 3)
+        setVal(from + (to - from) * eased)
+        if (t < 1) raf = requestAnimationFrame(tick)
+        else setVal(to)
+      }
+      raf = requestAnimationFrame(tick)
+      // Lands on the exact target even if rAF never ticks (throttled / hidden).
+      safety = setTimeout(() => setVal(to), duration + 600)
     }
-    raf = requestAnimationFrame(tick)
-    const safety = setTimeout(() => setVal(to), duration + 500)
+
+    const check = () => {
+      if (started) return
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight - 20 && rect.bottom > 0) run()
+    }
+
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    window.addEventListener('resize', check, { passive: true })
+    // Fallback for environments where scroll events don't fire (e.g. Lenis).
+    const interval = setInterval(check, 250)
+
     return () => {
+      window.removeEventListener('scroll', check)
+      window.removeEventListener('resize', check)
+      clearInterval(interval)
       cancelAnimationFrame(raf)
       clearTimeout(safety)
     }
-  }, [inView, to, from, duration, reduce])
+  }, [reduce, to, from, duration])
 
   const formatted = val.toLocaleString('en-US', {
     minimumFractionDigits: decimals,
