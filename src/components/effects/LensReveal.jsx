@@ -266,10 +266,11 @@ export default function LensReveal() {
           <MaisonSite />
         </div>
 
-        {/* Reveal layer, clipped to the lens: the SAME site, scanned — a subtle
-            blue "activated" tint plus the labeled capability widgets pinned to
-            their anchors, each with a glowing halo on the element it powers. The
-            base site shows straight through, so it reads as the page humming. */}
+        {/* Reveal layer, clipped to the lens: the X-ray view BEHIND the front.
+            An OPAQUE dark interior hides the site wherever the lens passes (so the
+            "Fine dining" front never shows through / overlaps), with a faint tech
+            grid + scanner glow and the labeled capability widgets pinned to their
+            anchors, each with a halo marking the element it powers. */}
         <div
           ref={liveRef}
           className="absolute inset-0"
@@ -279,17 +280,27 @@ export default function LensReveal() {
             willChange: 'clip-path',
           }}
         >
-          {/* scanner tint — brightens + blues whatever the lens is over */}
+          {/* opaque dark "inside" — covers the front cover under the lens */}
+          <div className="absolute inset-0 bg-[#080b16]" />
+          {/* faint blueprint grid */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(179,200,244,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(179,200,244,0.08) 1px, transparent 1px)',
+              backgroundSize: '24px 24px',
+            }}
+          />
+          {/* scanner glow so the interior reads as "alive" */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(circle at 50% 45%, rgba(15,49,184,0.20), rgba(15,49,184,0.06) 55%, transparent 72%)',
-              mixBlendMode: 'screen',
+                'radial-gradient(circle at 50% 45%, rgba(15,49,184,0.28), transparent 70%)',
             }}
           />
 
-          {/* halos highlighting the real element each widget powers */}
+          {/* halos marking the real element each widget powers */}
           {HOTSPOTS.filter((a) => a.src).map((a) => (
             <div
               key={`${a.id}-halo`}

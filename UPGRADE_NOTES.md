@@ -141,9 +141,12 @@ glowing halos on the elements they power.
   elements), and `StaticLensReveal` (reduced-motion: site + all six labeled).
   Capabilities: Live analytics, Booking system, Secure payments, AI concierge,
   Instant notifications, Online ordering.
-- `src/components/effects/LensReveal.jsx` — base layer now the full-color
-  `MaisonSite` (no grayscale/opacity dim); reveal layer = scanner tint + source
-  halos + the labeled widgets, clipped to the lens. Uses `ANCHORS`. Tunables at
+- `src/components/effects/LensReveal.jsx` — base layer is the full-color
+  `MaisonSite` (no grayscale/opacity dim), shown OUTSIDE the lens. The reveal
+  layer (clipped to the lens) is an X-ray view BEHIND the front: an OPAQUE dark
+  interior (so the site never shows through / overlaps where the lens passes) +
+  tech grid + scanner glow + source halos + the labeled widgets. Uses `ANCHORS`.
+  Tunables at
   top: `LENS_R`, `LENS_BOX`, `PROX`, `SMOOTH`, `R_SMOOTH`, `DWELL`,
   `RESUME_DELAY`, `TAP_SLOP`.
 - `src/components/CapabilityLens.jsx` — new copy ("Your site, but alive."),
