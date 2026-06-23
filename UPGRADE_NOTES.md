@@ -282,14 +282,21 @@ oversized (`inset:-28%`) and drifts via a single `transform` loop
 heading/text AA-crisp. Border is a soft `--grad-accent` hairline **ring** (mask
 trick) that brightens on hover; hover keeps the lift + `--shadow-md`.
 
-**Perf / flicker fix:** the earlier version used 12 blurred `will-change` layers
+**Perf / flicker fix:** the first version used 12 blurred `will-change` layers
 (4 `filter:blur(36px)` blobs × 3 cards) which churned GPU layers and caused
-intermittent black-flash flicker on scroll (stacked above the demo CTA's own
-`blur(90px)` aura). Replaced with ONE non-blurred composited layer per card, and
-the clip container gets `transform:translateZ(0)` so the rounded mask never
-re-rasterises. Drift is **paused off-screen** (`useActiveWhenVisible` →
-`.svc3-aurora[data-active="false"]` toggles `animation-play-state`) and frozen
-under reduced motion.
+intermittent black-flash flicker on scroll. Replaced with ONE non-blurred
+composited layer per card, and the clip container gets `transform:translateZ(0)`
+so the rounded mask never re-rasterises. The **demo CTA** (`DemoCTAV3.jsx`) had a
+*separate* `filter:blur(90px)` accent aura (a 640px element) that was its own
+black-flicker source on that section — replaced with a no-blur `radial-gradient`
+glow.
+
+**Drift is NOT gated on the viewport observer.** It originally paused off-screen
+via `useActiveWhenVisible` (IntersectionObserver), but that observer doesn't fire
+reliably with the Lenis scroll setup here, so the drift stayed paused (looked
+static) even in view. Since the drift is one cheap transform animation per card
+(×3), it now runs unconditionally — frozen only under reduced motion (media
+query). Correctness over a negligible idle-CPU saving.
 
 ## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/

@@ -15,8 +15,10 @@ export default function DemoCTAV3() {
         <AnimateIn>
           <div className="relative overflow-hidden rounded-[28px] border border-[color:var(--hairline-color)] px-6 py-16 text-center shadow-[var(--shadow-lg)] sm:px-12 md:py-20"
             style={{ background: 'linear-gradient(160deg, #ffffff 0%, #f3f1fe 55%, #eef6fe 100%)' }}>
-            {/* soft accent aura */}
-            <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full opacity-25" style={{ backgroundImage: 'var(--grad-accent)', filter: 'blur(90px)' }} aria-hidden />
+            {/* soft accent aura — radial-gradient glow (no blur filter, which on a
+                640px element caused GPU black-flash flicker on some machines) */}
+            <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-[46rem] -translate-x-1/2" aria-hidden
+              style={{ background: 'radial-gradient(50% 50% at 50% 50%, rgba(99,102,241,0.22), rgba(124,58,237,0.12) 45%, transparent 72%)' }} />
 
             <div className="relative">
               <div className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#4f46e5]">Free demo</div>

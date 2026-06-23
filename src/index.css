@@ -386,8 +386,6 @@ html[data-theme='light'] body {
   inset: 0;
   background: radial-gradient(125% 80% at 50% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.08) 64%, transparent);
 }
-.svc3-aurora[data-active='false']::before { animation-play-state: paused; }
-
 /* clearly-visible drift: the whole mesh translates a few % and gently breathes */
 @keyframes svc-aurora-drift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }

@@ -3,7 +3,6 @@ import { Code2, Layout, Server, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useReducedMotion } from 'framer-motion'
 import { AnimateIn } from '../useScrollAnimation'
-import { useActiveWhenVisible } from '../../hooks/useActiveWhenVisible'
 
 // ---- Tunables --------------------------------------------------------------
 // 6 items (phrase + 5 features) lit ~240ms apart → whole sequence in ~1.6s.
@@ -44,7 +43,7 @@ function finePointer() {
 // One card. The highlighter sequence latches on first trigger (hover on desktop,
 // scroll-into-view on mobile) and runs once to completion, staying lit until the
 // page refreshes. A single setTimeout chain per active card — no loops.
-function ServiceCard({ service, reduce, register, index, bgActive }) {
+function ServiceCard({ service, reduce, register, index }) {
   const { icon: Icon, title, description, highlightPhrase, features } = service
   const total = 1 + features.length // index 0 = phrase, then each feature
   const [lit, setLit] = useState(reduce ? total : 0)
@@ -93,9 +92,9 @@ function ServiceCard({ service, reduce, register, index, bgActive }) {
       onPointerEnter={onPointerEnter}
       className="svc3-card group flex h-full flex-col p-8"
     >
-      {/* Soft pastel aurora behind the content; drift pauses off-screen /
-          reduced-motion (data-active). --svc-d offsets each card's phase. */}
-      <div className="svc3-aurora" aria-hidden="true" data-active={bgActive ? 'true' : 'false'} style={{ '--svc-d': `${index * -5}s` }}>
+      {/* Soft pastel aurora behind the content; always drifts (cheap, one layer),
+          frozen only under reduced motion. --svc-d offsets each card's phase. */}
+      <div className="svc3-aurora" aria-hidden="true" style={{ '--svc-d': `${index * -5}s` }}>
         <span className="svc3-scrim" />
       </div>
       <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0fe] text-[#4f46e5] transition-colors duration-300 group-hover:bg-[#4f46e5] group-hover:text-white">
@@ -123,9 +122,6 @@ function ServiceCard({ service, reduce, register, index, bgActive }) {
 
 export default function ServicesV3() {
   const reduce = useReducedMotion()
-  const sectionRef = useRef(null)
-  const active = useActiveWhenVisible(sectionRef)
-  const bgActive = active && !reduce // moving gradient runs only on-screen + motion-OK
   const registryRef = useRef([])
 
   const register = useCallback((entry) => {
@@ -160,7 +156,7 @@ export default function ServicesV3() {
   }, [reduce])
 
   return (
-    <section ref={sectionRef} id="services" className="bg-white py-24 md:py-32">
+    <section id="services" className="bg-white py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <AnimateIn className="mx-auto mb-16 max-w-2xl text-center">
           <div className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#4f46e5]">What we do</div>
@@ -173,7 +169,7 @@ export default function ServicesV3() {
         <div className="grid gap-6 md:grid-cols-3">
           {services.map((service, i) => (
             <AnimateIn key={service.title} delay={i * 120} className="h-full">
-              <ServiceCard service={service} reduce={reduce} register={register} index={i} bgActive={bgActive} />
+              <ServiceCard service={service} reduce={reduce} register={register} index={i} />
             </AnimateIn>
           ))}
         </div>
