@@ -271,18 +271,21 @@ LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
 Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
-## Card visual — faint baby-blue + pink mesh (`.svc3-card`)
-A subtle two-tone mesh: baby blue `rgba(152,194,255)` (top-left) + soft pink
-`rgba(255,190,222)` (bottom-right) + a whisper of blue top-right, all ~0.13–0.22
-alpha over a pure-white base, sized `160% 160%`. Deliberately faint so it gives the
-card life without competing with the text. The `svc-bg-drift` keyframe pans each
-blob along a slow looping orbit (~24s ease-in-out) so the mesh gently breathes —
-never distracting; each card is phase-offset (`animation-delay` 0 / -8 / -16s) so
-they don't move in lockstep. The
-border is a soft `--grad-accent` gradient hairline **ring** (mask trick) that
-brightens on hover; hover keeps the lift + `--shadow-md`. The drift is the only
-continuous animation added and is **paused off-screen** (via `useActiveWhenVisible`
-→ inline `animation-play-state`) and under reduced motion.
+## Card visual — floating pastel aurora (`.svc3-card`)
+A `.svc3-aurora` layer (`position:absolute; inset:0; overflow:hidden`, behind the
+content via `isolation:isolate` + `z-index`) holds four blurred colour blobs —
+periwinkle `#b9c6ff` 230px (top-left), lilac `#dcc4ff` 210px (bottom-right), sky
+blue `#aeeaff` 185px (center), blush `#ffc9de` 150px (bottom-left) — each
+`border-radius:50%; filter:blur(36px); opacity:0.72`. Each drifts on its own slow
+transform-only loop (`svc-blob-a..d`, 17–24s ease-in-out, one with a slight
+`scale`); `--svc-d` phase-offsets each card so they don't look identical. A white
+**readability scrim** (`radial-gradient(125% 80% at 50% 0%, …)`) sits over the
+blobs so the heading/text stays AA-crisp. Border is a soft `--grad-accent` hairline
+**ring** (mask trick) that brightens on hover; hover keeps the lift + `--shadow-md`.
+The blob drift is the only continuous animation added and is **paused off-screen**
+(`useActiveWhenVisible` → `.svc3-aurora[data-active="false"]` toggles
+`animation-play-state`) and frozen under reduced motion. Colours/sizes/opacity/blur
+are kept as clearly-labelled per-blob rules for easy tuning.
 
 ## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/
