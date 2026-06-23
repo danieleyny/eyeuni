@@ -359,46 +359,42 @@ html[data-theme='light'] body {
   z-index: 0;
   overflow: hidden;
   border-radius: inherit;
+  /* promote the clip to its own layer so the drifting child never re-rasterises
+     the rounded mask (prevents black-flash flicker on scroll) */
+  transform: translateZ(0);
 }
-.svc3-blob {
-  /* tunables: size per blob below; shared blur/opacity here */
+.svc3-aurora::before {
+  /* ONE soft pastel aurora layer (gradients fade to transparent = blob-like, no
+     blur filter). Oversized so the transform drift never reveals a hard edge.
+     A single compositor layer per card — cheap, no GPU-layer churn. */
+  content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(36px);
-  opacity: 0.72;
+  inset: -28%;
+  background:
+    radial-gradient(34% 40% at 22% 24%, #b9c6ff 0%, rgba(185, 198, 255, 0) 72%),
+    radial-gradient(33% 38% at 82% 78%, #dcc4ff 0%, rgba(220, 196, 255, 0) 72%),
+    radial-gradient(30% 34% at 56% 52%, #aeeaff 0%, rgba(174, 234, 255, 0) 72%),
+    radial-gradient(26% 30% at 24% 82%, #ffc9de 0%, rgba(255, 201, 222, 0) 72%);
+  opacity: 0.8;
   will-change: transform;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+  animation: svc-aurora-drift 18s ease-in-out infinite;
   animation-delay: var(--svc-d, 0s);
 }
-.svc3-blob-1 { /* periwinkle, top-left */
-  width: 230px; height: 230px; background: #b9c6ff;
-  top: -72px; left: -58px; animation-name: svc-blob-a; animation-duration: 22s;
-}
-.svc3-blob-2 { /* lilac, bottom-right */
-  width: 210px; height: 210px; background: #dcc4ff;
-  bottom: -74px; right: -52px; animation-name: svc-blob-b; animation-duration: 19s;
-}
-.svc3-blob-3 { /* sky blue, center */
-  width: 185px; height: 185px; background: #aeeaff;
-  top: 32%; left: 34%; animation-name: svc-blob-c; animation-duration: 24s;
-}
-.svc3-blob-4 { /* blush, bottom-left (warm accent) */
-  width: 150px; height: 150px; background: #ffc9de;
-  bottom: -42px; left: -34px; animation-name: svc-blob-d; animation-duration: 17s;
-}
 .svc3-scrim {
-  /* keeps heading/text crisp over the blobs */
+  /* keeps heading/text crisp over the aurora */
   position: absolute;
   inset: 0;
   background: radial-gradient(125% 80% at 50% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.08) 64%, transparent);
 }
-.svc3-aurora[data-active='false'] .svc3-blob { animation-play-state: paused; }
+.svc3-aurora[data-active='false']::before { animation-play-state: paused; }
 
-@keyframes svc-blob-a { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(42px, 32px); } }
-@keyframes svc-blob-b { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-38px, -30px) scale(1.12); } }
-@keyframes svc-blob-c { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-32px, 26px); } 66% { transform: translate(28px, -22px); } }
-@keyframes svc-blob-d { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(36px, -28px); } }
+/* clearly-visible drift: the whole mesh translates a few % and gently breathes */
+@keyframes svc-aurora-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  25% { transform: translate3d(5%, -3.5%, 0) scale(1.08); }
+  50% { transform: translate3d(-3.5%, 4.5%, 0) scale(1.05); }
+  75% { transform: translate3d(3.5%, 2.5%, 0) scale(1.09); }
+}
 
 .svc3-card::after {
   /* soft --grad-accent gradient hairline ring (mask trick), brightens on hover */
@@ -424,7 +420,7 @@ html[data-theme='light'] body {
   opacity: 0.85;
 }
 @media (prefers-reduced-motion: reduce) {
-  .svc3-blob { animation: none; }
+  .svc3-aurora::before { animation: none; }
 }
 
 /* Underline sweep (Style B): a glowing --grad-accent line draws in left→right

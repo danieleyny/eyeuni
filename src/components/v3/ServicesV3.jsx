@@ -93,13 +93,9 @@ function ServiceCard({ service, reduce, register, index, bgActive }) {
       onPointerEnter={onPointerEnter}
       className="svc3-card group flex h-full flex-col p-8"
     >
-      {/* Floating pastel aurora behind the content; drift pauses off-screen /
+      {/* Soft pastel aurora behind the content; drift pauses off-screen /
           reduced-motion (data-active). --svc-d offsets each card's phase. */}
       <div className="svc3-aurora" aria-hidden="true" data-active={bgActive ? 'true' : 'false'} style={{ '--svc-d': `${index * -5}s` }}>
-        <span className="svc3-blob svc3-blob-1" />
-        <span className="svc3-blob svc3-blob-2" />
-        <span className="svc3-blob svc3-blob-3" />
-        <span className="svc3-blob svc3-blob-4" />
         <span className="svc3-scrim" />
       </div>
       <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0fe] text-[#4f46e5] transition-colors duration-300 group-hover:bg-[#4f46e5] group-hover:text-white">

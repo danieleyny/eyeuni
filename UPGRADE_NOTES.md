@@ -271,21 +271,25 @@ LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
 Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
-## Card visual — floating pastel aurora (`.svc3-card`)
-A `.svc3-aurora` layer (`position:absolute; inset:0; overflow:hidden`, behind the
-content via `isolation:isolate` + `z-index`) holds four blurred colour blobs —
-periwinkle `#b9c6ff` 230px (top-left), lilac `#dcc4ff` 210px (bottom-right), sky
-blue `#aeeaff` 185px (center), blush `#ffc9de` 150px (bottom-left) — each
-`border-radius:50%; filter:blur(36px); opacity:0.72`. Each drifts on its own slow
-transform-only loop (`svc-blob-a..d`, 17–24s ease-in-out, one with a slight
-`scale`); `--svc-d` phase-offsets each card so they don't look identical. A white
-**readability scrim** (`radial-gradient(125% 80% at 50% 0%, …)`) sits over the
-blobs so the heading/text stays AA-crisp. Border is a soft `--grad-accent` hairline
-**ring** (mask trick) that brightens on hover; hover keeps the lift + `--shadow-md`.
-The blob drift is the only continuous animation added and is **paused off-screen**
-(`useActiveWhenVisible` → `.svc3-aurora[data-active="false"]` toggles
-`animation-play-state`) and frozen under reduced motion. Colours/sizes/opacity/blur
-are kept as clearly-labelled per-blob rules for easy tuning.
+## Card visual — soft pastel aurora (`.svc3-card`)
+A single `.svc3-aurora::before` layer holds a soft pastel mesh — four radial
+gradients (periwinkle `#b9c6ff`, lilac `#dcc4ff`, sky blue `#aeeaff`, blush
+`#ffc9de`) that **fade to transparent** (blob-like, no `filter:blur`). It's
+oversized (`inset:-28%`) and drifts via a single `transform` loop
+(`svc-aurora-drift`, 18s, translate ±5% + `scale` 1→1.09) so the colour wash
+**visibly** moves and breathes; `--svc-d` phase-offsets each card. A white
+**readability scrim** (`radial-gradient(125% 80% at 50% 0%, …)`) keeps the
+heading/text AA-crisp. Border is a soft `--grad-accent` hairline **ring** (mask
+trick) that brightens on hover; hover keeps the lift + `--shadow-md`.
+
+**Perf / flicker fix:** the earlier version used 12 blurred `will-change` layers
+(4 `filter:blur(36px)` blobs × 3 cards) which churned GPU layers and caused
+intermittent black-flash flicker on scroll (stacked above the demo CTA's own
+`blur(90px)` aura). Replaced with ONE non-blurred composited layer per card, and
+the clip container gets `transform:translateZ(0)` so the rounded mask never
+re-rasterises. Drift is **paused off-screen** (`useActiveWhenVisible` →
+`.svc3-aurora[data-active="false"]` toggles `animation-play-state`) and frozen
+under reduced motion.
 
 ## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/
