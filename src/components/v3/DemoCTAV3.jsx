@@ -13,7 +13,7 @@ export default function DemoCTAV3() {
     <section className="bg-white py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <AnimateIn>
-          <div className="relative overflow-hidden rounded-[28px] border border-[color:var(--hairline-color)] px-6 py-16 text-center shadow-[var(--shadow-lg)] sm:px-12 md:py-20"
+          <div className="relative overflow-hidden rounded-[28px] border border-[color:var(--hairline-color)] px-6 py-16 text-center shadow-[0_14px_44px_-24px_rgba(13,18,40,0.22)] sm:px-12 md:py-20"
             style={{ background: 'linear-gradient(160deg, #ffffff 0%, #f3f1fe 55%, #eef6fe 100%)' }}>
             {/* soft accent aura — radial-gradient glow (no blur filter, which on a
                 640px element caused GPU black-flash flicker on some machines) */}

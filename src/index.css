@@ -333,7 +333,7 @@ html[data-theme='light'] body {
   filter: blur(70px);
   opacity: 0.22;
   animation: v3-ribbon-drift 16s ease-in-out infinite;
-  will-change: transform;
+  /* no will-change: a permanent GPU layer here was a Chrome black-flash trigger */
 }
 
 /* ---- Services (light, main page): floating aurora card + underline sweep ---- */
@@ -344,9 +344,12 @@ html[data-theme='light'] body {
   isolation: isolate;
   border-radius: 16px;
   background-color: #ffffff;
+  /* simple solid hairline (replaces the mask-composite gradient ring, which was a
+     Chrome repaint/black-flash trigger); brightens to indigo on hover */
+  border: 1px solid var(--hairline-color);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
 }
 /* content sits above the aurora layer */
 .svc3-card > :not(.svc3-aurora) {
@@ -359,32 +362,31 @@ html[data-theme='light'] body {
   z-index: 0;
   overflow: hidden;
   border-radius: inherit;
-  /* promote the clip to its own layer so the drifting child never re-rasterises
-     the rounded mask (prevents black-flash flicker on scroll) */
-  transform: translateZ(0);
+  /* no translateZ/will-change layer hack — those promoted persistent GPU layers
+     that triggered Chrome's black-flash; overflow+radius clips fine on its own */
 }
 .svc3-aurora::before {
-  /* ONE soft pastel aurora layer (gradients fade to transparent = blob-like, no
-     blur filter). Oversized so the transform drift never reveals a hard edge.
-     A single compositor layer per card — cheap, no GPU-layer churn. */
+  /* soft pastel blobs: each gradient stays SOLID out to ~38% then fades, so real
+     colour reads (not washed to white). Oversized so the drift never reveals an
+     edge. No blur filter, no will-change. */
   content: '';
   position: absolute;
   inset: -28%;
   background:
-    radial-gradient(34% 40% at 22% 24%, #b9c6ff 0%, rgba(185, 198, 255, 0) 72%),
-    radial-gradient(33% 38% at 82% 78%, #dcc4ff 0%, rgba(220, 196, 255, 0) 72%),
-    radial-gradient(30% 34% at 56% 52%, #aeeaff 0%, rgba(174, 234, 255, 0) 72%),
-    radial-gradient(26% 30% at 24% 82%, #ffc9de 0%, rgba(255, 201, 222, 0) 72%);
-  opacity: 0.8;
-  will-change: transform;
+    radial-gradient(42% 48% at 20% 22%, #b9c6ff 0%, #b9c6ff 38%, rgba(185, 198, 255, 0) 82%),
+    radial-gradient(40% 46% at 84% 80%, #dcc4ff 0%, #dcc4ff 36%, rgba(220, 196, 255, 0) 82%),
+    radial-gradient(38% 44% at 58% 50%, #aeeaff 0%, #aeeaff 34%, rgba(174, 234, 255, 0) 80%),
+    radial-gradient(34% 40% at 22% 82%, #ffc9de 0%, #ffc9de 32%, rgba(255, 201, 222, 0) 80%);
+  opacity: 0.9;
   animation: svc-aurora-drift 18s ease-in-out infinite;
   animation-delay: var(--svc-d, 0s);
 }
 .svc3-scrim {
-  /* keeps heading/text crisp over the aurora */
+  /* lighter scrim: white only behind the top heading area, so the lower card
+     keeps its colour while the heading/body stay crisp */
   position: absolute;
   inset: 0;
-  background: radial-gradient(125% 80% at 50% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.08) 64%, transparent);
+  background: radial-gradient(120% 72% at 50% 0%, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 56%);
 }
 /* clearly-visible drift: the whole mesh translates a few % and gently breathes */
 @keyframes svc-aurora-drift {
@@ -394,28 +396,10 @@ html[data-theme='light'] body {
   75% { transform: translate3d(3.5%, 2.5%, 0) scale(1.09); }
 }
 
-.svc3-card::after {
-  /* soft --grad-accent gradient hairline ring (mask trick), brightens on hover */
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: inherit;
-  padding: 1px;
-  background: var(--grad-accent);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.4;
-  transition: opacity 0.45s ease;
-  pointer-events: none;
-}
 .svc3-card:hover {
   transform: translateY(-6px);
+  border-color: rgba(99, 102, 241, 0.42);
   box-shadow: var(--shadow-md), 0 20px 50px -26px rgba(79, 70, 229, 0.5);
-}
-.svc3-card:hover::after {
-  opacity: 0.85;
 }
 @media (prefers-reduced-motion: reduce) {
   .svc3-aurora::before { animation: none; }

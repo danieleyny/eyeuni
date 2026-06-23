@@ -274,29 +274,29 @@ The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 ## Card visual — soft pastel aurora (`.svc3-card`)
 A single `.svc3-aurora::before` layer holds a soft pastel mesh — four radial
 gradients (periwinkle `#b9c6ff`, lilac `#dcc4ff`, sky blue `#aeeaff`, blush
-`#ffc9de`) that **fade to transparent** (blob-like, no `filter:blur`). It's
-oversized (`inset:-28%`) and drifts via a single `transform` loop
+`#ffc9de`). Each stays **solid out to ~38%** then fades to transparent (`opacity
+0.9`) so real colour reads — an earlier "fade from the centre" version washed the
+cards to white. Oversized (`inset:-28%`), it drifts via a single `transform` loop
 (`svc-aurora-drift`, 18s, translate ±5% + `scale` 1→1.09) so the colour wash
-**visibly** moves and breathes; `--svc-d` phase-offsets each card. A white
-**readability scrim** (`radial-gradient(125% 80% at 50% 0%, …)`) keeps the
-heading/text AA-crisp. Border is a soft `--grad-accent` hairline **ring** (mask
-trick) that brightens on hover; hover keeps the lift + `--shadow-md`.
+**visibly** moves and breathes; `--svc-d` phase-offsets each card. A **lighter
+scrim** (`radial-gradient(120% 72% at 50% 0%, rgba(255,255,255,.62), transparent
+56%)`) puts white only behind the top heading area so the lower card keeps colour
+while text stays AA-crisp. Drift runs unconditionally (not gated on the flaky
+Lenis-incompatible IntersectionObserver), frozen only under reduced motion.
 
-**Perf / flicker fix:** the first version used 12 blurred `will-change` layers
-(4 `filter:blur(36px)` blobs × 3 cards) which churned GPU layers and caused
-intermittent black-flash flicker on scroll. Replaced with ONE non-blurred
-composited layer per card, and the clip container gets `transform:translateZ(0)`
-so the rounded mask never re-rasterises. The **demo CTA** (`DemoCTAV3.jsx`) had a
-*separate* `filter:blur(90px)` accent aura (a 640px element) that was its own
-black-flicker source on that section — replaced with a no-blur `radial-gradient`
-glow.
-
-**Drift is NOT gated on the viewport observer.** It originally paused off-screen
-via `useActiveWhenVisible` (IntersectionObserver), but that observer doesn't fire
-reliably with the Lenis scroll setup here, so the drift stayed paused (looked
-static) even in view. Since the drift is one cheap transform animation per card
-(×3), it now runs unconditionally — frozen only under reduced motion (media
-query). Correctness over a negligible idle-CPU saving.
+**Chrome black-flicker fix (verified live in incognito).** The flashing was GPU
+layer-rasterisation, triggered by specific compositing props — fixed by removing
+each:
+- `will-change: transform` on `.svc3-aurora::before` **and** `.v3-ribbon` (permanent
+  forced layers were a primary trigger),
+- the `transform: translateZ(0)` promotion hack on `.svc3-aurora` (clip works via
+  `overflow:hidden`+`border-radius` alone),
+- the `-webkit-mask-composite/mask-composite` gradient-ring border on
+  `.svc3-card::after` → replaced with a simple `1px solid var(--hairline-color)`
+  hairline that brightens to indigo on hover,
+- the oversized `--shadow-lg` on the demo-CTA card (`DemoCTAV3.jsx`) → a lighter
+  `0 14px 44px -24px` shadow (its `blur(90px)` aura was already swapped for a
+  no-blur radial-gradient glow).
 
 ## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/
