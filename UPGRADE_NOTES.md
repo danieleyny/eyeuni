@@ -271,14 +271,14 @@ LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
 Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
-## Card visual — soft pastel mesh gradient (`.svc3-card`)
-Four pastel blobs in distinct corners — periwinkle `rgba(138,166,255)`, soft rose
-`rgba(255,176,214)`, lilac `rgba(192,164,250)`, mint `rgba(126,226,214)` (~0.42–0.5
-alpha, kept light) — over a near-white `#fdfdff` base, sized `150% 150%`. Stronger
-than a single hue so it reads as a real multi-colour mesh, still pale enough for AA
-ink text. The `svc-bg-drift` keyframe pans each blob along a slow looping orbit
-(~24s ease-in-out) so the mesh gently breathes — never distracting; each card is
-phase-offset (`animation-delay` 0 / -8 / -16s) so they don't move in lockstep. The
+## Card visual — faint baby-blue + pink mesh (`.svc3-card`)
+A subtle two-tone mesh: baby blue `rgba(152,194,255)` (top-left) + soft pink
+`rgba(255,190,222)` (bottom-right) + a whisper of blue top-right, all ~0.13–0.22
+alpha over a pure-white base, sized `160% 160%`. Deliberately faint so it gives the
+card life without competing with the text. The `svc-bg-drift` keyframe pans each
+blob along a slow looping orbit (~24s ease-in-out) so the mesh gently breathes —
+never distracting; each card is phase-offset (`animation-delay` 0 / -8 / -16s) so
+they don't move in lockstep. The
 border is a soft `--grad-accent` gradient hairline **ring** (mask trick) that
 brightens on hover; hover keeps the lift + `--shadow-md`. The drift is the only
 continuous animation added and is **paused off-screen** (via `useActiveWhenVisible`
@@ -302,8 +302,10 @@ rather than the 1200ms the spec mentions.)
 
 - **Trigger — desktop:** first `pointerenter` on a fine-pointer device starts it
   (latches; never auto-starts without hover).
-- **Trigger — mobile:** one shared `IntersectionObserver` (threshold 0.4) starts
-  each card as it enters view, then stops observing it.
+- **Trigger — mobile:** one shared `IntersectionObserver` starts each card only
+  once it's **essentially fully in view** — 90% of the card visible, OR (for a card
+  taller than the viewport) once it fills 60% of the screen — so the draw isn't
+  missed above the fold. Stops observing once started.
 - **Reduced motion:** cards render fully lit from mount, gradient drift off.
 
 ## Performance

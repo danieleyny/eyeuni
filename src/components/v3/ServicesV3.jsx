@@ -135,22 +135,25 @@ export default function ServicesV3() {
     }
   }, [])
 
-  // Mobile / touch trigger: ONE shared IntersectionObserver starts each card the
-  // first time it's ~40% visible, then stops observing it. Desktop (fine pointer)
-  // uses hover instead, so cards never auto-start there. Reduced motion skips it
-  // (cards render fully lit from mount).
+  // Mobile / touch trigger: ONE shared IntersectionObserver starts each card only
+  // once it's essentially fully in view — 90% of the card visible, OR (for a card
+  // taller than the viewport) once it fills 60% of the screen — so the user
+  // actually watches the underlines draw rather than missing them above the fold.
+  // Then it stops observing that card. Desktop (fine pointer) uses hover instead,
+  // so cards never auto-start there. Reduced motion skips it (lit from mount).
   useEffect(() => {
     if (reduce || finePointer()) return
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) {
+          const coverage = e.intersectionRect.height / (window.innerHeight || 1)
+          if (e.intersectionRatio >= 0.9 || coverage >= 0.6) {
             registryRef.current.find((r) => r.el === e.target)?.start()
             io.unobserve(e.target)
           }
         })
       },
-      { threshold: 0.4 }
+      { threshold: Array.from({ length: 21 }, (_, i) => i * 0.05) }
     )
     registryRef.current.forEach((r) => r.el && io.observe(r.el))
     return () => io.disconnect()
