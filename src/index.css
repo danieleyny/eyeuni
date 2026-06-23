@@ -337,16 +337,22 @@ html[data-theme='light'] body {
 }
 
 /* ---- Services (light, main page): moving-gradient card + underline sweep ---- */
-/* Slowly-drifting pale aurora surface + soft --grad-accent hairline ring. The
+/* Soft pastel "mesh gradient": three faint colour blobs (periwinkle / lilac /
+   aqua) drift slowly over a near-white base — gentle, never distracting. The
    drift pauses off-screen (inline animation-play-state) and under reduced motion. */
 .svc3-card {
   position: relative;
   border-radius: 16px;
-  background-image: linear-gradient(120deg, #ffffff, #f3f5ff, #f7f2ff, #eef7ff);
-  background-size: 200% 200%;
+  background-color: #fbfcff;
+  background-image:
+    radial-gradient(58% 70% at 18% 22%, rgba(120, 150, 255, 0.16), transparent 62%),
+    radial-gradient(54% 64% at 84% 26%, rgba(178, 145, 246, 0.15), transparent 64%),
+    radial-gradient(66% 72% at 70% 84%, rgba(108, 224, 214, 0.14), transparent 66%);
+  background-size: 165% 165%;
+  background-repeat: no-repeat;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  animation: svc-bg-drift 14s ease-in-out infinite;
+  animation: svc-bg-drift 24s ease-in-out infinite;
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 .svc3-card::after {
@@ -372,9 +378,12 @@ html[data-theme='light'] body {
   opacity: 0.85;
 }
 @keyframes svc-bg-drift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  /* each blob pans a little, on a slow looping orbit — the three layers share
+     these positions in order, so the mesh gently breathes and shifts */
+  0% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  33% { background-position: 28% 26%, 72% 16%, 38% 72%; }
+  66% { background-position: 12% 18%, 92% 38%, 64% 86%; }
+  100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .svc3-card { animation: none; }
@@ -386,19 +395,20 @@ html[data-theme='light'] body {
    break: clone underlines EVERY wrapped line of the multi-line phrase. */
 .svc-hl {
   color: #4b5568;
-  padding-bottom: 0.08em;
-  background-image: linear-gradient(90deg, #0f31b8, #7c3aed, #22d3ee);
+  padding-bottom: 0.1em;
+  /* soft pastel: periwinkle → lilac → aqua (lighter than the brand gradient) */
+  background-image: linear-gradient(90deg, #8aa3ff, #c0a6f5, #84e3d6);
   background-repeat: no-repeat;
   background-position: 0 100%;
-  background-size: 0% 2.5px;
+  background-size: 0% 3px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   transition: background-size 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease;
 }
 .svc-hl.is-lit {
   color: #0a0e27;
-  background-size: 100% 2.5px;
-  filter: drop-shadow(0 1px 1.5px rgba(124, 58, 237, 0.45));
+  background-size: 100% 3px;
+  filter: drop-shadow(0 1px 2px rgba(138, 163, 255, 0.5));
 }
 
 /* ---- Headline decode, retuned for light ---- */

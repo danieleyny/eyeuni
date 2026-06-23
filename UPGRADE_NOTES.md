@@ -271,21 +271,24 @@ LensReveal/Aurora already rely on. `npm run build` passes; `/V2.html` unchanged.
 Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.css`.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
-## Card visual — moving gradient surface (`.svc3-card`)
-A pale aurora gradient (`120deg #ffffff → #f3f5ff → #f7f2ff → #eef7ff`) sized
-`200% 200%` and slowly drifted by the `svc-bg-drift` keyframe (~14s loop), with
-each card phase-offset (`animation-delay` 0 / -4.5 / -9s) so they don't move in
-lockstep. The border is a soft `--grad-accent` gradient hairline **ring** (mask
-trick) that brightens on hover; hover keeps the lift + `--shadow-md`. The drift is
-the only continuous animation added and is **paused off-screen** (via
-`useActiveWhenVisible` → inline `animation-play-state`) and under reduced motion.
+## Card visual — soft pastel mesh gradient (`.svc3-card`)
+Three faint colour blobs (periwinkle `rgba(120,150,255)`, lilac `rgba(178,145,246)`,
+aqua `rgba(108,224,214)` — all ~0.15 alpha) over a near-white `#fbfcff` base, sized
+`165% 165%`. The `svc-bg-drift` keyframe pans each blob along a slow looping orbit
+(~24s ease-in-out) so the mesh gently breathes — never distracting; each card is
+phase-offset (`animation-delay` 0 / -8 / -16s) so they don't move in lockstep. The
+border is a soft `--grad-accent` gradient hairline **ring** (mask trick) that
+brightens on hover; hover keeps the lift + `--shadow-md`. The drift is the only
+continuous animation added and is **paused off-screen** (via `useActiveWhenVisible`
+→ inline `animation-play-state`) and under reduced motion.
 
 ## Sequenced highlighter — gradient underline sweep (Style B)
 Each service gains a `highlightPhrase`; the description is split before/phrase/
-after so only the phrase underlines. When a card is **activated**, a glowing
-`--grad-accent` **underline** (`linear-gradient(90deg,#0f31b8,#7c3aed,#22d3ee)`,
-~2.5px, soft `drop-shadow` glow) draws in left→right beneath the text (animating a
-bottom `background-size` width 0%→100%) and the text shifts grey→ink — across the
+after so only the phrase underlines. When a card is **activated**, a soft pastel
+**underline** (`linear-gradient(90deg,#8aa3ff,#c0a6f5,#84e3d6)` — periwinkle→lilac→
+aqua, 3px, gentle `drop-shadow` glow) draws in left→right beneath the text
+(animating a bottom `background-size` width 0%→100%) and the text shifts grey→ink
+— across the
 phrase, then each feature in order, ~`STAGGER` (240ms) apart, the whole card
 finishing in ~1.6s. `box-decoration-break: clone` underlines **every wrapped line**
 of the multi-line phrase. Check icons untouched. Cumulative:

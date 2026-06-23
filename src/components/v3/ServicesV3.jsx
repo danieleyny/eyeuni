@@ -94,7 +94,7 @@ function ServiceCard({ service, reduce, register, index, bgActive }) {
       className="svc3-card group flex h-full flex-col p-8"
       style={{
         // offset each card so the drift isn't in lockstep; pause it off-screen / reduced-motion
-        animationDelay: `${index * -4.5}s`,
+        animationDelay: `${index * -8}s`,
         animationPlayState: bgActive ? 'running' : 'paused',
       }}
     >
