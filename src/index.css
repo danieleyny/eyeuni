@@ -365,21 +365,37 @@ html[data-theme='light'] body {
   /* no translateZ/will-change layer hack — those promoted persistent GPU layers
      that triggered Chrome's black-flash; overflow+radius clips fine on its own */
 }
-.svc3-aurora::before {
-  /* soft pastel blobs: each gradient stays SOLID out to ~38% then fades, so real
-     colour reads (not washed to white). Oversized so the drift never reveals an
-     edge. No blur filter, no will-change. */
-  content: '';
+/* Four SEPARATE soft pastel blobs, each a single radial-gradient that fades to
+   transparent (soft shape, no blur filter / no will-change). Each floats on its
+   OWN path so they visibly move around the card relative to each other. Faint
+   (low opacity) so they never compete with the text. */
+.svc3-blob {
   position: absolute;
-  inset: -28%;
-  background:
-    radial-gradient(42% 48% at 20% 22%, #b9c6ff 0%, #b9c6ff 38%, rgba(185, 198, 255, 0) 82%),
-    radial-gradient(40% 46% at 84% 80%, #dcc4ff 0%, #dcc4ff 36%, rgba(220, 196, 255, 0) 82%),
-    radial-gradient(38% 44% at 58% 50%, #aeeaff 0%, #aeeaff 34%, rgba(174, 234, 255, 0) 80%),
-    radial-gradient(34% 40% at 22% 82%, #ffc9de 0%, #ffc9de 32%, rgba(255, 201, 222, 0) 80%);
-  opacity: 0.9;
-  animation: svc-aurora-drift 18s ease-in-out infinite;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
   animation-delay: var(--svc-d, 0s);
+}
+.svc3-blob-1 { /* periwinkle */
+  width: 78%; aspect-ratio: 1; top: -16%; left: -14%;
+  background: radial-gradient(circle at center, #b9c6ff 0%, #b9c6ff 34%, rgba(185, 198, 255, 0) 70%);
+  animation-name: svc-b1; animation-duration: 20s;
+}
+.svc3-blob-2 { /* lilac */
+  width: 72%; aspect-ratio: 1; bottom: -18%; right: -16%;
+  background: radial-gradient(circle at center, #dcc4ff 0%, #dcc4ff 34%, rgba(220, 196, 255, 0) 70%);
+  animation-name: svc-b2; animation-duration: 17s;
+}
+.svc3-blob-3 { /* sky */
+  width: 66%; aspect-ratio: 1; top: 8%; left: 42%;
+  background: radial-gradient(circle at center, #aeeaff 0%, #aeeaff 32%, rgba(174, 234, 255, 0) 70%);
+  animation-name: svc-b3; animation-duration: 23s;
+}
+.svc3-blob-4 { /* blush */
+  width: 60%; aspect-ratio: 1; bottom: -14%; left: 18%;
+  background: radial-gradient(circle at center, #ffc9de 0%, #ffc9de 30%, rgba(255, 201, 222, 0) 70%);
+  animation-name: svc-b4; animation-duration: 19s;
 }
 .svc3-scrim {
   /* lighter scrim: white only behind the top heading area, so the lower card
@@ -388,12 +404,24 @@ html[data-theme='light'] body {
   inset: 0;
   background: radial-gradient(120% 72% at 50% 0%, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 56%);
 }
-/* clearly-visible drift: the whole mesh translates a few % and gently breathes */
-@keyframes svc-aurora-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  25% { transform: translate3d(5%, -3.5%, 0) scale(1.08); }
-  50% { transform: translate3d(-3.5%, 4.5%, 0) scale(1.05); }
-  75% { transform: translate3d(3.5%, 2.5%, 0) scale(1.09); }
+/* each blob roams a meaningful distance on a distinct path + slight scale */
+@keyframes svc-b1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(42%, 26%) scale(1.12); }
+  66% { transform: translate(16%, 44%) scale(1.04); }
+}
+@keyframes svc-b2 {
+  0%, 100% { transform: translate(0, 0) scale(1.06); }
+  50% { transform: translate(-38%, -30%) scale(1); }
+}
+@keyframes svc-b3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(-34%, 30%) scale(1.14); }
+  72% { transform: translate(26%, 14%) scale(1.02); }
+}
+@keyframes svc-b4 {
+  0%, 100% { transform: translate(0, 0) scale(1.05); }
+  45% { transform: translate(40%, -28%) scale(1); }
 }
 
 .svc3-card:hover {
@@ -402,7 +430,7 @@ html[data-theme='light'] body {
   box-shadow: var(--shadow-md), 0 20px 50px -26px rgba(79, 70, 229, 0.5);
 }
 @media (prefers-reduced-motion: reduce) {
-  .svc3-aurora::before { animation: none; }
+  .svc3-blob { animation: none; }
 }
 
 /* Underline sweep (Style B): a glowing --grad-accent line draws in left→right

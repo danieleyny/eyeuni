@@ -272,17 +272,19 @@ Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
 ## Card visual — soft pastel aurora (`.svc3-card`)
-A single `.svc3-aurora::before` layer holds a soft pastel mesh — four radial
-gradients (periwinkle `#b9c6ff`, lilac `#dcc4ff`, sky blue `#aeeaff`, blush
-`#ffc9de`). Each stays **solid out to ~38%** then fades to transparent (`opacity
-0.9`) so real colour reads — an earlier "fade from the centre" version washed the
-cards to white. Oversized (`inset:-28%`), it drifts via a single `transform` loop
-(`svc-aurora-drift`, 18s, translate ±5% + `scale` 1→1.09) so the colour wash
-**visibly** moves and breathes; `--svc-d` phase-offsets each card. A **lighter
-scrim** (`radial-gradient(120% 72% at 50% 0%, rgba(255,255,255,.62), transparent
-56%)`) puts white only behind the top heading area so the lower card keeps colour
-while text stays AA-crisp. Drift runs unconditionally (not gated on the flaky
-Lenis-incompatible IntersectionObserver), frozen only under reduced motion.
+**Four separate blob elements** (`.svc3-blob-1..4`, rendered in `.svc3-aurora`),
+each a single radial-gradient in one pastel — periwinkle `#b9c6ff`, lilac
+`#dcc4ff`, sky `#aeeaff`, blush `#ffc9de` — that fades to transparent (soft shape,
+**no `blur` filter**). Each blob floats on its **own** keyframe (`svc-b1..4`,
+17–23s, distinct paths translating 30–44% + a slight scale) so they visibly drift
+*around* the card and move relative to each other — the earlier single baked-in
+gradient moved as a rigid block and read as static. `--svc-d` phase-offsets each
+card. **Faint:** blob `opacity 0.5` so the wash is present but never competes with
+the text. A **lighter scrim** (`radial-gradient(120% 72% at 50% 0%,
+rgba(255,255,255,.62), transparent 56%)`) keeps the heading area crisp. Drift runs
+unconditionally (not gated on the flaky Lenis-incompatible IntersectionObserver),
+frozen only under reduced motion. No `will-change`/`translateZ`/`mask-composite`
+(keeps the Chrome flicker fix intact).
 
 **Chrome black-flicker fix (verified live in incognito).** The flashing was GPU
 layer-rasterisation, triggered by specific compositing props — fixed by removing
