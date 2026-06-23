@@ -272,9 +272,11 @@ Scope: `src/components/v3/ServicesV3.jsx` + a Services-only block in `src/index.
 The dark `Services.jsx` and the `V2.html`/`V3.html` entry files are untouched.
 
 ## Card visual — soft pastel mesh gradient (`.svc3-card`)
-Three faint colour blobs (periwinkle `rgba(120,150,255)`, lilac `rgba(178,145,246)`,
-aqua `rgba(108,224,214)` — all ~0.15 alpha) over a near-white `#fbfcff` base, sized
-`165% 165%`. The `svc-bg-drift` keyframe pans each blob along a slow looping orbit
+Four pastel blobs in distinct corners — periwinkle `rgba(138,166,255)`, soft rose
+`rgba(255,176,214)`, lilac `rgba(192,164,250)`, mint `rgba(126,226,214)` (~0.42–0.5
+alpha, kept light) — over a near-white `#fdfdff` base, sized `150% 150%`. Stronger
+than a single hue so it reads as a real multi-colour mesh, still pale enough for AA
+ink text. The `svc-bg-drift` keyframe pans each blob along a slow looping orbit
 (~24s ease-in-out) so the mesh gently breathes — never distracting; each card is
 phase-offset (`animation-delay` 0 / -8 / -16s) so they don't move in lockstep. The
 border is a soft `--grad-accent` gradient hairline **ring** (mask trick) that

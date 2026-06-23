@@ -343,12 +343,13 @@ html[data-theme='light'] body {
 .svc3-card {
   position: relative;
   border-radius: 16px;
-  background-color: #fbfcff;
+  background-color: #fdfdff;
   background-image:
-    radial-gradient(58% 70% at 18% 22%, rgba(120, 150, 255, 0.16), transparent 62%),
-    radial-gradient(54% 64% at 84% 26%, rgba(178, 145, 246, 0.15), transparent 64%),
-    radial-gradient(66% 72% at 70% 84%, rgba(108, 224, 214, 0.14), transparent 66%);
-  background-size: 165% 165%;
+    radial-gradient(50% 56% at 14% 16%, rgba(138, 166, 255, 0.5), transparent 64%),
+    radial-gradient(48% 52% at 88% 14%, rgba(255, 176, 214, 0.42), transparent 64%),
+    radial-gradient(52% 58% at 18% 90%, rgba(192, 164, 250, 0.48), transparent 66%),
+    radial-gradient(56% 60% at 90% 84%, rgba(126, 226, 214, 0.46), transparent 66%);
+  background-size: 150% 150%;
   background-repeat: no-repeat;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
@@ -378,12 +379,12 @@ html[data-theme='light'] body {
   opacity: 0.85;
 }
 @keyframes svc-bg-drift {
-  /* each blob pans a little, on a slow looping orbit — the three layers share
+  /* each blob pans a little, on a slow looping orbit — the four layers share
      these positions in order, so the mesh gently breathes and shifts */
-  0% { background-position: 0% 0%, 100% 0%, 50% 100%; }
-  33% { background-position: 28% 26%, 72% 16%, 38% 72%; }
-  66% { background-position: 12% 18%, 92% 38%, 64% 86%; }
-  100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  0% { background-position: 0% 0%, 100% 0%, 0% 100%, 100% 100%; }
+  33% { background-position: 24% 18%, 78% 10%, 14% 82%, 86% 90%; }
+  66% { background-position: 10% 28%, 92% 30%, 26% 92%, 92% 76%; }
+  100% { background-position: 0% 0%, 100% 0%, 0% 100%, 100% 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .svc3-card { animation: none; }
