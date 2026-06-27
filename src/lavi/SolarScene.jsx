@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 /* Fixed ambient background — drifting solar-gold + electric-blue auroras over
    the deep base, with a faint photovoltaic grid. Sits behind all content. */
@@ -65,8 +65,8 @@ export function HeroArt() {
               <div className="h-full w-full opacity-40" style={{ backgroundImage: 'linear-gradient(rgba(160,190,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(160,190,255,0.4) 1px, transparent 1px)', backgroundSize: '50% 33%' }} />
             </motion.div>
           ))}
-          {/* robotic cleaning sweep */}
-          <div className="sweep-bar rounded-2xl" />
+          {/* robotic cleaner traversing the array */}
+          <RobotCleaner />
         </motion.div>
       </div>
 
@@ -74,6 +74,45 @@ export function HeroArt() {
       <FloatChip className="left-[2%] top-[34%]" delay={0.8} label="+30%" sub="output" />
       <FloatChip className="right-[0%] top-[48%]" delay={1.1} label="10×" sub="faster" gold />
     </div>
+  )
+}
+
+/* A robotic panel cleaner that rides the array on side rails, sweeping a glowing
+   brush back and forth and leaving a freshly-cleaned shine — the company's core
+   service, brought to life on the hero. Sits inside the tilted panel plane. */
+function RobotCleaner() {
+  const reduce = useReducedMotion()
+  return (
+    <motion.div
+      className="absolute left-1.5 right-1.5 z-30 pointer-events-none"
+      style={{ height: '15%' }}
+      initial={reduce ? false : { top: '-11%' }}
+      animate={reduce ? { top: '40%' } : { top: ['-11%', '85%'] }}
+      transition={reduce ? undefined : { duration: 5, ease: [0.45, 0, 0.55, 1], repeat: Infinity, repeatType: 'reverse', repeatDelay: 0.5 }}
+    >
+      {/* freshly-cleaned wet shine the brush leaves on the glass */}
+      <div
+        className="absolute inset-x-0 -bottom-2 h-[200%]"
+        style={{ background: 'linear-gradient(180deg, rgba(150,210,255,0) 0%, rgba(160,215,255,0.4) 55%, rgba(120,190,255,0) 100%)', mixBlendMode: 'screen', filter: 'blur(2px)' }}
+      />
+      {/* side-rail carriages riding the panel frame */}
+      <div className="absolute -left-1 top-0 h-full w-2 rounded-sm" style={{ background: 'linear-gradient(180deg,#d7dee8,#475569)', boxShadow: '0 1px 4px rgba(0,0,0,0.6)' }} />
+      <div className="absolute -right-1 top-0 h-full w-2 rounded-sm" style={{ background: 'linear-gradient(180deg,#d7dee8,#475569)', boxShadow: '0 1px 4px rgba(0,0,0,0.6)' }} />
+      {/* chassis body with status lights */}
+      <div
+        className="absolute inset-x-1 top-[8%] h-[52%] rounded-md flex items-center justify-center gap-1.5"
+        style={{ background: 'linear-gradient(180deg,#42526b,#0e1730)', boxShadow: '0 3px 9px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.22)' }}
+      >
+        <span className="block h-1 w-1 rounded-full bg-[#ffd60a]" style={{ boxShadow: '0 0 6px #ffd60a', animation: reduce ? 'none' : 'pulse-glow 1.4s ease-in-out infinite' }} />
+        <span className="block h-[3px] w-7 rounded-full" style={{ background: 'rgba(47,107,255,0.6)' }} />
+        <span className="block h-1 w-1 rounded-full bg-[#4dd2ff]" style={{ boxShadow: '0 0 6px #4dd2ff', animation: reduce ? 'none' : 'pulse-glow 1.4s ease-in-out infinite 0.4s' }} />
+      </div>
+      {/* glowing brush roller along the leading edge */}
+      <div
+        className="absolute inset-x-0 bottom-[14%] h-[7px] rounded-full"
+        style={{ background: 'linear-gradient(90deg, rgba(77,210,255,0.45), #c7f1ff 50%, rgba(77,210,255,0.45))', boxShadow: '0 0 12px rgba(120,220,255,0.85)' }}
+      />
+    </motion.div>
   )
 }
 

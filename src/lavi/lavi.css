@@ -149,6 +149,7 @@ body {
 @keyframes spin-slow { to { transform: rotate(360deg); } }
 @keyframes sweep { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
 @keyframes rise { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes pulse-glow { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
 
 .animate-drift { animation: drift 18s ease-in-out infinite; }
 .animate-drift-2 { animation: drift-2 22s ease-in-out infinite; }
