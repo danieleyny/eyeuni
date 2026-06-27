@@ -129,7 +129,7 @@ const en = {
   portfolio: {
     eyebrow: 'Our Work',
     title: 'Results you can see',
-    sub: 'A look at the sites we keep performing — from rooftops to utility-scale fields. (Demo gallery — your real project photos and videos go here.)',
+    sub: 'A look at the sites we keep performing — from rooftops to utility-scale fields.',
     filters: { all: 'All', rooftop: 'Rooftop', ground: 'Ground-Mounted', floating: 'Floating', cleaning: 'Cleaning' },
     items: [
       { title: 'Commercial Rooftop Array', cat: 'rooftop', tag: 'Rooftop' },
@@ -140,7 +140,7 @@ const en = {
       { title: 'Domestic Rooftop System', cat: 'rooftop', tag: 'Rooftop' },
     ],
     videoTitle: 'See the robots at work',
-    videoSub: 'Watch our cleaning robots restore a full array in a fraction of the time. (Your project video embeds here.)',
+    videoSub: 'Watch our cleaning robots restore a full array in a fraction of the time.',
     videoCta: 'Play showreel',
     beforeAfter: { title: 'Before & After', before: 'Before', after: 'After', text: 'Drag to compare a soiled array with a freshly cleaned one.' },
   },
@@ -296,7 +296,7 @@ const he = {
   portfolio: {
     eyebrow: 'העבודות שלנו',
     title: 'תוצאות שרואים',
-    sub: 'הצצה לאתרים שאנחנו שומרים על ביצועיהם — מגגות ועד שדות בקנה מידה גדול. (גלריית הדגמה — תמונות והסרטונים האמיתיים שלכם ייכנסו כאן.)',
+    sub: 'הצצה לאתרים שאנחנו שומרים על ביצועיהם — מגגות ועד שדות בקנה מידה גדול.',
     filters: { all: 'הכל', rooftop: 'גגות', ground: 'קרקעי', floating: 'צף', cleaning: 'ניקוי' },
     items: [
       { title: 'מערכת גג מסחרית', cat: 'rooftop', tag: 'גגות' },
@@ -307,7 +307,7 @@ const he = {
       { title: 'מערכת גג ביתית', cat: 'rooftop', tag: 'גגות' },
     ],
     videoTitle: 'ראו את הרובוטים בעבודה',
-    videoSub: 'צפו ברובוטים שלנו משחזרים מערכת שלמה בשבריר מהזמן. (סרטון הפרויקט שלכם ייכנס כאן.)',
+    videoSub: 'צפו ברובוטים שלנו משחזרים מערכת שלמה בשבריר מהזמן.',
     videoCta: 'הפעלת סרטון',
     beforeAfter: { title: 'לפני ואחרי', before: 'לפני', after: 'אחרי', text: 'גררו כדי להשוות מערכת מלוכלכת למערכת נקייה.' },
   },

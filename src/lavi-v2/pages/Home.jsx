@@ -1,253 +1,197 @@
-import { motion, useReducedMotion } from 'framer-motion'
-import { Reveal, CountUp, Magnetic, Icon, SectionHeading, useLang } from '../ui'
-import { DesertHeroScene, LionSun, PanelField } from '../SolarScene'
-import { CtaBand, SolarImage } from '../sections'
-import { CONTACT } from '../i18n'
+import { Reveal, CountUp, Icon, useLang } from '../ui'
+import { Pic, Clip } from '../../media'
 
-const SERVICE_ICONS = { cleaning: Icon.robot, maintenance: Icon.wrench, installation: Icon.panel }
-const MODULE_ICONS = [Icon.panel, Icon.bolt, Icon.drop]
+const SERVICE_MEDIA = {
+  cleaning: { type: 'clip', name: 'robot-brush-closeup' },
+  maintenance: { type: 'pic', name: 'robot-cleaning-wide' },
+  installation: { type: 'pic', name: 'utility-field-wide' },
+}
+const PT_ICONS = [Icon.robot, Icon.panel, Icon.bolt]
 
 export default function Home({ go }) {
   const { t } = useLang()
-  const reduce = useReducedMotion()
 
   return (
     <div>
-      {/* ===================== CINEMATIC DESERT HERO ===================== */}
-      <section className="relative overflow-hidden -mt-16">
-        <DesertHeroScene />
-
-        {/* content — lion-sun + copy over the open sky */}
-        <div className="container-x relative z-10 flex flex-col items-center text-center pt-[clamp(6.5rem,15vh,9.5rem)] pb-6">
-          {/* the brand lion-sun, rising in */}
-          <motion.div
-            className="relative w-[clamp(8.5rem,15vw,12.5rem)] aspect-square mb-1"
-            initial={reduce ? false : { y: 50, opacity: 0, scale: 0.85 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, ease: [0.22, 0.61, 0.36, 1] }}
-          >
-            <div className="absolute inset-[8%] rounded-full" style={{ background: 'radial-gradient(circle, rgba(255,190,90,0.6), transparent 68%)', filter: 'blur(24px)', animation: reduce ? 'none' : 'ray-breathe 6s ease-in-out infinite' }} />
-            <LionSun className="relative w-full h-full drop-shadow-[0_10px_40px_rgba(255,140,50,0.5)]" animated reduce={reduce} />
-          </motion.div>
-
-          <motion.span className="eyebrow" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.5 }}>
-            <Icon.robot className="h-3.5 w-3.5" />{t.hero.eyebrow}
-          </motion.span>
-
-          <h1 className="headline mt-5 text-[clamp(2.5rem,7.5vw,4.6rem)] text-balance" style={{ textShadow: '0 4px 40px rgba(0,0,0,0.5)' }}>
-            <Reveal as="span" delay={0.55} className="block">{t.hero.titleA}</Reveal>
-            <Reveal as="span" delay={0.65} className="block text-gradient">{t.hero.titleB}</Reveal>
-            <Reveal as="span" delay={0.75} className="block">{t.hero.titleC}</Reveal>
-          </h1>
-
-          <Reveal delay={0.9}>
-            <p className="mt-6 text-[1.05rem] leading-relaxed text-muted max-w-xl mx-auto" style={{ textShadow: '0 2px 18px rgba(0,0,0,0.6)' }}>{t.hero.sub}</p>
-          </Reveal>
-
-          <Reveal delay={1}>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Magnetic strength={0.25}>
-                <button onClick={() => go('contact')} className="btn btn-primary !px-6 !py-3.5">
-                  <Icon.bolt className="h-4 w-4" />{t.common.getQuote}
-                </button>
-              </Magnetic>
-              <button onClick={() => go('services')} className="btn btn-ghost !px-6 !py-3.5">
-                {t.common.viewServices}<Icon.arrow className="h-4 w-4 rtl:rotate-180" />
-              </button>
-            </div>
-          </Reveal>
-
-          <Reveal delay={1.1}>
-            <div className="mt-9 flex flex-wrap justify-center gap-x-10 gap-y-5">
-              {[t.hero.stat1, t.hero.stat2, t.hero.stat3].map((st, i) => (
-                <div key={i} className="text-center">
-                  <div className="font-display text-[2rem] font-extrabold leading-none text-gold">
-                    <CountUp value={st.value} suffix={st.suffix} />
-                  </div>
-                  <div className="mt-1.5 text-xs text-muted max-w-[10rem] leading-snug mx-auto">{st.label}</div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+      {/* ===================== HERO (dark cinematic video) ===================== */}
+      <section className="hero">
+        <div className="absolute inset-0">
+          <Clip name="showreel-clean-run-01" className="hidden sm:block w-full h-full" videoClassName="media" eager />
+          <Clip name="robot-vertical-mobile" className="sm:hidden w-full h-full" videoClassName="media" objectPosition="center" eager />
         </div>
-
-        {/* foreground: warm-lit solar field with the rover driving across it */}
-        <div className="relative z-10 w-full flex justify-center px-4 mt-[clamp(2rem,6vh,4.5rem)]">
-          <div className="w-[min(88%,660px)]">
-            <PanelField reduce={reduce} />
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== TRUST MARQUEE ===================== */}
-      <section className="py-6 border-y border-white/10 overflow-hidden" style={{ background: 'rgba(10,15,30,0.5)' }}>
-        <div className="container-x mb-3">
-          <p className="text-center text-xs uppercase tracking-[0.22em] text-muted">{t.trust.title}</p>
-        </div>
-        <div className="relative">
-          <div className="marquee-track gap-3">
-            {[...t.trust.items, ...t.trust.items].map((item, i) => (
-              <span key={i} className="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm whitespace-nowrap mx-1.5">
-                <Icon.check className="h-3.5 w-3.5 text-blue-bright" />{item}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== WHY / INTRO ===================== */}
-      <section className="section">
-        <div className="container-x grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <SectionHeading eyebrow={t.intro.eyebrow} title={t.intro.title} sub={t.intro.body} />
-            <div className="mt-8 space-y-4">
-              {t.intro.points.map((p, i) => (
-                <Reveal key={i} delay={i * 0.08}>
-                  <div className="flex gap-4 glass rounded-2xl p-4 card-hover">
-                    <div className="grid place-items-center h-11 w-11 rounded-xl shrink-0" style={{ background: 'linear-gradient(135deg, rgba(47,107,255,0.25), rgba(255,179,0,0.2))' }}>
-                      <Icon.check className="h-5 w-5 text-blue-bright" />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-semibold">{p.title}</h3>
-                      <p className="text-sm text-muted mt-1 leading-relaxed">{p.text}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-
-          {/* Soiling loss visual */}
-          <Reveal delay={0.15}>
-            <div className="relative glass-strong rounded-[1.75rem] p-7 overflow-hidden">
-              <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full" style={{ background: 'radial-gradient(circle, rgba(255,179,0,0.3), transparent 70%)', filter: 'blur(20px)' }} />
-              <div className="relative">
-                <div className="flex items-center gap-2 text-sm text-muted"><Icon.trend className="h-4 w-4 text-gold-warm" />Output recovery</div>
-                <div className="mt-5 space-y-4">
-                  <BarRow label="Soiled panel" pct={70} color="#7c4a12" />
-                  <BarRow label="After Lavi clean" pct={100} color="linear-gradient(90deg,#2f6bff,#ffd60a)" highlight />
-                </div>
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {[
-                    { v: 30, s: '%', l: 'recovered' },
-                    { v: 10, s: '×', l: 'faster' },
-                    { v: 100, s: '%', l: 'PV types' },
-                  ].map((m, i) => (
-                    <div key={i} className="rounded-xl glass p-3 text-center">
-                      <div className="font-display text-xl font-extrabold text-gradient"><CountUp value={m.v} suffix={m.s} /></div>
-                      <div className="text-[0.65rem] text-muted uppercase tracking-wide mt-0.5">{m.l}</div>
-                    </div>
-                  ))}
-                </div>
+        <div className="scrim" />
+        <div className="inner">
+          <div className="wrap">
+            <Reveal><div className="eyebrow">{t.hero.eyebrow}</div></Reveal>
+            <Reveal delay={0.08}>
+              <h1>
+                {t.hero.titleA} {t.hero.titleB} <span className="hl">{t.hero.titleC}</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.16}><p className="sub">{t.hero.sub}</p></Reveal>
+            <Reveal delay={0.24}>
+              <div className="cta-row">
+                <button className="btn btn-blue" onClick={() => go('contact')}>{t.common.getQuote}</button>
+                <button className="btn btn-ghost" onClick={() => go('services')}>{t.common.viewServices}</button>
+                <button className="play" onClick={() => go('portfolio')}><span className="tri" />{t.portfolio.videoCta}</button>
               </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===================== SERVICES PREVIEW ===================== */}
-      <section className="section pt-0">
-        <div className="container-x">
-          <SectionHeading center eyebrow={t.services.eyebrow} title={t.services.title} sub={t.services.sub} />
-          <div className="mt-12 grid md:grid-cols-3 gap-5">
-            {t.services.items.map((svc, i) => {
-              const I = SERVICE_ICONS[svc.key] || Icon.sun
-              return (
-                <Reveal key={svc.key} delay={i * 0.1}>
-                  <button onClick={() => go('services')} className="group text-start w-full h-full glass rounded-2xl p-7 card-hover relative overflow-hidden">
-                    <div className="absolute top-0 inset-x-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(90deg,#2f6bff,#ffd60a)' }} />
-                    <div className="flex items-center justify-between">
-                      <div className="grid place-items-center h-13 w-13 rounded-2xl p-3.5" style={{ background: 'linear-gradient(135deg, #16306e, #0c1c45)', border: '1px solid rgba(120,160,255,0.25)' }}>
-                        <I className="h-6 w-6 text-blue-bright" />
-                      </div>
-                      <span className="text-[0.65rem] uppercase tracking-wider font-display font-semibold px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,214,10,0.15)', color: '#ffd60a' }}>{svc.tag}</span>
-                    </div>
-                    <h3 className="font-display font-bold text-lg mt-5">{svc.title}</h3>
-                    <p className="text-sm text-muted mt-2 leading-relaxed line-clamp-3">{svc.text}</p>
-                    <span className="inline-flex items-center gap-1.5 mt-5 text-sm font-medium text-blue-bright group-hover:gap-2.5 transition-all">
-                      {t.common.learnMore}<Icon.arrow className="h-4 w-4 rtl:rotate-180" />
-                    </span>
-                  </button>
-                </Reveal>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== MODULE TYPES ===================== */}
-      <section className="section pt-0">
-        <div className="container-x">
-          <Reveal><h2 className="headline text-center text-[clamp(1.6rem,4vw,2.5rem)]">{t.services.moduleTitle}</h2></Reveal>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
-            {t.services.modules.map((m, i) => {
-              const I = MODULE_ICONS[i]
-              const cats = ['rooftop', 'ground', 'floating']
-              return (
-                <Reveal key={i} delay={i * 0.1}>
-                  <div className="relative rounded-2xl overflow-hidden card-hover glass">
-                    <SolarImage cat={cats[i]} idx={i} w={760} className="h-40 w-full" />
-                    <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-t from-[#0a0f1e]/60 to-transparent pointer-events-none" />
-                    <div className="p-6">
-                      <div className="flex items-center gap-2.5">
-                        <I className="h-5 w-5 text-gold-warm" />
-                        <h3 className="font-display font-semibold">{m.title}</h3>
-                      </div>
-                      <p className="text-sm text-muted mt-2 leading-relaxed">{m.text}</p>
-                    </div>
+            </Reveal>
+            <Reveal delay={0.32}>
+              <div className="stats">
+                {[t.hero.stat1, t.hero.stat2, t.hero.stat3].map((s, i) => (
+                  <div className="stat" key={i}>
+                    <div className="v"><CountUp value={s.value} /><b>{s.suffix}</b></div>
+                    <div className="l">{s.label}</div>
                   </div>
-                </Reveal>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== GALLERY TEASER ===================== */}
-      <section className="section pt-0">
-        <div className="container-x">
-          <div className="flex items-end justify-between gap-6 flex-wrap">
-            <SectionHeading eyebrow={t.portfolio.eyebrow} title={t.portfolio.title} />
-            <Reveal>
-              <button onClick={() => go('portfolio')} className="btn btn-ghost">{t.common.viewGallery}<Icon.arrow className="h-4 w-4 rtl:rotate-180" /></button>
+                ))}
+              </div>
             </Reveal>
           </div>
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
-            {t.portfolio.items.slice(0, 4).map((it, i) => (
-              <Reveal key={i} delay={i * 0.06}>
-                <button onClick={() => go('portfolio')} className="group relative block w-full aspect-[4/3] rounded-xl overflow-hidden card-hover">
-                  <SolarImage cat={it.cat} idx={i} w={700} hoverZoom className="absolute inset-0 w-full h-full" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#060912]/85 to-transparent" />
-                  <span className="absolute bottom-3 start-3 text-xs font-medium text-white/95 text-start">{it.title}</span>
-                </button>
+        </div>
+      </section>
+
+      {/* ===================== TRUST STRIP ===================== */}
+      <div className="trust section-sand" style={{ borderBottom: '1px solid var(--color-line)' }}>
+        <div className="wrap flex items-center gap-3 flex-wrap" style={{ paddingBlock: 18 }}>
+          <span className="text-[12px] tracking-[0.16em] uppercase text-muted font-semibold me-2">{t.trust.title}</span>
+          {t.trust.items.map((it) => <span key={it} className="chip">{it}</span>)}
+        </div>
+      </div>
+
+      {/* ===================== INTRO — Dirty panels (light split) ===================== */}
+      <section className="section">
+        <div className="wrap split">
+          <div>
+            <Reveal><div className="eyebrow">{t.intro.eyebrow}</div></Reveal>
+            <Reveal delay={0.06}><h2 className="lead-h mt-4">{t.intro.title}</h2></Reveal>
+            <Reveal delay={0.12}><p className="muted mt-4 text-[16px]">{t.intro.body}</p></Reveal>
+            <div className="pts">
+              {t.intro.points.map((p, i) => {
+                const I = PT_ICONS[i] || Icon.check
+                return (
+                  <Reveal key={i} delay={0.1 + i * 0.07}>
+                    <div className="pt">
+                      <span className="ic"><I className="h-5 w-5" /></span>
+                      <div><h4>{p.title}</h4><p>{p.text}</p></div>
+                    </div>
+                  </Reveal>
+                )
+              })}
+            </div>
+          </div>
+          <Reveal delay={0.1}>
+            <div className="figure" style={{ aspectRatio: '4 / 3' }}>
+              <span className="tag">{t.portfolio.beforeAfter.before} · {t.intro.eyebrow}</span>
+              <Pic name="array-dust-atmospheric" imgClassName="w-full h-full object-cover" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ===================== SERVICES (sand) ===================== */}
+      <section className="section section-sand">
+        <div className="wrap">
+          <Reveal><div className="eyebrow">{t.services.eyebrow}</div></Reveal>
+          <Reveal delay={0.06}><h2 className="lead-h mt-3">{t.services.title}</h2></Reveal>
+          <Reveal delay={0.12}><p className="muted mt-3 text-[16px] max-w-[640px]">{t.services.sub}</p></Reveal>
+          <div className="svc-grid">
+            {t.services.items.map((svc, i) => {
+              const m = SERVICE_MEDIA[svc.key]
+              return (
+                <Reveal key={svc.key} delay={i * 0.08}>
+                  <article className="svc-card h-full">
+                    <div className="ph">
+                      {i === 0 && <span className="flag">{svc.tag}</span>}
+                      {m.type === 'clip'
+                        ? <Clip name={m.name} videoClassName="w-full h-full object-cover" />
+                        : <Pic name={m.name} imgClassName="w-full h-full object-cover" />}
+                    </div>
+                    <div className="body">
+                      <h3>{svc.title}</h3>
+                      <p>{svc.text}</p>
+                      <div className="bul">{svc.bullets.map((b) => <span key={b}>{b}</span>)}</div>
+                    </div>
+                  </article>
+                </Reveal>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== DARK SHOWREEL BAND ===================== */}
+      <section className="band">
+        <Pic name="robot-cleaning-lowangle" className="media" imgClassName="media" />
+        <div className="scrim" />
+        <div className="inner">
+          <div className="wrap">
+            <Reveal>
+              <button className="playbig" onClick={() => go('portfolio')} aria-label={t.portfolio.videoCta} />
+            </Reveal>
+            <Reveal delay={0.06}><div className="eyebrow" style={{ color: '#cfd6ff' }}>{t.portfolio.eyebrow}</div></Reveal>
+            <Reveal delay={0.1}><h2>{t.portfolio.videoTitle}</h2></Reveal>
+            <Reveal delay={0.16}><p>{t.portfolio.videoSub}</p></Reveal>
+            <Reveal delay={0.2}>
+              <button className="btn btn-ghost" onClick={() => go('portfolio')}>{t.common.viewGallery}</button>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== MODULES (light) ===================== */}
+      <section className="section">
+        <div className="wrap">
+          <Reveal><div className="eyebrow">{t.services.eyebrow}</div></Reveal>
+          <Reveal delay={0.06}><h2 className="lead-h mt-3">{t.services.moduleTitle}</h2></Reveal>
+          <div className="mods">
+            {t.services.modules.map((m, i) => (
+              <Reveal key={i} delay={i * 0.08}>
+                <div className="mod h-full">
+                  <div className="n">{String(i + 1).padStart(2, '0')}</div>
+                  <h4>{m.title}</h4>
+                  <p>{m.text}</p>
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <CtaBand go={go} />
-    </div>
-  )
-}
+      {/* ===================== GALLERY (sand) ===================== */}
+      <section className="section section-sand">
+        <div className="wrap">
+          <div className="flex items-end justify-between gap-4 flex-wrap">
+            <div>
+              <Reveal><div className="eyebrow">{t.portfolio.eyebrow}</div></Reveal>
+              <Reveal delay={0.06}><h2 className="lead-h mt-3">{t.portfolio.title}</h2></Reveal>
+            </div>
+            <Reveal><button className="btn btn-dark" onClick={() => go('portfolio')}>{t.common.viewGallery}</button></Reveal>
+          </div>
+          <div className="gal">
+            {[
+              { cls: 'g-a', name: 'robot-cleaning-wide', cap: t.portfolio.items[2].title },
+              { cls: 'g-b', name: 'utility-field-wide', cap: t.portfolio.items[1].title },
+              { cls: 'g-c', name: 'robot-on-array-angled', cap: t.portfolio.items[0].title },
+              { cls: 'g-d', name: 'array-rows-hillside', cap: t.portfolio.items[4].title },
+              { cls: 'g-e', name: 'array-panorama', cap: t.portfolio.items[5].title },
+            ].map((g) => (
+              <button key={g.cls} className={`gi ${g.cls}`} onClick={() => go('portfolio')}>
+                <Pic name={g.name} imgClassName="w-full h-full object-cover" />
+                <span className="cap">{g.cap}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
-function BarRow({ label, pct, color, highlight }) {
-  return (
-    <div>
-      <div className="flex justify-between text-xs text-muted mb-1.5">
-        <span>{label}</span>
-        <span className={highlight ? 'text-gold font-semibold' : ''}>{pct}%</span>
-      </div>
-      <div className="h-3 rounded-full bg-white/8 overflow-hidden">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: color.startsWith('linear') ? color : color }}
-          initial={{ width: 0 }}
-          whileInView={{ width: `${pct}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        />
-      </div>
+      {/* ===================== CTA BAND ===================== */}
+      <section className="ctaband">
+        <div className="wrap">
+          <Reveal><h2>{t.cta.title}</h2></Reveal>
+          <Reveal delay={0.06}><p>{t.cta.sub}</p></Reveal>
+          <Reveal delay={0.12}><button className="btn btn-y" onClick={() => go('contact')}>{t.cta.button}</button></Reveal>
+        </div>
+      </section>
     </div>
   )
 }

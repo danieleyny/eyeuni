@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { LangProvider, useLang, Icon, Magnetic } from './ui'
-import { AmbientBackground, LionSun } from './SolarScene'
+import { LangProvider, useLang, Icon } from './ui'
+import { LaviMark, Wordmark } from './LaviMark'
 import { NAV_PAGES, CONTACT } from './i18n'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -11,42 +11,33 @@ import Contact from './pages/Contact'
 
 const PAGES = { home: Home, about: About, services: Services, portfolio: Portfolio, contact: Contact }
 
-function Logo({ onClick }) {
-  const { t } = useLang()
+function wordmarkText(lang) {
+  return lang === 'he' ? { main: 'לביא', sub: 'אנרגיה' } : { main: 'LAVI', sub: 'ENERGY' }
+}
+
+function Brand({ go }) {
+  const { t, lang } = useLang()
+  const wm = wordmarkText(lang)
   return (
-    <button onClick={onClick} className="flex items-center gap-2.5 group" aria-label={t.brand}>
-      <span className="relative h-10 w-10 shrink-0 transition-transform duration-500 group-hover:rotate-12">
-        <LionSun className="h-full w-full drop-shadow-[0_2px_10px_rgba(255,140,50,0.5)]" />
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display font-extrabold text-[1.05rem] tracking-tight">{t.brand}</span>
-        <span className="text-[0.58rem] uppercase tracking-[0.22em] text-gold/80 font-medium mt-0.5">Desert Solar</span>
-      </span>
+    <button className="brand" onClick={() => go('home')} aria-label={t.brand}>
+      <LaviMark className="mark" />
+      <Wordmark main={wm.main} sub={wm.sub} />
     </button>
   )
 }
 
-function LangToggle() {
-  const { t, toggle } = useLang()
+function LangToggle({ className = '' }) {
+  const { lang, toggle } = useLang()
   return (
-    <button onClick={toggle} className="btn btn-ghost !px-3.5 !py-2 !text-sm" aria-label="Switch language">
-      <Icon.globe className="h-4 w-4" />
-      {t.langLabel}
+    <button className={`lang ${className}`} onClick={toggle} aria-label="Switch language">
+      {lang === 'en' ? 'EN · עב' : 'עב · EN'}
     </button>
   )
 }
 
 function Header({ page, go }) {
   const { t } = useLang()
-  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -54,85 +45,64 @@ function Header({ page, go }) {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
-      >
-        <div className={`transition-all duration-500 ${scrolled ? 'glass-strong shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)]' : ''}`}>
-          <div className="container-x flex items-center justify-between h-16">
-            <Logo onClick={() => go('home')} />
-
-            <nav className="hidden lg:flex items-center gap-1">
-              {NAV_PAGES.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => go(p)}
-                  className={`relative px-3.5 py-2 text-sm font-medium rounded-full transition-colors ${page === p ? 'text-ink' : 'text-muted hover:text-ink'}`}
-                >
-                  {t.nav[p]}
-                  {page === p && (
-                    <motion.span layoutId="nav-pill" className="absolute inset-0 -z-10 rounded-full" style={{ background: 'rgba(47,107,255,0.16)', border: '1px solid rgba(47,107,255,0.3)' }} transition={{ type: 'spring', stiffness: 380, damping: 30 }} />
-                  )}
-                </button>
-              ))}
-            </nav>
-
-            <div className="hidden lg:flex items-center gap-2.5">
+      <header className="lavi-header">
+        <div className="wrap nav">
+          <Brand go={go} />
+          <nav className="menu">
+            {NAV_PAGES.map((p) => (
+              <button key={p} className={page === p ? 'active' : ''} onClick={() => go(p)}>
+                {t.nav[p]}
+              </button>
+            ))}
+          </nav>
+          <div className="navright">
+            <div className="nav-desktop">
               <LangToggle />
-              <Magnetic strength={0.25}>
-                <button onClick={() => go('contact')} className="btn btn-primary !py-2.5">
-                  <Icon.bolt className="h-4 w-4" />
-                  {t.nav.cta}
-                </button>
-              </Magnetic>
+              <button className="btn btn-blue !py-2.5 !px-4" onClick={() => go('contact')}>
+                {t.nav.cta}
+              </button>
             </div>
-
-            <button onClick={() => setOpen(true)} className="lg:hidden btn btn-ghost !p-2.5" aria-label="Open menu">
+            <button className="nav-mobile lang !p-2" onClick={() => setOpen(true)} aria-label="Open menu">
               <Icon.menu className="h-5 w-5" />
             </button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
-          <motion.div className="fixed inset-0 z-[60] lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div className="absolute inset-0 bg-[#060912]/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <motion.div className="fixed inset-0 z-[80] lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setOpen(false)} />
             <motion.div
-              className="absolute top-0 inset-x-0 glass-strong border-b border-white/10 p-6 pt-5"
+              className="absolute top-0 inset-x-0 p-6 pt-5"
+              style={{ background: 'var(--color-surface)', borderBottom: '1px solid var(--color-line)' }}
               initial={{ y: -30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+              transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
             >
-              <div className="flex items-center justify-between mb-6">
-                <Logo onClick={() => { go('home'); setOpen(false) }} />
-                <button onClick={() => setOpen(false)} className="btn btn-ghost !p-2.5" aria-label="Close menu">
+              <div className="flex items-center justify-between mb-5">
+                <Brand go={(p) => { go(p); setOpen(false) }} />
+                <button className="lang !p-2" onClick={() => setOpen(false)} aria-label="Close menu">
                   <Icon.close className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="flex flex-col gap-1">
-                {NAV_PAGES.map((p, i) => (
-                  <motion.button
+              <nav className="flex flex-col">
+                {NAV_PAGES.map((p) => (
+                  <button
                     key={p}
                     onClick={() => { go(p); setOpen(false) }}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + i * 0.05 }}
-                    className={`text-start text-lg font-display font-semibold py-3 border-b border-white/5 ${page === p ? 'text-gradient' : 'text-ink'}`}
+                    className="text-start text-lg font-display font-semibold py-3 border-b"
+                    style={{ borderColor: 'var(--color-line)', color: page === p ? 'var(--color-blue)' : 'var(--color-ink)' }}
                   >
                     {t.nav[p]}
-                  </motion.button>
+                  </button>
                 ))}
               </nav>
-              <div className="flex items-center gap-3 mt-6">
+              <div className="flex items-center gap-3 mt-5">
                 <LangToggle />
-                <a href={`tel:${CONTACT.phoneHref}`} className="btn btn-gold flex-1">
-                  <Icon.phone className="h-4 w-4" />
-                  {t.common.callUs}
+                <a href={`tel:${CONTACT.phoneHref}`} className="btn btn-blue flex-1">
+                  <Icon.phone className="h-4 w-4" />{t.common.callUs}
                 </a>
               </div>
             </motion.div>
@@ -144,52 +114,49 @@ function Header({ page, go }) {
 }
 
 function Footer({ go }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const wm = wordmarkText(lang)
   return (
-    <footer className="relative border-t border-white/10 mt-8" style={{ background: 'linear-gradient(180deg, transparent, rgba(10,15,30,0.7))' }}>
-      <div className="container-x py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
-          <div>
-            <Logo onClick={() => go('home')} />
-            <p className="mt-4 text-sm text-muted leading-relaxed max-w-xs">{t.footer.blurb}</p>
+    <footer className="lavi-footer">
+      <div className="wrap">
+        <div className="fgrid">
+          <div style={{ color: '#fff' }}>
+            <button className="brand" onClick={() => go('home')} style={{ marginBottom: 14 }}>
+              <LaviMark className="mark" ring="#5b73ff" />
+              <Wordmark main={wm.main} sub={wm.sub} />
+            </button>
+            <p style={{ maxWidth: 260 }}>{t.footer.blurb}</p>
             <div className="flex gap-2.5 mt-5">
               {['instagram', 'facebook', 'linkedin', 'youtube'].map((s) => (
-                <a key={s} href="#" onClick={(e) => e.preventDefault()} className="grid place-items-center h-9 w-9 rounded-lg glass text-muted hover:text-ink card-hover" aria-label={s}>
+                <a key={s} href="#" onClick={(e) => e.preventDefault()} className="grid place-items-center h-9 w-9 rounded-lg" style={{ border: '1px solid #23252e', color: '#a9adba' }} aria-label={s}>
                   <SocialIcon name={s} />
                 </a>
               ))}
             </div>
           </div>
-
           <div>
-            <h4 className="font-display font-semibold text-sm mb-4">{t.footer.quickLinks}</h4>
-            <ul className="space-y-2.5 text-sm text-muted">
-              {NAV_PAGES.map((p) => (
-                <li key={p}><button onClick={() => go(p)} className="hover:text-ink transition-colors">{t.nav[p]}</button></li>
-              ))}
-            </ul>
+            <h5>{t.footer.services}</h5>
+            {t.footer.servicesList.map((s) => (
+              <a key={s} href="#" onClick={(e) => { e.preventDefault(); go('services') }} className="block mb-2.5 text-start">{s}</a>
+            ))}
           </div>
-
           <div>
-            <h4 className="font-display font-semibold text-sm mb-4">{t.footer.services}</h4>
-            <ul className="space-y-2.5 text-sm text-muted">
-              {t.footer.servicesList.map((s) => <li key={s}><button onClick={() => go('services')} className="hover:text-ink transition-colors text-start">{s}</button></li>)}
-            </ul>
+            <h5>{t.footer.quickLinks}</h5>
+            {['about', 'portfolio', 'contact'].map((p) => (
+              <a key={p} href="#" onClick={(e) => { e.preventDefault(); go(p) }} className="block mb-2.5 text-start">{t.nav[p]}</a>
+            ))}
           </div>
-
           <div>
-            <h4 className="font-display font-semibold text-sm mb-4">{t.footer.contact}</h4>
-            <ul className="space-y-3 text-sm text-muted">
-              <li><a href={`tel:${CONTACT.phoneHref}`} className="flex items-center gap-2.5 hover:text-ink transition-colors"><Icon.phone className="h-4 w-4 text-blue-bright shrink-0" />{CONTACT.phone}</a></li>
-              <li><a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2.5 hover:text-ink transition-colors"><Icon.mail className="h-4 w-4 text-blue-bright shrink-0" />{CONTACT.email}</a></li>
-              <li className="flex items-center gap-2.5"><Icon.sun className="h-4 w-4 text-gold-warm shrink-0" />{CONTACT.name}</li>
-            </ul>
+            <h5>{t.footer.contact}</h5>
+            <p style={{ marginBottom: 9 }}>{CONTACT.name}</p>
+            <a href={`tel:${CONTACT.phoneHref}`} className="block mb-2.5" dir="ltr">{CONTACT.phone}</a>
+            <a href={`mailto:${CONTACT.email}`} className="block mb-2.5 break-all">{CONTACT.email}</a>
+            <p>{t.contact.hours}</p>
           </div>
         </div>
-
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
+        <div className="foot-bottom">
           <span>© {new Date().getFullYear()} {t.brand}. {t.footer.rights}</span>
-          <span className="opacity-70">{t.footer.builtBy}</span>
+          <span>{t.footer.builtBy}</span>
         </div>
       </div>
     </footer>
@@ -207,20 +174,19 @@ function SocialIcon({ name }) {
   return <svg {...common}><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.52A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.52 9.38.52 9.38.52s7.5 0 9.38-.52a3 3 0 0 0 2.12-2.13A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z" /></svg>
 }
 
-function StickyCallBar({ go }) {
-  const { t } = useLang()
-  return (
-    <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden p-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-      <div className="glass-strong rounded-2xl p-2 flex gap-2 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.7)]">
-        <a href={`tel:${CONTACT.phoneHref}`} className="btn btn-gold flex-1 !py-3">
-          <Icon.phone className="h-4 w-4" />{t.common.callUs}
-        </a>
-        <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noreferrer" className="btn btn-primary flex-1 !py-3">
-          <Icon.whatsapp className="h-4 w-4" />{t.common.whatsapp}
-        </a>
-      </div>
-    </div>
-  )
+function ScrollProgress() {
+  const [p, setP] = useState(0)
+  useEffect(() => {
+    const on = () => {
+      const h = document.documentElement
+      const max = h.scrollHeight - h.clientHeight
+      setP(max > 0 ? h.scrollTop / max : 0)
+    }
+    on()
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
+  return <div className="scroll-progress" style={{ width: '100%', transform: `scaleX(${p})` }} />
 }
 
 function Shell() {
@@ -233,24 +199,22 @@ function Shell() {
 
   return (
     <>
-      <AmbientBackground />
+      <ScrollProgress />
       <Header page={page} go={go} />
-      <main className="relative pt-16">
+      <main>
         <AnimatePresence mode="wait">
           <motion.div
             key={page}
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
           >
             <PageComp go={go} />
           </motion.div>
         </AnimatePresence>
       </main>
       <Footer go={go} />
-      <StickyCallBar go={go} />
-      <div className="h-20 lg:hidden" />
     </>
   )
 }

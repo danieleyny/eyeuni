@@ -1,48 +1,45 @@
-import { Reveal, Icon, SectionHeading, useLang } from '../ui'
-import { CtaBand, SolarImage } from '../sections'
+import { Reveal, Icon, useLang } from '../ui'
+import { Pic, Clip } from '../../media'
+import { CtaBand } from '../sections'
 
-const SERVICE_ICONS = { cleaning: Icon.robot, maintenance: Icon.wrench, installation: Icon.panel }
-const SERVICE_CATS = { cleaning: 'cleaning', maintenance: 'rooftop', installation: 'ground' }
+const SERVICE_MEDIA = {
+  cleaning: { type: 'clip', name: 'robot-brush-closeup' },
+  maintenance: { type: 'clip', name: 'field-team-operating' },
+  installation: { type: 'pic', name: 'utility-field-wide' },
+}
 
 export default function Services({ go }) {
   const { t } = useLang()
-
   return (
     <div>
-      <section className="section pb-0">
-        <div className="container-x">
-          <SectionHeading center eyebrow={t.services.eyebrow} title={t.services.title} sub={t.services.sub} />
+      <section className="section">
+        <div className="wrap text-center max-w-3xl mx-auto">
+          <Reveal><div className="eyebrow justify-center">{t.services.eyebrow}</div></Reveal>
+          <Reveal delay={0.06}><h1 className="lead-h mx-auto mt-3">{t.services.title}</h1></Reveal>
+          <Reveal delay={0.12}><p className="muted mt-4 text-[16px]">{t.services.sub}</p></Reveal>
         </div>
       </section>
 
-      {/* detailed alternating service blocks */}
-      <section className="section">
-        <div className="container-x space-y-6">
+      {/* alternating service blocks */}
+      <section className="section section-sand">
+        <div className="wrap flex flex-col gap-7">
           {t.services.items.map((svc, i) => {
-            const I = SERVICE_ICONS[svc.key] || Icon.sun
+            const m = SERVICE_MEDIA[svc.key]
             const flip = i % 2 === 1
             return (
               <Reveal key={svc.key}>
-                <div className={`grid lg:grid-cols-2 gap-8 items-center glass rounded-[1.75rem] p-6 lg:p-8 card-hover ${flip ? 'lg:[&>*:first-child]:order-2' : ''}`}>
-                  <div className="relative rounded-2xl overflow-hidden">
-                    <SolarImage cat={SERVICE_CATS[svc.key]} idx={i} w={1000} className="w-full aspect-[16/10]" />
-                    <span className="absolute top-4 start-4 z-10 text-[0.65rem] uppercase tracking-wider font-display font-semibold px-3 py-1.5 rounded-full" style={{ background: 'rgba(6,9,18,0.7)', color: '#ffd60a', backdropFilter: 'blur(8px)' }}>{svc.tag}</span>
+                <div className={`split items-center card p-5 lg:p-7 ${flip ? '[&>*:first-child]:lg:order-2' : ''}`}>
+                  <div className="figure" style={{ aspectRatio: '16 / 10' }}>
+                    {i === 0 && <span className="tag y">{svc.tag}</span>}
+                    {m.type === 'clip'
+                      ? <Clip name={m.name} videoClassName="w-full h-full object-cover" />
+                      : <Pic name={m.name} imgClassName="w-full h-full object-cover" />}
                   </div>
                   <div>
-                    <div className="grid place-items-center h-13 w-13 rounded-2xl p-3.5 mb-5" style={{ background: 'linear-gradient(135deg, #16306e, #0c1c45)', border: '1px solid rgba(120,160,255,0.25)' }}>
-                      <I className="h-6 w-6 text-blue-bright" />
-                    </div>
-                    <h3 className="font-display font-bold text-[clamp(1.3rem,3vw,1.7rem)]">{svc.title}</h3>
-                    <p className="text-muted mt-3 leading-relaxed">{svc.text}</p>
-                    <ul className="mt-5 space-y-2.5">
-                      {svc.bullets.map((b, j) => (
-                        <li key={j} className="flex items-center gap-3 text-sm">
-                          <span className="grid place-items-center h-5 w-5 rounded-full shrink-0" style={{ background: 'linear-gradient(135deg,#2f6bff,#ffd60a)' }}><Icon.check className="h-3 w-3 text-[#060912]" /></span>
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                    <button onClick={() => go('contact')} className="btn btn-primary mt-7 !py-3">{t.common.getQuote}<Icon.arrow className="h-4 w-4 rtl:rotate-180" /></button>
+                    <h3 className="font-display font-semibold text-[clamp(1.3rem,3vw,1.7rem)]">{svc.title}</h3>
+                    <p className="muted mt-3 leading-relaxed">{svc.text}</p>
+                    <div className="bul mt-5">{svc.bullets.map((b) => <span key={b}>{b}</span>)}</div>
+                    <button className="btn btn-blue mt-7" onClick={() => go('contact')}>{t.common.getQuote}</button>
                   </div>
                 </div>
               </Reveal>
@@ -52,22 +49,47 @@ export default function Services({ go }) {
       </section>
 
       {/* process */}
-      <section className="section pt-0">
-        <div className="container-x">
-          <SectionHeading center eyebrow={t.process.eyebrow} title={t.process.title} />
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="section">
+        <div className="wrap">
+          <Reveal><div className="eyebrow">{t.process.eyebrow}</div></Reveal>
+          <Reveal delay={0.06}><h2 className="lead-h mt-3">{t.process.title}</h2></Reveal>
+          <div className="mods" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))' }}>
             {t.process.steps.map((s, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="relative glass rounded-2xl p-6 h-full card-hover">
-                  <div className="font-display text-5xl font-extrabold leading-none" style={{ WebkitTextStroke: '1px rgba(120,160,255,0.4)', color: 'transparent' }}>{s.n}</div>
-                  <h3 className="font-display font-semibold mt-4">{s.title}</h3>
-                  <p className="text-sm text-muted mt-2 leading-relaxed">{s.text}</p>
-                  {i < t.process.steps.length - 1 && (
-                    <Icon.arrow className="hidden lg:block absolute top-7 -end-2 h-5 w-5 text-blue-bright/40 rtl:rotate-180" />
-                  )}
+              <Reveal key={i} delay={i * 0.08}>
+                <div className="mod h-full">
+                  <div className="n">{s.n}</div>
+                  <h4>{s.title}</h4>
+                  <p>{s.text}</p>
                 </div>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* modules */}
+      <section className="section section-sand">
+        <div className="wrap">
+          <Reveal><h2 className="lead-h">{t.services.moduleTitle}</h2></Reveal>
+          <div className="mods">
+            {t.services.modules.map((m, i) => {
+              const cats = ['rooftop', 'ground', 'floating']
+              const media = ['robot-on-array-angled', 'utility-field-wide', 'array-field-dry']
+              return (
+                <Reveal key={i} delay={i * 0.08}>
+                  <div className="card overflow-hidden h-full card-hover" style={{ padding: 0 }}>
+                    <div style={{ height: 150, overflow: 'hidden' }}>
+                      <Pic name={media[i]} imgClassName="w-full h-full object-cover" />
+                    </div>
+                    <div className="p-6">
+                      <div className="n font-display font-bold text-sm" style={{ color: 'var(--color-blue)' }}>{String(i + 1).padStart(2, '0')}</div>
+                      <h4 className="font-display font-semibold text-[19px] mt-1 flex items-center gap-2"><Icon.panel className="h-4 w-4" style={{ color: 'var(--color-muted)' }} />{m.title}</h4>
+                      <p className="muted text-sm mt-2">{m.text}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              )
+            })}
           </div>
         </div>
       </section>

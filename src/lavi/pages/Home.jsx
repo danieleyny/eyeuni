@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Reveal, CountUp, Magnetic, Icon, SectionHeading, useLang } from '../ui'
-import { HeroArt } from '../SolarScene'
 import { CtaBand, SolarImage } from '../sections'
+import { Clip } from '../../media'
 import { CONTACT } from '../i18n'
 
 const SERVICE_ICONS = { cleaning: Icon.robot, maintenance: Icon.wrench, installation: Icon.panel }
@@ -54,7 +54,14 @@ export default function Home({ go }) {
           </div>
 
           <Reveal delay={0.2}>
-            <HeroArt />
+            <div className="relative rounded-[1.75rem] overflow-hidden glass-strong aspect-[4/3] mx-auto max-w-[560px]">
+              <Clip name="showreel-clean-run-01" videoClassName="absolute inset-0 w-full h-full object-cover" eager />
+              <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 60%, rgba(6,9,18,0.5))' }} />
+              <div className="absolute bottom-3 left-3 flex gap-2">
+                <span className="glass rounded-full px-3 py-1.5 text-xs font-medium text-white/90">+30% output</span>
+                <span className="glass rounded-full px-3 py-1.5 text-xs font-medium text-gold">10× faster</span>
+              </div>
+            </div>
           </Reveal>
         </div>
 

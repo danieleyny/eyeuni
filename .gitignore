@@ -26,3 +26,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw client media backups (optimized copies live in public/media/)
+lavi/img/
+lavi-v2/img/
