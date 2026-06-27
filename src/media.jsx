@@ -28,6 +28,7 @@ export const IMG = {
   'transport-atv-robot': 'ATV towing the cleaning robot on a dirt road',
   'robots-pair-ground': 'Two Israeli-flag cleaning robots on the ground',
   'robot-setup-ground': 'Technician setting up a cleaning robot on the ground',
+  'cleanerrobot': 'Lavi Energy SolarClean F1 cleaning robot with Israeli-flag livery',
 }
 
 export const VID = {
@@ -41,6 +42,7 @@ export const VID = {
   'panels-reflection-scenic-clip': { poster: 'array-field-dry', alt: 'Reflective panels with hazy hills' },
   'array-pan-short': { poster: 'array-panorama', alt: 'Quick pan across a solar array' },
   'robot-quick-clip': { poster: 'robot-flag-hero', alt: 'Short clip of the cleaning robot' },
+  'main': { poster: 'robot-on-array-angled', alt: 'Lavi Energy cleaning robot working across a solar array' },
 }
 
 export const mediaUrl = (name, ext) => `/media/${name}.${ext}`

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { LangProvider, useLang, Icon } from './ui'
 import { LaviMark, Wordmark } from './LaviMark'
 import { NAV_PAGES, CONTACT } from './i18n'
@@ -189,16 +189,90 @@ function ScrollProgress() {
   return <div className="scroll-progress" style={{ width: '100%', transform: `scaleX(${p})` }} />
 }
 
+/* Animated load-in screen — the robot mark assembles, the wordmark rises and a
+   yellow bar sweeps, then the whole thing fades away. Shown once on first load. */
+function Preloader() {
+  const reduce = useReducedMotion()
+  const [done, setDone] = useState(false)
+  useEffect(() => {
+    const tt = setTimeout(() => setDone(true), reduce ? 350 : 1750)
+    return () => clearTimeout(tt)
+  }, [reduce])
+  return (
+    <AnimatePresence>
+      {!done && (
+        <motion.div
+          className="fixed inset-0 z-[100] grid place-items-center"
+          style={{ background: 'var(--color-base)', color: '#fff' }}
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+        >
+          <div className="flex flex-col items-center">
+            <motion.div
+              initial={reduce ? false : { scale: 0.6, opacity: 0, y: 8 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+              className="h-16 w-16"
+            >
+              <LaviMark className="h-full w-full" />
+            </motion.div>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="mt-4 font-display font-extrabold tracking-[0.18em] text-[15px]"
+            >
+              LAVI ENERGY
+            </motion.div>
+            <div className="mt-5 h-[3px] w-40 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.12)' }}>
+              <motion.div
+                className="h-full"
+                style={{ background: 'var(--color-yellow)', transformOrigin: '0 50%' }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: reduce ? 0.3 : 1.4, ease: [0.22, 0.61, 0.36, 1] }}
+              />
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+const validPage = (p) => (PAGES[p] ? p : 'home')
+
 function Shell() {
-  const [page, setPage] = useState('home')
+  const [page, setPage] = useState(() => validPage(window.location.hash.replace('#', '')))
+
+  useEffect(() => {
+    // seed the current history entry so back/forward restore in-site pages
+    window.history.replaceState({ laviPage: page }, '')
+    const onPop = (e) => {
+      const p = validPage(e.state?.laviPage || window.location.hash.replace('#', ''))
+      setPage(p)
+      window.scrollTo({ top: 0 })
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const go = (p) => {
+    if (p === page) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
     setPage(p)
+    window.history.pushState({ laviPage: p }, '', '#' + p)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   const PageComp = PAGES[page] || Home
 
   return (
     <>
+      <Preloader />
       <ScrollProgress />
       <Header page={page} go={go} />
       <main>

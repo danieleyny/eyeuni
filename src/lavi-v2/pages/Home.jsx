@@ -2,7 +2,7 @@ import { Reveal, CountUp, Icon, useLang } from '../ui'
 import { Pic, Clip } from '../../media'
 
 const SERVICE_MEDIA = {
-  cleaning: { type: 'clip', name: 'robot-brush-closeup' },
+  cleaning: { type: 'clip', name: 'field-team-operating' },
   maintenance: { type: 'pic', name: 'robot-cleaning-wide' },
   installation: { type: 'pic', name: 'utility-field-wide' },
 }
@@ -16,9 +16,11 @@ export default function Home({ go }) {
       {/* ===================== HERO (dark cinematic video) ===================== */}
       <section className="hero">
         <div className="absolute inset-0">
-          <Clip name="showreel-clean-run-01" className="hidden sm:block w-full h-full" videoClassName="media" eager />
+          <Clip name="main" className="hidden sm:block w-full h-full" videoClassName="media" eager />
           <Clip name="robot-vertical-mobile" className="sm:hidden w-full h-full" videoClassName="media" objectPosition="center" eager />
         </div>
+        {/* light-black overlay so the content pops over the footage */}
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.42)' }} />
         <div className="scrim" />
         <div className="inner">
           <div className="wrap">
@@ -81,8 +83,8 @@ export default function Home({ go }) {
           </div>
           <Reveal delay={0.1}>
             <div className="figure" style={{ aspectRatio: '4 / 3' }}>
-              <span className="tag">{t.portfolio.beforeAfter.before} · {t.intro.eyebrow}</span>
-              <Pic name="array-dust-atmospheric" imgClassName="w-full h-full object-cover" />
+              <span className="tag y">SolarClean F1</span>
+              <Pic name="cleanerrobot" imgClassName="w-full h-full object-cover" />
             </div>
           </Reveal>
         </div>

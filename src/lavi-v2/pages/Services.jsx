@@ -3,8 +3,8 @@ import { Pic, Clip } from '../../media'
 import { CtaBand } from '../sections'
 
 const SERVICE_MEDIA = {
-  cleaning: { type: 'clip', name: 'robot-brush-closeup' },
-  maintenance: { type: 'clip', name: 'field-team-operating' },
+  cleaning: { type: 'clip', name: 'field-team-operating' },
+  maintenance: { type: 'clip', name: 'robot-brush-closeup' },
   installation: { type: 'pic', name: 'utility-field-wide' },
 }
 
