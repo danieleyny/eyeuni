@@ -20,7 +20,7 @@ export default function Home({ go }) {
           <Clip name="robot-vertical-mobile" className="sm:hidden w-full h-full" videoClassName="media" objectPosition="center" eager />
         </div>
         {/* light-black overlay so the content pops over the footage */}
-        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.42)' }} />
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)' }} />
         <div className="scrim" />
         <div className="inner">
           <div className="wrap">

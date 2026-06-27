@@ -122,17 +122,13 @@ function Footer({ go }) {
         <div className="fgrid">
           <div style={{ color: '#fff' }}>
             <button className="brand" onClick={() => go('home')} style={{ marginBottom: 14 }}>
-              <LaviMark className="mark" ring="#5b73ff" />
+              <span className="mark" style={{ color: '#cdd0da', display: 'inline-flex' }}><LaviMark className="w-full h-full" /></span>
               <Wordmark main={wm.main} sub={wm.sub} />
             </button>
             <p style={{ maxWidth: 260 }}>{t.footer.blurb}</p>
-            <div className="flex gap-2.5 mt-5">
-              {['instagram', 'facebook', 'linkedin', 'youtube'].map((s) => (
-                <a key={s} href="#" onClick={(e) => e.preventDefault()} className="grid place-items-center h-9 w-9 rounded-lg" style={{ border: '1px solid #23252e', color: '#a9adba' }} aria-label={s}>
-                  <SocialIcon name={s} />
-                </a>
-              ))}
-            </div>
+            <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noreferrer" className="btn btn-ghost mt-5" style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.22)' }}>
+              <Icon.whatsapp className="h-4 w-4" />{t.footer.whatsappCta}
+            </a>
           </div>
           <div>
             <h5>{t.footer.services}</h5>
@@ -163,17 +159,6 @@ function Footer({ go }) {
   )
 }
 
-function SocialIcon({ name }) {
-  const common = { className: 'h-4 w-4', viewBox: '0 0 24 24', fill: 'currentColor' }
-  if (name === 'instagram')
-    return <svg {...common}><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s0-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2Zm0 1.8c-3.14 0-3.5 0-4.74.07-.9.04-1.38.19-1.7.31-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.32-.27.8-.31 1.7C3.43 8.5 3.42 8.86 3.42 12s0 3.5.07 4.74c.04.9.19 1.38.31 1.7.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.12.8.27 1.7.31 1.24.07 1.6.07 4.74.07s3.5 0 4.74-.07c.9-.04 1.38-.19 1.7-.31.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.32.27-.8.31-1.7.07-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.04-.9-.19-1.38-.31-1.7a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.32-.12-.8-.27-1.7-.31C15.5 4 15.14 4 12 4Zm0 3.06A4.94 4.94 0 1 1 12 16.94 4.94 4.94 0 0 1 12 7.06Zm0 1.8a3.14 3.14 0 1 0 0 6.28 3.14 3.14 0 0 0 0-6.28Zm5.14-.96a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z" /></svg>
-  if (name === 'facebook')
-    return <svg {...common}><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" /></svg>
-  if (name === 'linkedin')
-    return <svg {...common}><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.74v20.5C0 23.2.8 24 1.77 24h20.45c.98 0 1.78-.8 1.78-1.76V1.74C24 .78 23.2 0 22.22 0Z" /></svg>
-  return <svg {...common}><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.52A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.52 9.38.52 9.38.52s7.5 0 9.38-.52a3 3 0 0 0 2.12-2.13A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z" /></svg>
-}
-
 function ScrollProgress() {
   const [p, setP] = useState(0)
   useEffect(() => {
@@ -189,13 +174,54 @@ function ScrollProgress() {
   return <div className="scroll-progress" style={{ width: '100%', transform: `scaleX(${p})` }} />
 }
 
-/* Animated load-in screen — the robot mark assembles, the wordmark rises and a
-   yellow bar sweeps, then the whole thing fades away. Shown once on first load. */
+/* The new sunrise mark, drawn stroke-by-stroke for the load-in screen. */
+function DrawMark({ reduce }) {
+  const C = '#f6f7fb'
+  const draw = (delay, dur = 0.55) =>
+    reduce
+      ? { initial: false }
+      : {
+          initial: { pathLength: 0, opacity: 0 },
+          animate: { pathLength: 1, opacity: 1 },
+          transition: { pathLength: { duration: dur, delay, ease: 'easeInOut' }, opacity: { duration: 0.15, delay } },
+        }
+  const rays = [
+    ['50', '9', '50', '21'],
+    ['26', '19', '33', '29'],
+    ['74', '19', '67', '29'],
+    ['11', '41', '23', '45'],
+    ['89', '41', '77', '45'],
+  ]
+  return (
+    <svg viewBox="0 0 100 100" className="h-16 w-16" fill="none" aria-hidden>
+      {/* horizon + disc */}
+      <motion.path d="M31 60 A19 19 0 0 1 69 60" stroke={C} strokeWidth="6" strokeLinecap="round" {...draw(0.1, 0.6)} />
+      <motion.line x1="17" y1="60" x2="83" y2="60" stroke={C} strokeWidth="6" strokeLinecap="round" {...draw(0.2, 0.5)} />
+      {/* rays, outward */}
+      {rays.map((r, i) => (
+        <motion.line key={i} x1={r[0]} y1={r[1]} x2={r[2]} y2={r[3]} stroke={i === 0 ? '#e0a400' : C} strokeWidth="6" strokeLinecap="round" {...draw(0.45 + i * 0.07, 0.4)} />
+      ))}
+      {/* panel ticks */}
+      <motion.line x1="32" y1="60" x2="29" y2="73" stroke={C} strokeWidth="4" strokeLinecap="round" {...draw(0.85, 0.3)} />
+      <motion.line x1="50" y1="60" x2="50" y2="75" stroke={C} strokeWidth="4" strokeLinecap="round" {...draw(0.9, 0.3)} />
+      <motion.line x1="68" y1="60" x2="71" y2="73" stroke={C} strokeWidth="4" strokeLinecap="round" {...draw(0.95, 0.3)} />
+      {/* core dot pops in */}
+      <motion.circle cx="50" cy="55" r="5.5" fill="#2a4ea0"
+        initial={reduce ? false : { scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: reduce ? 0 : 1.05, duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
+        style={{ transformOrigin: '50px 55px' }} />
+    </svg>
+  )
+}
+
+/* Animated load-in screen — the sunrise mark draws itself, the wordmark rises
+   and a yellow underline sweeps, then the overlay fades. Shown once on load. */
 function Preloader() {
   const reduce = useReducedMotion()
+  const rtl = typeof document !== 'undefined' && document.documentElement.dir === 'rtl'
   const [done, setDone] = useState(false)
   useEffect(() => {
-    const tt = setTimeout(() => setDone(true), reduce ? 350 : 1750)
+    const tt = setTimeout(() => setDone(true), reduce ? 320 : 1950)
     return () => clearTimeout(tt)
   }, [reduce])
   return (
@@ -208,30 +234,25 @@ function Preloader() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
-          <div className="flex flex-col items-center">
+          {/* deep-blue radial glow so the dark screen isn't flat */}
+          <div className="absolute h-[26rem] w-[26rem] rounded-full" style={{ background: 'radial-gradient(circle, rgba(42,78,160,0.18), transparent 60%)', filter: 'blur(20px)' }} />
+          <div className="relative flex flex-col items-center">
+            <DrawMark reduce={reduce} />
             <motion.div
-              initial={reduce ? false : { scale: 0.6, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
-              className="h-16 w-16"
-            >
-              <LaviMark className="h-full w-full" />
-            </motion.div>
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 10 }}
+              initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="mt-4 font-display font-extrabold tracking-[0.18em] text-[15px]"
+              transition={{ duration: 0.6, delay: reduce ? 0 : 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+              className="mt-4 font-display font-semibold tracking-[0.22em] text-[15px]"
             >
               LAVI ENERGY
             </motion.div>
-            <div className="mt-5 h-[3px] w-40 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.12)' }}>
+            <div className="mt-3 h-[2px] w-44 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
               <motion.div
                 className="h-full"
-                style={{ background: 'var(--color-yellow)', transformOrigin: '0 50%' }}
+                style={{ background: 'var(--color-yellow)', transformOrigin: rtl ? '100% 50%' : '0 50%' }}
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: reduce ? 0.3 : 1.4, ease: [0.22, 0.61, 0.36, 1] }}
+                transition={{ duration: reduce ? 0.2 : 1, delay: reduce ? 0 : 0.95, ease: [0.22, 0.61, 0.36, 1] }}
               />
             </div>
           </div>

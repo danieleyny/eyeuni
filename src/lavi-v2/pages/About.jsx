@@ -67,7 +67,7 @@ export default function About({ go }) {
               return (
                 <Reveal key={i} delay={i * 0.07}>
                   <div className="card p-6 h-full card-hover">
-                    <span className="grid place-items-center h-11 w-11 rounded-xl mb-4" style={{ background: '#eef1ff', border: '1px solid #d8deff', color: 'var(--color-blue)' }}><I className="h-5 w-5" /></span>
+                    <span className="grid place-items-center h-11 w-11 rounded-xl mb-4" style={{ background: 'var(--color-blue-soft)', border: '1px solid #dfe3f3', color: 'var(--color-blue)' }}><I className="h-5 w-5" /></span>
                     <h3 className="font-display font-semibold text-[17px]">{v.title}</h3>
                     <p className="muted text-sm mt-2 leading-relaxed">{v.text}</p>
                   </div>
