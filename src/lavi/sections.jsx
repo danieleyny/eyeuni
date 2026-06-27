@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Reveal, Magnetic, Icon, useLang } from './ui'
 import { CONTACT } from './i18n'
@@ -99,5 +100,52 @@ export function SolarTile({ cat = 'rooftop', className = '' }) {
         </radialGradient>
       </defs>
     </svg>
+  )
+}
+
+/* Real, hotlinkable solar photos (Unsplash) grouped by category. These are
+   placeholder stock images for the demo — swap for the client's own project
+   photos in the live build. The stylised SolarTile always renders underneath
+   as a graceful fallback if a photo ever fails to load. Floating PV has no
+   reliable stock photo, so it intentionally uses the SVG scene. */
+const PHOTOS = {
+  rooftop: ['1613665813446-82a78c468a1d', '1624397640148-949b1732bb0a'],
+  ground: [
+    '1509391366360-2e959784a276',
+    '1508514177221-188b1cf16e9d',
+    '1497440001374-f26997328c1b',
+    '1521618755572-156ae0cdd74d',
+    '1592833159155-c62df1b65634',
+  ],
+  cleaning: ['1559302504-64aae6ca6b6d', '1545209463-e2825498edbf'],
+  floating: [],
+}
+
+const photoUrl = (id, w = 900) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`
+
+export function photoFor(cat = 'ground', idx = 0, w = 900) {
+  const pool = PHOTOS[cat] || []
+  return pool.length ? photoUrl(pool[idx % pool.length], w) : null
+}
+
+/* A real solar photo with the SVG scene as an always-present fallback layer. */
+export function SolarImage({ cat = 'ground', idx = 0, w = 900, className = '', hoverZoom = false }) {
+  const [failed, setFailed] = useState(false)
+  const src = photoFor(cat, idx, w)
+  const zoom = hoverZoom ? 'transition-transform duration-700 ease-out group-hover:scale-110' : ''
+  return (
+    <div className={`relative overflow-hidden bg-[#0a0f1e] ${className}`}>
+      <SolarTile cat={cat} className={`absolute inset-0 w-full h-full ${zoom}`} />
+      {src && !failed && (
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className={`absolute inset-0 w-full h-full object-cover ${zoom}`}
+        />
+      )}
+    </div>
   )
 }

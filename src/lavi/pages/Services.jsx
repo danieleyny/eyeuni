@@ -1,5 +1,5 @@
 import { Reveal, Icon, SectionHeading, useLang } from '../ui'
-import { CtaBand, SolarTile } from '../sections'
+import { CtaBand, SolarImage } from '../sections'
 
 const SERVICE_ICONS = { cleaning: Icon.robot, maintenance: Icon.wrench, installation: Icon.panel }
 const SERVICE_CATS = { cleaning: 'cleaning', maintenance: 'rooftop', installation: 'ground' }
@@ -25,8 +25,8 @@ export default function Services({ go }) {
               <Reveal key={svc.key}>
                 <div className={`grid lg:grid-cols-2 gap-8 items-center glass rounded-[1.75rem] p-6 lg:p-8 card-hover ${flip ? 'lg:[&>*:first-child]:order-2' : ''}`}>
                   <div className="relative rounded-2xl overflow-hidden">
-                    <SolarTile cat={SERVICE_CATS[svc.key]} className="w-full aspect-[16/10]" />
-                    <span className="absolute top-4 start-4 text-[0.65rem] uppercase tracking-wider font-display font-semibold px-3 py-1.5 rounded-full" style={{ background: 'rgba(6,9,18,0.7)', color: '#ffd60a', backdropFilter: 'blur(8px)' }}>{svc.tag}</span>
+                    <SolarImage cat={SERVICE_CATS[svc.key]} idx={i} w={1000} className="w-full aspect-[16/10]" />
+                    <span className="absolute top-4 start-4 z-10 text-[0.65rem] uppercase tracking-wider font-display font-semibold px-3 py-1.5 rounded-full" style={{ background: 'rgba(6,9,18,0.7)', color: '#ffd60a', backdropFilter: 'blur(8px)' }}>{svc.tag}</span>
                   </div>
                   <div>
                     <div className="grid place-items-center h-13 w-13 rounded-2xl p-3.5 mb-5" style={{ background: 'linear-gradient(135deg, #16306e, #0c1c45)', border: '1px solid rgba(120,160,255,0.25)' }}>

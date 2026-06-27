@@ -1,5 +1,5 @@
 import { Reveal, CountUp, Icon, SectionHeading, useLang } from '../ui'
-import { CtaBand, SolarTile } from '../sections'
+import { CtaBand, SolarImage } from '../sections'
 
 const VALUE_ICONS = [Icon.trend, Icon.drop, Icon.bolt, Icon.shield]
 
@@ -25,7 +25,7 @@ export default function About({ go }) {
           <Reveal delay={0.15}>
             <div className="relative">
               <div className="rounded-[1.75rem] overflow-hidden glass-strong">
-                <SolarTile cat="ground" className="w-full aspect-[4/3]" />
+                <SolarImage cat="ground" idx={2} w={1000} className="w-full aspect-[4/3]" />
               </div>
               <div className="absolute -bottom-5 start-5 glass-strong rounded-2xl px-5 py-4 shadow-xl">
                 <div className="flex items-center gap-3">

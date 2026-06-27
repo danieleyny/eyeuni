@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Reveal, Icon, SectionHeading, useLang } from '../ui'
-import { CtaBand, SolarTile } from '../sections'
+import { CtaBand, SolarImage } from '../sections'
 
 export default function Portfolio({ go }) {
   const { t } = useLang()
@@ -47,7 +47,7 @@ export default function Portfolio({ go }) {
                   onClick={() => go('contact')}
                   className="group relative block w-full aspect-[4/3] rounded-2xl overflow-hidden card-hover text-start"
                 >
-                  <SolarTile cat={it.cat} className="w-full h-full transition-transform duration-700 group-hover:scale-110" />
+                  <SolarImage cat={it.cat} idx={i} w={760} hoverZoom className="absolute inset-0 w-full h-full" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#060912]/90 via-transparent to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-4">
                     <span className="text-[0.62rem] uppercase tracking-wider font-display font-semibold px-2.5 py-1 rounded-full" style={{ background: 'rgba(47,107,255,0.3)', color: '#cfe0ff', backdropFilter: 'blur(6px)' }}>{it.tag}</span>
@@ -75,7 +75,7 @@ export default function Portfolio({ go }) {
         <div className="container-x">
           <Reveal>
             <div className="relative overflow-hidden rounded-[2rem] glass-strong">
-              <SolarTile cat="cleaning" className="absolute inset-0 w-full h-full opacity-40" />
+              <SolarImage cat="cleaning" idx={0} w={1400} className="absolute inset-0 w-full h-full opacity-30" />
               <div className="relative grid md:grid-cols-2 gap-8 items-center p-8 md:p-14">
                 <div>
                   <span className="eyebrow"><Icon.play className="h-3 w-3" />Video</span>
@@ -83,7 +83,7 @@ export default function Portfolio({ go }) {
                   <p className="text-muted mt-3 leading-relaxed">{t.portfolio.videoSub}</p>
                 </div>
                 <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10" style={{ background: 'linear-gradient(135deg,#0c1c45,#16306e)' }}>
-                  <SolarTile cat="cleaning" className="absolute inset-0 w-full h-full" />
+                  <SolarImage cat="cleaning" idx={1} w={900} className="absolute inset-0 w-full h-full" />
                   <div className="absolute inset-0 grid place-items-center">
                     <button className="grid place-items-center h-16 w-16 rounded-full shadow-xl transition-transform hover:scale-110" style={{ background: 'linear-gradient(135deg,#2f6bff,#ffd60a)' }} aria-label={t.portfolio.videoCta}>
                       <Icon.play className="h-7 w-7 text-[#060912] ms-1" />
@@ -124,13 +124,13 @@ function BeforeAfter({ t }) {
       onTouchMove={(e) => setFromClient(e.touches[0].clientX)}
     >
       {/* after (clean) full */}
-      <SolarTile cat="ground" className="absolute inset-0 w-full h-full" />
+      <SolarImage cat="ground" idx={0} w={1200} className="absolute inset-0 w-full h-full" />
       <span className="absolute top-3 end-3 z-10 text-xs glass rounded-full px-3 py-1">{t.portfolio.beforeAfter.after}</span>
 
       {/* before (soiled) clipped */}
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
         <div className="absolute inset-0" style={{ width: ref.current ? ref.current.getBoundingClientRect().width : '100%' }}>
-          <SolarTile cat="ground" className="w-full h-full" />
+          <SolarImage cat="ground" idx={0} w={1200} className="w-full h-full" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(80,55,20,0.7), rgba(50,40,25,0.6))', mixBlendMode: 'multiply' }} />
           <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(rgba(120,90,40,0.6) 1px, transparent 2px)', backgroundSize: '7px 7px' }} />
         </div>

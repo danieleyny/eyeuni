@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Reveal, CountUp, Magnetic, Icon, SectionHeading, useLang } from '../ui'
 import { HeroArt } from '../SolarScene'
-import { CtaBand, SolarTile } from '../sections'
+import { CtaBand, SolarImage } from '../sections'
 import { CONTACT } from '../i18n'
 
 const SERVICE_ICONS = { cleaning: Icon.robot, maintenance: Icon.wrench, installation: Icon.panel }
@@ -174,9 +174,8 @@ export default function Home({ go }) {
               return (
                 <Reveal key={i} delay={i * 0.1}>
                   <div className="relative rounded-2xl overflow-hidden card-hover glass">
-                    <div className="h-40 overflow-hidden">
-                      <SolarTile cat={cats[i]} className="w-full h-full" />
-                    </div>
+                    <SolarImage cat={cats[i]} idx={i} w={760} className="h-40 w-full" />
+                    <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-t from-[#0a0f1e]/60 to-transparent pointer-events-none" />
                     <div className="p-6">
                       <div className="flex items-center gap-2.5">
                         <I className="h-5 w-5 text-gold-warm" />
@@ -205,7 +204,7 @@ export default function Home({ go }) {
             {t.portfolio.items.slice(0, 4).map((it, i) => (
               <Reveal key={i} delay={i * 0.06}>
                 <button onClick={() => go('portfolio')} className="group relative block w-full aspect-[4/3] rounded-xl overflow-hidden card-hover">
-                  <SolarTile cat={it.cat} className="w-full h-full transition-transform duration-700 group-hover:scale-110" />
+                  <SolarImage cat={it.cat} idx={i} w={700} hoverZoom className="absolute inset-0 w-full h-full" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#060912]/85 to-transparent" />
                   <span className="absolute bottom-3 start-3 text-xs font-medium text-white/95 text-start">{it.title}</span>
                 </button>
