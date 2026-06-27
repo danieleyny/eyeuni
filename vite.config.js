@@ -15,6 +15,8 @@ export default defineConfig({
         v2: fileURLToPath(new URL('./V2.html', import.meta.url)),
         // Client demo — Lavi Energy (solar PV), served at /lavi/
         lavi: fileURLToPath(new URL('./lavi/index.html', import.meta.url)),
+        // Client demo V2 — Lavi Energy desert variation, served at /lavi-v2/
+        'lavi-v2': fileURLToPath(new URL('./lavi-v2/index.html', import.meta.url)),
       },
     },
   },

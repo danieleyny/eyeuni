@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LAVI ENERGY — V2 "Desert" theme
+   Same component API as V1, re-skinned to a warm golden-hour
+   desert palette. "Lavi" (לביא) = lion in Hebrew, woven into the
+   brand. Solar panels stay blue; the UI goes amber/terracotta.
+   ============================================================ */
+@theme {
+  --color-base: #130b06;
+  --color-base-2: #1d1109;
+  --color-ink: #fbf1e6;
+  --color-muted: #cdb79d;
+
+  /* "blue" token kept for component compatibility but re-skinned warm */
+  --color-blue: #ff7d33;
+  --color-blue-bright: #ff9d4d;
+  --color-blue-deep: #d9531f;
+  --color-gold: #ffc94b;
+  --color-gold-warm: #ff9d2e;
+
+  --color-sand: #e7c9a0;
+  --color-dusk: #b5472e;
+
+  --font-display: 'Sora', 'Heebo', system-ui, sans-serif;
+  --font-body: 'Inter', 'Heebo', system-ui, sans-serif;
+}
+
+html[dir='rtl'] {
+  --font-display: 'Heebo', 'Sora', system-ui, sans-serif;
+  --font-body: 'Heebo', 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--color-gold); color: #2a1606; }
+
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: var(--color-base); }
+::-webkit-scrollbar-thumb { background: #4a2f1a; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold-warm); }
+
+/* ---------- type helpers ---------- */
+.font-display { font-family: var(--font-display); }
+.text-balance { text-wrap: balance; }
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+/* ---------- gradient text ---------- */
+.text-gradient {
+  background: linear-gradient(100deg, #ffd47a 0%, var(--color-gold-warm) 45%, var(--color-dusk) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gold {
+  background: linear-gradient(100deg, #ffe2a0, var(--color-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- glass surfaces (warm) ---------- */
+.glass {
+  background: linear-gradient(160deg, rgba(255,228,193,0.08), rgba(255,210,160,0.02));
+  border: 1px solid rgba(255,213,168,0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.glass-strong {
+  background: linear-gradient(160deg, rgba(44,27,15,0.92), rgba(26,15,8,0.86));
+  border: 1px solid rgba(255,200,150,0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.card-hover { transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .4s, box-shadow .5s; }
+.card-hover:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,157,77,0.55);
+  box-shadow: 0 20px 60px -20px rgba(255,125,51,0.5);
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  font-family: var(--font-display); font-weight: 600; font-size: 0.95rem;
+  padding: 0.9rem 1.5rem; border-radius: 999px; cursor: pointer;
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, background .35s, color .35s;
+  white-space: nowrap; border: 1px solid transparent; text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(100deg, var(--color-blue-deep), var(--color-gold-warm));
+  color: #2a1606;
+  box-shadow: 0 12px 34px -10px rgba(255,125,51,0.7);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 44px -10px rgba(255,125,51,0.9); }
+.btn-gold {
+  background: linear-gradient(100deg, var(--color-gold-warm), var(--color-gold));
+  color: #2a1606;
+  box-shadow: 0 12px 34px -10px rgba(255,179,0,0.6);
+}
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 20px 44px -10px rgba(255,179,0,0.85); }
+.btn-ghost {
+  background: rgba(255,235,210,0.05);
+  border-color: rgba(255,213,168,0.22);
+  color: var(--color-ink);
+}
+.btn-ghost:hover { background: rgba(255,235,210,0.1); transform: translateY(-3px); }
+
+/* ---------- pills / eyebrows ---------- */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--color-gold);
+  padding: 0.4rem 0.9rem; border-radius: 999px;
+  background: rgba(255,157,46,0.1); border: 1px solid rgba(255,157,46,0.28);
+}
+
+/* ---------- solar panel grid texture ---------- */
+.panel-grid {
+  background-image:
+    linear-gradient(rgba(120,160,255,0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,160,255,0.14) 1px, transparent 1px);
+  background-size: 46px 30px;
+}
+
+/* ---------- animations ---------- */
+@keyframes sun-pulse { 0%,100% { opacity: .85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
+@keyframes drift { 0%,100% { transform: translate(0,0); } 50% { transform: translate(3%, -4%); } }
+@keyframes drift-2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-4%, 3%); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes sweep { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+@keyframes rise { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes pulse-glow { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes robot-spin { to { transform: rotate(360deg); } }
+@keyframes robot-roll { from { transform: translateY(0); } to { transform: translateY(8px); } }
+@keyframes robot-spray { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 25% { opacity: 0.85; } 100% { transform: translateY(-11px) scale(1.1); opacity: 0; } }
+
+/* desert-specific */
+@keyframes dust-rise { 0% { transform: translate(0,0); opacity: 0; } 12% { opacity: 0.8; } 100% { transform: translate(40px,-140px); opacity: 0; } }
+@keyframes heat-haze { 0%,100% { transform: translateX(0) skewX(0deg); } 50% { transform: translateX(2px) skewX(0.6deg); } }
+@keyframes mane-spin { to { transform: rotate(360deg); } }
+@keyframes ray-breathe { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.06); } }
+@keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.9; } }
+
+.animate-drift { animation: drift 18s ease-in-out infinite; }
+.animate-drift-2 { animation: drift-2 22s ease-in-out infinite; }
+.animate-sun { animation: sun-pulse 6s ease-in-out infinite; }
+.animate-float { animation: float-y 7s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 60s linear infinite; }
+
+.shimmer {
+  background: linear-gradient(110deg, transparent 25%, rgba(255,235,200,0.28) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 3.5s linear infinite;
+}
+
+.sweep-bar {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,201,75,0.35), transparent);
+  animation: sweep 3.2s ease-in-out infinite;
+}
+
+/* marquee */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+html[dir='rtl'] .marquee-track { animation-direction: reverse; }
+.marquee-track:hover { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift, .animate-drift-2, .animate-sun, .animate-float,
+  .animate-spin-slow, .shimmer, .sweep-bar, .marquee-track { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* section vertical rhythm */
+.section { padding-block: clamp(4.5rem, 9vw, 8rem); position: relative; }
+.container-x { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: clamp(1.1rem, 4vw, 2.2rem); }
+
+:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
