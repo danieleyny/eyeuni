@@ -13,6 +13,8 @@ export default defineConfig({
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         // Private V2 archive (full original dark site), served at /V2.html
         v2: fileURLToPath(new URL('./V2.html', import.meta.url)),
+        // Client demo — Lavi Energy (solar PV), served at /lavi/
+        lavi: fileURLToPath(new URL('./lavi/index.html', import.meta.url)),
       },
     },
   },
