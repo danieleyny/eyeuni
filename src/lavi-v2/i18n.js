@@ -207,10 +207,10 @@ const en = {
       { q: 'Why robotic cleaning instead of manual?', a: 'It’s faster, more consistent, uses less water and less manpower, and lowers the safety risk of working at height or across large fields.' },
     ],
   },
-  // TODO(client): replace placeholder water-saved figure with a measured number.
+  // TODO(client): 15,000 L is a realistic placeholder — replace with your measured per-service saving.
   water: {
     eyebrow: 'Water-smart',
-    stat: 'Up to X,000 L',
+    stat: 'Up to 15,000 L',
     title: 'Less water than manual cleaning — every service.',
     text: 'Robotic cleaning is engineered for water efficiency, saving thousands of litres versus manual hosing across a full array — meaningful in water-scarce Israel.',
   },
@@ -426,7 +426,7 @@ const he = {
   },
   water: {
     eyebrow: 'חסכוני במים',
-    stat: 'עד X,000 ל׳',
+    stat: 'עד 15,000 ל׳',
     title: 'פחות מים מניקוי ידני — בכל שירות.',
     text: 'הניקוי הרובוטי מתוכנן ליעילות במים, וחוסך אלפי ליטרים לעומת שטיפה ידנית על פני מערכת שלמה — משמעותי בישראל דלת המים.',
   },
