@@ -47,6 +47,18 @@ export const VID = {
 
 export const mediaUrl = (name, ext) => `/media/${name}.${ext}`
 
+export function useMediaQuery(query) {
+  const [match, setMatch] = useState(() => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false))
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const on = () => setMatch(mq.matches)
+    on()
+    mq.addEventListener?.('change', on)
+    return () => mq.removeEventListener?.('change', on)
+  }, [query])
+  return match
+}
+
 function usePrefersReducedMotion() {
   const [reduce, setReduce] = useState(false)
   useEffect(() => {

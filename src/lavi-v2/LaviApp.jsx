@@ -264,8 +264,32 @@ function Preloader() {
 
 const validPage = (p) => (PAGES[p] ? p : 'home')
 
+/* Slim sticky Call / WhatsApp bar — mobile only (see .mobile-cta in CSS). */
+function StickyMobileBar() {
+  const { t } = useLang()
+  return (
+    <div className="mobile-cta">
+      <a href={`tel:${CONTACT.phoneHref}`} className="btn btn-blue"><Icon.phone className="h-4 w-4" />{t.common.callUs}</a>
+      <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noreferrer" className="btn" style={{ background: '#1faa52', color: '#fff' }}><Icon.whatsapp className="h-4 w-4" />{t.common.whatsapp}</a>
+    </div>
+  )
+}
+
 function Shell() {
+  const { t } = useLang()
   const [page, setPage] = useState(() => validPage(window.location.hash.replace('#', '')))
+
+  // per-page document title + meta description (SPA SEO)
+  useEffect(() => {
+    const label = page === 'home' ? '' : `${t.nav[page]} · `
+    document.title = `${label}${t.brand} — ${t.tagline}`
+    const descMap = {
+      home: t.hero.sub, about: t.about.lead, services: t.services.sub,
+      portfolio: t.portfolio.sub, contact: t.contact.sub,
+    }
+    const m = document.querySelector('meta[name="description"]')
+    if (m && descMap[page]) m.setAttribute('content', descMap[page])
+  }, [page, t])
 
   useEffect(() => {
     // seed the current history entry so back/forward restore in-site pages
@@ -310,6 +334,7 @@ function Shell() {
         </AnimatePresence>
       </main>
       <Footer go={go} />
+      <StickyMobileBar />
     </>
   )
 }

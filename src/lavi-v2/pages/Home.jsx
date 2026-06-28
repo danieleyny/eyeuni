@@ -1,5 +1,6 @@
 import { Reveal, CountUp, Icon, useLang } from '../ui'
-import { Pic, Clip } from '../../media'
+import { Pic, Clip, useMediaQuery } from '../../media'
+import { Testimonials, References, FAQ, WaterHighlight } from '../trust'
 
 const SERVICE_MEDIA = {
   cleaning: { type: 'clip', name: 'field-team-operating' },
@@ -10,14 +11,16 @@ const PT_ICONS = [Icon.robot, Icon.panel, Icon.bolt]
 
 export default function Home({ go }) {
   const { t } = useLang()
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const stats = [t.hero.stat1, t.hero.stat2, t.hero.stat3]
 
   return (
     <div>
       {/* ===================== HERO (dark cinematic video) ===================== */}
       <section className="hero">
+        {/* one breakpoint-appropriate clip so phones fetch a single video */}
         <div className="absolute inset-0">
-          <Clip name="main" className="hidden sm:block w-full h-full" videoClassName="media" eager />
-          <Clip name="robot-vertical-mobile" className="sm:hidden w-full h-full" videoClassName="media" objectPosition="center" eager />
+          <Clip key={isMobile ? 'm' : 'd'} name={isMobile ? 'robot-vertical-mobile' : 'main'} className="w-full h-full" videoClassName="media" objectPosition="center" eager />
         </div>
         {/* light-black overlay so the content pops over the footage */}
         <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)' }} />
@@ -30,17 +33,26 @@ export default function Home({ go }) {
                 {t.hero.titleA} {t.hero.titleB} <span className="hl">{t.hero.titleC}</span>
               </h1>
             </Reveal>
-            <Reveal delay={0.16}><p className="sub">{t.hero.sub}</p></Reveal>
-            <Reveal delay={0.24}>
-              <div className="cta-row">
-                <button className="btn btn-blue" onClick={() => go('contact')}>{t.common.getQuote}</button>
-                <button className="btn btn-ghost" onClick={() => go('services')}>{t.common.viewServices}</button>
-                <button className="play" onClick={() => go('portfolio')}><span className="tri" />{t.portfolio.videoCta}</button>
-              </div>
+            <Reveal delay={0.16}>
+              <p className="sub">{isMobile ? t.hero.subShort : t.hero.sub}</p>
             </Reveal>
+            <Reveal delay={0.24}>
+              <>
+                <div className="cta-row">
+                  <button className="btn btn-blue" onClick={() => go('contact')}>{t.common.getQuote}</button>
+                  <button className="btn btn-ghost hide-mobile" onClick={() => go('services')}>{t.common.viewServices}</button>
+                  <button className="play hide-mobile" onClick={() => go('portfolio')}><span className="tri" />{t.portfolio.videoCta}</button>
+                </div>
+                {/* mobile-only secondary action */}
+                <button className="hero-link show-mobile mt-3" onClick={() => go('services')}>
+                  {t.common.viewServices}<Icon.arrow className="h-4 w-4 rtl:rotate-180" />
+                </button>
+              </>
+            </Reveal>
+            {/* stats in-hero on desktop only */}
             <Reveal delay={0.32}>
-              <div className="stats">
-                {[t.hero.stat1, t.hero.stat2, t.hero.stat3].map((s, i) => (
+              <div className="stats hide-mobile">
+                {stats.map((s, i) => (
                   <div className="stat" key={i}>
                     <div className="v"><CountUp value={s.value} /><b>{s.suffix}</b></div>
                     <div className="l">{s.label}</div>
@@ -52,11 +64,23 @@ export default function Home({ go }) {
         </div>
       </section>
 
+      {/* slim stats strip below the hero — mobile only */}
+      <div className="stats-strip show-mobile">
+        {stats.map((s, i) => (
+          <div className="s" key={i}>
+            <div className="v"><CountUp value={s.value} /><b>{s.suffix}</b></div>
+            <div className="l">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
       {/* ===================== TRUST STRIP ===================== */}
-      <div className="trust section-sand" style={{ borderBottom: '1px solid var(--color-line)' }}>
-        <div className="wrap flex items-center gap-3 flex-wrap" style={{ paddingBlock: 18 }}>
-          <span className="text-[12px] tracking-[0.16em] uppercase text-muted font-semibold me-2">{t.trust.title}</span>
-          {t.trust.items.map((it) => <span key={it} className="chip">{it}</span>)}
+      <div className="trust section-sand" style={{ borderBottom: '1px solid var(--color-line)', paddingBlock: 18 }}>
+        <div className="wrap">
+          <span className="trust-label">{t.trust.title}</span>
+          <div className="trust-chips">
+            {t.trust.items.map((it) => <span key={it} className="chip">{it}</span>)}
+          </div>
         </div>
       </div>
 
@@ -120,6 +144,9 @@ export default function Home({ go }) {
           </div>
         </div>
       </section>
+
+      {/* ===================== WATER-SAVED HIGHLIGHT ===================== */}
+      <WaterHighlight />
 
       {/* ===================== DARK SHOWREEL BAND ===================== */}
       <section className="band">
@@ -185,6 +212,11 @@ export default function Home({ go }) {
           </div>
         </div>
       </section>
+
+      {/* ===================== TRUST: testimonials, references, FAQ ===================== */}
+      <Testimonials />
+      <References />
+      <FAQ />
 
       {/* ===================== CTA BAND ===================== */}
       <section className="ctaband">

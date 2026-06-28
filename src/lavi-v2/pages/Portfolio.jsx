@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Reveal, Icon, useLang } from '../ui'
 import { Pic, Clip } from '../../media'
@@ -102,35 +102,67 @@ export default function Portfolio({ go }) {
   )
 }
 
-/* Drag-to-compare a soiled array (before) vs a clean one (after). */
+/* Drag- or keyboard-compare a soiled array (before) vs a clean one (after).
+   Width is tracked via ResizeObserver so the clipped image always aligns.
+   TODO(client): ideal would be a real same-panel before/after pair (one
+   dirty, one freshly cleaned, same angle) instead of two different shots. */
 function BeforeAfter({ t }) {
   const [pos, setPos] = useState(50)
+  const [w, setW] = useState(0)
   const ref = useRef(null)
-  const set = (clientX) => {
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const measure = () => setW(el.getBoundingClientRect().width)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  const setFromX = (clientX) => {
     const el = ref.current
     if (!el) return
     const r = el.getBoundingClientRect()
     setPos(Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100)))
   }
+  const onKey = (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { setPos((p) => Math.max(0, p - 4)); e.preventDefault() }
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { setPos((p) => Math.min(100, p + 4)); e.preventDefault() }
+    else if (e.key === 'Home') { setPos(0); e.preventDefault() }
+    else if (e.key === 'End') { setPos(100); e.preventDefault() }
+  }
+
   return (
     <div
       ref={ref}
       className="relative rounded-2xl overflow-hidden select-none cursor-ew-resize"
       style={{ aspectRatio: '16 / 9', border: '1px solid var(--color-line)' }}
-      onMouseMove={(e) => e.buttons === 1 && set(e.clientX)}
-      onMouseDown={(e) => set(e.clientX)}
-      onTouchMove={(e) => set(e.touches[0].clientX)}
+      onMouseMove={(e) => e.buttons === 1 && setFromX(e.clientX)}
+      onMouseDown={(e) => setFromX(e.clientX)}
+      onTouchMove={(e) => setFromX(e.touches[0].clientX)}
     >
       <Pic name="array-panorama" imgClassName="absolute inset-0 w-full h-full object-cover" />
       <span className="absolute top-3 end-3 z-10 text-xs rounded-full px-3 py-1 text-white" style={{ background: 'rgba(8,9,14,.7)' }}>{t.portfolio.beforeAfter.after}</span>
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-        <div className="absolute inset-0" style={{ width: ref.current ? ref.current.getBoundingClientRect().width : '100%' }}>
+        <div className="absolute inset-0 h-full" style={{ width: w || '100%' }}>
           <Pic name="array-dust-atmospheric" imgClassName="absolute inset-0 w-full h-full object-cover" />
         </div>
         <span className="absolute top-3 start-3 z-10 text-xs rounded-full px-3 py-1 text-white" style={{ background: 'rgba(8,9,14,.7)' }}>{t.portfolio.beforeAfter.before}</span>
       </div>
-      <div className="absolute inset-y-0 z-20" style={{ left: `${pos}%`, transform: 'translateX(-50%)' }}>
-        <div className="h-full w-0.5 bg-white/90" />
+      <div
+        role="slider"
+        tabIndex={0}
+        aria-label={t.portfolio.beforeAfter.title}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(pos)}
+        onKeyDown={onKey}
+        className="absolute inset-y-0 z-20 cursor-ew-resize"
+        style={{ left: `${pos}%`, transform: 'translateX(-50%)' }}
+      >
+        <div className="h-full w-0.5 bg-white/90 mx-auto" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center h-9 w-9 rounded-full bg-white shadow-lg" style={{ color: '#14151c' }}>
           <Icon.arrow className="h-4 w-4 -ms-1" />
         </div>

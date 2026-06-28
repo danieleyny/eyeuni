@@ -42,6 +42,7 @@ const en = {
     titleB: 'More Power.',
     titleC: 'Less Effort.',
     sub: 'We keep solar assets performing at their peak — with advanced cleaning robots that deliver flawless results faster than manual labor, across rooftop, floating and ground-mounted PV.',
+    subShort: 'Advanced cleaning robots that keep solar assets at peak output — faster than manual labor.',
     stat1: { value: 30, suffix: '%', label: 'Output lost to soiling — recovered' },
     stat2: { value: 10, suffix: '×', label: 'Faster than manual cleaning' },
     stat3: { value: 100, suffix: '%', label: 'Water-smart, panel-safe robots' },
@@ -172,6 +173,47 @@ const en = {
     hoursTitle: 'Service area',
     hours: 'Domestic, commercial & utility-scale across Israel',
   },
+  // TODO(client): replace placeholder testimonials with real, attributed client quotes (name, role/company, permission to publish).
+  testimonials: {
+    eyebrow: 'What clients say',
+    title: 'Trusted by the people who run the panels.',
+    items: [
+      { quote: 'Output on our ground-mount climbed noticeably after Lavi’s first robotic clean — and the crew was in and out with zero disruption.', name: 'Placeholder Name', role: 'O&M Manager · Utility-scale developer' },
+      { quote: 'Finally a cleaning partner that scales. Rooftop to field, the results are consistent and the reporting is clear.', name: 'Placeholder Name', role: 'Asset Manager · EPC contractor' },
+      { quote: 'Water-smart, panel-safe, and far faster than the manual crews we used before — exactly what our kibbutz needed.', name: 'Placeholder Name', role: 'Operations · Agricultural community' },
+    ],
+    note: 'Placeholder quotes — to be replaced with real, attributed client testimonials.',
+  },
+  // TODO(client): replace placeholder project details, locations and figures with real reference projects (with consent).
+  references: {
+    eyebrow: 'Selected projects',
+    title: 'Results across every scale.',
+    items: [
+      { type: 'Utility-scale ground-mount', location: 'Northern Israel', size: '5 MWp', metric: '+X% output recovered', media: 'utility-field-wide' },
+      { type: 'Commercial rooftop', location: 'Central Israel', size: '850 kWp', metric: '−X% soiling loss', media: 'robot-on-array-angled' },
+      { type: 'Agricultural field', location: 'Kibbutz · Galilee', size: '1.2 MWp', metric: 'X panels / day', media: 'array-rows-hillside' },
+    ],
+    note: 'Placeholder numbers — replace with measured project results.',
+  },
+  faq: {
+    eyebrow: 'Good to know',
+    title: 'Questions, answered.',
+    items: [
+      { q: 'How often should solar panels be cleaned?', a: 'It depends on your site — dust, pollen, bird activity and proximity to fields or roads. In dusty regions many sites benefit from cleaning every 1–3 months; we assess your soiling rate and recommend a schedule.' },
+      { q: 'How much water does robotic cleaning use?', a: 'Far less than manual hosing. Our robots are water-smart and, on many surfaces, clean with minimal water — important in a water-scarce climate.' },
+      { q: 'Is it safe for the glass? Will it scratch?', a: 'Yes. The brushes are panel-safe and engineered not to scratch or stress the glass or its coatings, so you protect the asset while cleaning it.' },
+      { q: 'Is there downtime during a service?', a: 'Minimal. Cleaning runs during normal operation with little to no disruption; we plan around your production where needed.' },
+      { q: 'Which sites and regions do you cover?', a: 'Domestic, commercial and utility-scale across Israel — rooftop, ground-mounted and floating PV.' },
+      { q: 'Why robotic cleaning instead of manual?', a: 'It’s faster, more consistent, uses less water and less manpower, and lowers the safety risk of working at height or across large fields.' },
+    ],
+  },
+  // TODO(client): replace placeholder water-saved figure with a measured number.
+  water: {
+    eyebrow: 'Water-smart',
+    stat: 'Up to X,000 L',
+    title: 'Less water than manual cleaning — every service.',
+    text: 'Robotic cleaning is engineered for water efficiency, saving thousands of litres versus manual hosing across a full array — meaningful in water-scarce Israel.',
+  },
   cta: {
     title: 'Ready to unlock your full solar output?',
     sub: 'Book a free site assessment with Lavi Energy and see what clean, well-maintained panels can do.',
@@ -219,6 +261,7 @@ const he = {
     titleB: 'יותר אנרגיה.',
     titleC: 'פחות מאמץ.',
     sub: 'אנחנו שומרים על נכסים סולאריים בביצועי שיא — בעזרת רובוטים מתקדמים לניקוי שמספקים תוצאה מושלמת מהר יותר מעבודה ידנית, על גגות, מערכות צפות ומערכות קרקעיות.',
+    subShort: 'רובוטים מתקדמים ששומרים על תפוקת שיא — מהר יותר מעבודה ידנית.',
     stat1: { value: 30, suffix: '%', label: 'אובדן תפוקה מלכלוך — מוחזר' },
     stat2: { value: 10, suffix: '×', label: 'מהיר יותר מניקוי ידני' },
     stat3: { value: 100, suffix: '%', label: 'רובוטים חסכוניים ובטוחים לפאנל' },
@@ -348,6 +391,44 @@ const he = {
     contactName: 'איש הקשר שלכם',
     hoursTitle: 'אזור שירות',
     hours: 'ביתי, מסחרי וקנה מידה גדול בכל הארץ',
+  },
+  testimonials: {
+    eyebrow: 'מה הלקוחות אומרים',
+    title: 'אמון של מי שמנהל את הפאנלים בפועל.',
+    items: [
+      { quote: 'התפוקה במערכת הקרקעית שלנו עלתה בצורה מורגשת אחרי הניקוי הרובוטי הראשון של לביא — והצוות נכנס ויצא בלי שום הפרעה.', name: 'שם לדוגמה', role: 'מנהל O&M · יזם בקנה מידה גדול' },
+      { quote: 'סוף סוף שותף ניקוי שמתאים לכל גודל. מגג ועד שדה, התוצאות עקביות והדיווח ברור.', name: 'שם לדוגמה', role: 'מנהל נכסים · קבלן EPC' },
+      { quote: 'חסכוני במים, בטוח לפאנל, והרבה יותר מהיר מהצוותים הידניים שעבדנו איתם — בדיוק מה שהקיבוץ שלנו היה צריך.', name: 'שם לדוגמה', role: 'תפעול · קהילה חקלאית' },
+    ],
+    note: 'ציטוטים לדוגמה — יוחלפו בהמלצות לקוחות אמיתיות ומיוחסות.',
+  },
+  references: {
+    eyebrow: 'פרויקטים נבחרים',
+    title: 'תוצאות בכל קנה מידה.',
+    items: [
+      { type: 'מערכת קרקעית בקנה מידה גדול', location: 'צפון הארץ', size: '5 מ"ו', metric: '+X% תפוקה שוחזרה', media: 'utility-field-wide' },
+      { type: 'גג מסחרי', location: 'מרכז הארץ', size: '850 ק"וט', metric: '−X% אובדן לכלוך', media: 'robot-on-array-angled' },
+      { type: 'שדה חקלאי', location: 'קיבוץ · גליל', size: '1.2 מ"ו', metric: 'X פאנלים / יום', media: 'array-rows-hillside' },
+    ],
+    note: 'מספרים לדוגמה — יוחלפו בתוצאות פרויקט אמיתיות.',
+  },
+  faq: {
+    eyebrow: 'כדאי לדעת',
+    title: 'שאלות, עם תשובות.',
+    items: [
+      { q: 'כל כמה זמן צריך לנקות פאנלים סולאריים?', a: 'תלוי באתר — אבק, אבקנים, פעילות ציפורים וקרבה לשדות או כבישים. באזורים מאובקים אתרים רבים מרוויחים מניקוי כל 1–3 חודשים; אנחנו מעריכים את קצב הלכלוך וממליצים על תדירות.' },
+      { q: 'כמה מים צורך הניקוי הרובוטי?', a: 'הרבה פחות משטיפה ידנית. הרובוטים שלנו חסכוניים במים, ועל משטחים רבים מנקים עם מינימום מים — חשוב באקלים דל מים.' },
+      { q: 'האם זה בטוח לזכוכית? ישרוט?', a: 'כן. המברשות בטוחות לפאנל ומתוכננות לא לשרוט או להעמיס על הזכוכית והציפויים — מגנים על הנכס תוך כדי ניקוי.' },
+      { q: 'יש השבתה במהלך השירות?', a: 'מינימלית. הניקוי מתבצע תוך כדי תפעול רגיל עם מעט מאוד הפרעה; מתכננים סביב הייצור שלכם במידת הצורך.' },
+      { q: 'אילו אתרים ואזורים אתם מכסים?', a: 'ביתי, מסחרי וקנה מידה גדול בכל הארץ — גגות, מערכות קרקעיות וצפות.' },
+      { q: 'למה ניקוי רובוטי ולא ידני?', a: 'מהיר יותר, עקבי יותר, צורך פחות מים ופחות כוח אדם, ומפחית את סיכון הבטיחות של עבודה בגובה או על פני שדות גדולים.' },
+    ],
+  },
+  water: {
+    eyebrow: 'חסכוני במים',
+    stat: 'עד X,000 ל׳',
+    title: 'פחות מים מניקוי ידני — בכל שירות.',
+    text: 'הניקוי הרובוטי מתוכנן ליעילות במים, וחוסך אלפי ליטרים לעומת שטיפה ידנית על פני מערכת שלמה — משמעותי בישראל דלת המים.',
   },
   cta: {
     title: 'מוכנים לפתוח את מלוא התפוקה הסולארית שלכם?',
