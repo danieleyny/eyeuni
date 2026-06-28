@@ -1,0 +1,1 @@
+import{n as e,s as t,t as n}from"./jsx-runtime-aDiqq-AH.js";import{t as r}from"./client-DKH8xWOR.js";import{u as i}from"./send-DR1Wtd5H.js";import{t as a}from"./App-CFwITcd6.js";var o=t(e(),1),s=r(),c=n();(0,s.createRoot)(document.getElementById(`root`)).render((0,c.jsx)(o.StrictMode,{children:(0,c.jsx)(i,{basename:`/`,children:(0,c.jsx)(a,{wildcardHome:!0})})}));
