@@ -223,6 +223,27 @@ function StickyCallBar({ go }) {
   )
 }
 
+/* Corner watermark ribbon — marks the build as an EYEuni evaluation demo so a
+   stolen copy is obviously not the client's. pointer-events:none so it never
+   blocks the UI underneath. */
+function DemoRibbon() {
+  return (
+    <div aria-hidden style={{ position: 'fixed', top: 0, right: 0, width: 190, height: 190, overflow: 'hidden', zIndex: 9999, pointerEvents: 'none' }}>
+      <div
+        style={{
+          position: 'absolute', top: 38, right: -56, width: 260, transform: 'rotate(45deg)',
+          background: 'linear-gradient(90deg, #ffb300, #ffd60a)', color: '#0a0a0a',
+          textAlign: 'center', padding: '6px 0',
+          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 10, fontWeight: 800, letterSpacing: '0.04em',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.45)', textShadow: '0 1px 0 rgba(255,255,255,0.25)',
+        }}
+      >
+        EVALUATION DEMO · © EYEuni
+      </div>
+    </div>
+  )
+}
+
 function Shell() {
   const [page, setPage] = useState('home')
   const go = (p) => {
@@ -251,6 +272,7 @@ function Shell() {
       <Footer go={go} />
       <StickyCallBar go={go} />
       <div className="h-20 lg:hidden" />
+      <DemoRibbon />
     </>
   )
 }
