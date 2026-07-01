@@ -16,13 +16,13 @@ export function CtaBand({ go }) {
 }
 
 /* Real client photos grouped by the categories the pages already use, so every
-   SolarImage now resolves to genuine Lavi Energy footage. "floating" has no
-   dedicated shot, so it reuses the most scenic/reflective field still. */
+   SolarImage now resolves to genuine Lavi Energy footage. "floating" now uses
+   real floating-PV reservoir shots. */
 const MEDIA_BY_CAT = {
   rooftop: ['robot-on-array-angled', 'array-panorama', 'robot-closeup-sky'],
   ground: ['utility-field-wide', 'array-rows-hillside', 'array-field-dry'],
   cleaning: ['robot-cleaning-wide', 'robot-action-valley', 'robot-cleaning-lowangle'],
-  floating: ['array-field-dry', 'array-panorama'],
+  floating: ['floating-pv-01', 'floating-pv-03', 'floating-pv-04', 'floating-pv-05'],
 }
 
 export function mediaFor(cat = 'ground', idx = 0) {

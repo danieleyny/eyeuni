@@ -4,7 +4,7 @@ import { Reveal, Icon, useLang } from '../ui'
 import { Pic, Clip } from '../../media'
 import { CtaBand } from '../sections'
 
-const ITEM_MEDIA = ['robot-on-array-angled', 'utility-field-wide', 'robot-cleaning-wide', 'array-field-dry', 'array-rows-hillside', 'array-panorama']
+const ITEM_MEDIA = ['robot-on-array-angled', 'utility-field-wide', 'robot-cleaning-wide', 'floating-pv-01', 'array-rows-hillside', 'array-panorama']
 
 export default function Portfolio({ go }) {
   const { t } = useLang()

@@ -42,10 +42,26 @@ videos=(
 "robot-quick-clip|||WhatsApp Video 2026-06-27 at 1.21.25 PM.mp4"
 )
 
+# newname|||oldfilename  (floating-PV photos, in lavi-v2/img/Floating Panel/)
+floating=(
+"floating-pv-01|||WhatsApp Image 2026-07-01 at 7.57.19 AM.jpeg"
+"floating-pv-02|||WhatsApp Image 2026-07-01 at 7.57.19 AM (1).jpeg"
+"floating-pv-03|||WhatsApp Image 2026-07-01 at 7.57.19 AM (2).jpeg"
+"floating-pv-04|||WhatsApp Image 2026-07-01 at 7.57.19 AM (3).jpeg"
+"floating-pv-05|||WhatsApp Image 2026-07-01 at 7.57.19 AM (4).jpeg"
+)
+FLOAT_SRC="lavi-v2/img/Floating Panel"
+
 for row in "${photos[@]}"; do
   new="${row%%|||*}"; old="${row##*|||}"
   cp "$SRC/$old" "$OUT/$new.jpg"
   cwebp -quiet -q 80 "$SRC/$old" -o "$OUT/$new.webp"
+done
+
+for row in "${floating[@]}"; do
+  new="${row%%|||*}"; old="${row##*|||}"
+  cp "$FLOAT_SRC/$old" "$OUT/$new.jpg"
+  cwebp -quiet -q 80 "$FLOAT_SRC/$old" -o "$OUT/$new.webp"
 done
 
 for row in "${videos[@]}"; do

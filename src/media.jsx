@@ -29,6 +29,11 @@ export const IMG = {
   'robots-pair-ground': 'Two Israeli-flag cleaning robots on the ground',
   'robot-setup-ground': 'Technician setting up a cleaning robot on the ground',
   'cleanerrobot': 'Lavi Energy SolarClean F1 cleaning robot with Israeli-flag livery',
+  'floating-pv-01': 'Floating solar array on pontoons across a reservoir under a deep blue sky',
+  'floating-pv-02': 'Low-angle rows of floating PV panels on the water with a service walkway',
+  'floating-pv-03': 'Floating solar panel rows receding across a reservoir',
+  'floating-pv-04': 'Floating PV array with open water channels on a lined reservoir',
+  'floating-pv-05': 'Elevated view of a large floating solar array on a reservoir with hills behind',
 }
 
 export const VID = {

@@ -74,7 +74,7 @@ export default function Services({ go }) {
           <div className="mods">
             {t.services.modules.map((m, i) => {
               const cats = ['rooftop', 'ground', 'floating']
-              const media = ['robot-on-array-angled', 'utility-field-wide', 'array-field-dry']
+              const media = ['robot-on-array-angled', 'utility-field-wide', 'floating-pv-02']
               return (
                 <Reveal key={i} delay={i * 0.08}>
                   <div className="card overflow-hidden h-full card-hover" style={{ padding: 0 }}>
