@@ -51,6 +51,7 @@
     'coach.f5': 'Built around your time and life',
     'coach.note': 'Limited spots. First a call to see if we’re a fit — no commitment.',
     'coach.loading': 'Loading calendar…', 'coach.fallback': 'Open the calendar in a new tab',
+    'coach.fbtitle': 'Book your free call',
     'cont.kicker': 'Content', 'cont.h2': 'See it in action.',
     'faq.kicker': 'Questions', 'faq.h2': 'What I get asked most.',
     'faq.q1': 'Do I need a gym?', 'faq.a1': 'Not required. I adapt the plan to what you have — gym, home or minimal equipment. What matters is that it’s sustainable for you.',
@@ -70,7 +71,7 @@
     ES[k] = attr ? n.getAttribute(attr) : n.textContent;
   });
   var TITLE = { es: 'Jose Aguirre — Coach de Pérdida de Grasa', en: 'Jose Aguirre — Fat-Loss Coach' };
-  var SUF_EN = { ' años': ' yrs', ' sem': ' wks' };
+  var SUF_EN = { '+ años': '+ years', ' años': ' years', ' sem': ' wks' };
   var curLang = 'es';
 
   function applyLang(lang) {
@@ -291,16 +292,24 @@
       });
     });
     var inline = doc.getElementById('calInline'), wrap = doc.querySelector('.coaching__cal');
+    var settled = false, tries = 0;
+    function done(fail) { if (settled) return; settled = true; wrap.classList.add('is-ready'); if (fail) wrap.classList.add('cal-failed'); }
     (function init() {
-      if (!W.Calendly || !Calendly.initInlineWidget) return setTimeout(init, 200);
-      if (inline.dataset.init) return; inline.dataset.init = '1';
-      Calendly.initInlineWidget({ url: CAL_URL + CAL_THEME, parentElement: inline });
-      var iv = setInterval(function () {
-        var f = inline.querySelector('iframe');
-        if (f) { f.addEventListener('load', function () { wrap.classList.add('is-ready'); }); clearInterval(iv); }
-      }, 150);
-      setTimeout(function () { wrap && wrap.classList.add('is-ready'); }, 5000);
+      if (W.Calendly && Calendly.initInlineWidget) {
+        if (inline.dataset.init) return; inline.dataset.init = '1';
+        Calendly.initInlineWidget({ url: CAL_URL + CAL_THEME, parentElement: inline });
+        var iv = setInterval(function () {
+          var f = inline.querySelector('iframe');
+          if (f) { f.addEventListener('load', function () { done(false); }); clearInterval(iv); }
+        }, 150);
+        setTimeout(function () { done(false); }, 4500);
+        return;
+      }
+      if (++tries < 28) setTimeout(init, 200); // ~5.6s of retries, then give up
     })();
+    // Hard fallback: if Calendly is blocked/unavailable and no calendar renders,
+    // show a clean "book a call" CTA instead of spinning forever.
+    setTimeout(function () { if (!inline.querySelector('iframe')) done(true); }, 5500);
   })();
 
   var y = doc.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
