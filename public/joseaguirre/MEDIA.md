@@ -5,9 +5,10 @@ Keep the same filenames (both `.webp` and `.jpg` for each) so nothing else needs
 A unified cinematic grade is applied in CSS, so color originals are fine.
 
 ## Current state
-The demo ships with **tasteful free-license placeholder photography** (dark, athletic,
-graded to match his feed). Replace each with Jose's real content from
-[@joseaguirrefitness](https://www.instagram.com/joseaguirrefitness/).
+Now uses **Jose's real photos** (provided), cropped + cohesively graded via CSS to one
+cinematic look. The `content-1..4` reels reuse the real gym shots — these can later be
+swapped for actual IG reel covers. The `before`/`after` pair is a client-style
+transformation (a different person) shown in **Resultados**.
 
 | Slot | File | Recommended source / crop |
 | --- | --- | --- |

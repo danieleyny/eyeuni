@@ -117,16 +117,19 @@ body.menu-open .menu__links a{ animation:menuIn .55s var(--exp) forwards; }
 /* ============================================================ Hero */
 .hero{ position:relative; min-height:100svh; display:flex; align-items:flex-end; padding-bottom:clamp(2.5rem,9vh,6rem); overflow:hidden; background:var(--bg); }
 .hero__media,.hero__media img{ position:absolute; inset:0; width:100%; height:100%; }
-.hero__media img{ object-fit:cover; object-position:50% 35%; filter:brightness(.78) contrast(1.08) saturate(.92) sepia(.12); animation:kenburns 22s ease-in-out infinite alternate; }
+.hero__media img{ object-fit:cover; object-position:58% 22%; filter:brightness(.78) contrast(1.08) saturate(.92) sepia(.12); animation:kenburns 22s ease-in-out infinite alternate; }
 @keyframes kenburns{ from{ transform:scale(1.02); } to{ transform:scale(1.12) translateY(-1%); } }
 .hero__scrim{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,12,14,.72) 0%,rgba(11,12,14,.2) 34%,rgba(11,12,14,.5) 66%,var(--bg) 100%),linear-gradient(90deg,rgba(11,12,14,.7) 0%,transparent 62%); }
 .hero__glow{ position:absolute; z-index:1; width:60vw; height:60vw; max-width:640px; max-height:640px; right:-8%; top:8%; border-radius:50%; background:radial-gradient(circle,rgba(232,179,61,.16),transparent 62%); filter:blur(20px); pointer-events:none; }
 .hero__content{ position:relative; z-index:2; width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); }
 .hero__title{ font-size:clamp(2.6rem,6.5vw,6rem); line-height:.98; letter-spacing:-0.03em; margin:1rem 0 1.2rem; max-width:16ch; }
 .hero__title .line{ display:block; overflow:hidden; }
-.hero__title .line span{ display:block; transform:translateY(110%); }
-.hero.on .hero__title .line span{ animation:lnUp .8s var(--exp) forwards; }
-.hero.on .hero__title .line:nth-child(2) span{ animation-delay:.1s; }
+.hero__title .line > span{ display:block; transform:translateY(110%); }
+.hero.on .hero__title .line > span{ animation:lnUp .8s var(--exp) forwards; }
+.hero.on .hero__title .line:nth-child(2) > span{ animation-delay:.1s; }
+/* amber keyword — solid fill overrides the parent's clipped-text transparency
+   (nested background-clip:text paints a filled box in WebKit, so avoid it) */
+.hero__title .hl{ -webkit-text-fill-color:var(--accent-hi); color:var(--accent-hi); }
 .hero__sub{ color:var(--muted); font-size:clamp(1.05rem,2vw,1.35rem); max-width:44ch; }
 .hero__actions{ display:flex; flex-wrap:wrap; gap:.8rem 1rem; margin-top:1.8rem; }
 .hero__trust{ margin-top:1.6rem; color:var(--faint); font-size:.85rem; font-variant-numeric:tabular-nums; }
@@ -315,7 +318,7 @@ body.menu-open .menu__links a{ animation:menuIn .55s var(--exp) forwards; }
   *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
   .reveal,.mask{ opacity:1; transform:none; }
   .hero__media img{ animation:none; transform:none; }
-  .hero__title .line span,.loader__mark .ln{ transform:none; }
+  .hero__title .line > span,.loader__mark .ln{ transform:none; }
   .marquee__track{ animation:none; }
   .atmos .orb{ animation:none!important; }
 }
@@ -361,8 +364,9 @@ body::after{ content:""; position:fixed; inset:0; z-index:390; pointer-events:no
 .eyebrow::before{ content:""; width:1.7rem; height:1px; background:linear-gradient(90deg, var(--accent), transparent); flex:none; }
 
 /* ---- Gradient headlines (luxe) ---- */
-.hero__title .line span{ background:linear-gradient(178deg, #FFFFFF 8%, #EAD9B6 128%);
+.hero__title .line > span{ background:linear-gradient(178deg, #FFFFFF 8%, #EAD9B6 128%);
   -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero__title .hl{ -webkit-text-fill-color:var(--accent-hi); color:var(--accent-hi); background:none; }
 .section__head h2, .problem__head h2, .about__body h2, .coaching__info h2, .faq__head h2, .final h2, .content h2, .results h2, .method h2{
   background:linear-gradient(180deg, #FFFFFF 0%, #C6CAD1 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent; }
@@ -457,4 +461,34 @@ body::after{ content:""; position:fixed; inset:0; z-index:390; pointer-events:no
 /* ---- Desktop: fill the method/about negative space with a sticky visual balance ---- */
 @media (min-width:900px){
   .method .section__head{ max-width:720px; }
+}
+
+/* ============================================================================
+   ██  REAL PHOTOS v3 — "then & now" story + cohesion polish  ██
+   ============================================================================ */
+.about__figs{ position:relative; }
+/* childhood "then" framed inset overlapping the portrait */
+.about__then{ position:absolute; z-index:3; right:-14px; bottom:-28px; width:42%; max-width:210px; margin:0;
+  background:linear-gradient(180deg,#1a1d22,#141619); padding:7px 7px 30px; border-radius:9px;
+  border:1px solid rgba(255,255,255,.15); transform:rotate(4deg);
+  box-shadow:0 34px 74px -26px rgba(0,0,0,.88), 0 0 0 1px rgba(232,179,61,.06);
+  transition:transform .5s var(--exp); }
+.about__then picture{ display:block; border-radius:4px; overflow:hidden; aspect-ratio:1; position:relative; }
+.about__then img{ width:100%; height:100%; object-fit:cover;
+  /* nostalgic warm-faded grade so it harmonises with the dark theme */
+  filter:brightness(.82) contrast(1.05) saturate(.8) sepia(.3); }
+.about__then picture::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(20,14,4,.5) 100%); mix-blend-mode:multiply; }
+.about__then figcaption{ font-size:.64rem; letter-spacing:.03em; text-align:center; color:var(--accent-hi); opacity:.9; margin-top:9px; font-weight:500; }
+.about__then:hover{ transform:rotate(1.5deg) scale(1.03); }
+.about__figs.in .about__then{ animation:thenIn .85s var(--exp) .3s both; }
+@keyframes thenIn{ from{ opacity:0; transform:rotate(9deg) scale(.86) translateY(20px); } to{ opacity:1; transform:rotate(4deg) scale(1) translateY(0); } }
+.about__story{ color:var(--accent-hi)!important; opacity:.92; font-size:1rem; letter-spacing:.01em; }
+@media (max-width:899px){
+  .about__then{ position:relative; right:auto; bottom:auto; width:56%; max-width:220px; margin:-14% 0 0 auto; }
+  .about__figs.in .about__then{ animation-delay:.15s; }
+}
+@media (prefers-reduced-motion:reduce){
+  .about__figs.in .about__then{ animation:none; }
+  .about__then{ transform:rotate(4deg); }
 }
