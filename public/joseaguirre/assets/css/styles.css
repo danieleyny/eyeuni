@@ -499,3 +499,68 @@ body::after{ content:""; position:fixed; inset:0; z-index:390; pointer-events:no
   .about__figs.in .about__then{ animation:none; }
   .about__then{ transform:rotate(4deg); }
 }
+
+/* ============================================================================
+   ██  POLISH v4 — testimonials + booking fallback + motion  ██
+   ============================================================================ */
+
+/* Stat numbers: one line (fits "13+ years") */
+.stat b{ font-size:clamp(1.45rem,4.4vw,2.5rem); white-space:nowrap; }
+
+/* Hide the redundant hero eyebrow on phones */
+@media (max-width:640px){
+  .hero__content > .eyebrow{ display:none; }
+  .hero__title{ margin-top:0; }
+}
+
+/* ---- Testimonials, redesigned ---- */
+.quotes{ align-items:stretch; }
+.quote{ padding:2.1rem 1.7rem 1.5rem; border-radius:var(--r-lg);
+  background:linear-gradient(180deg, rgba(28,31,37,.92), rgba(16,18,22,.94));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 26px 64px -34px rgba(0,0,0,.85);
+  transition:transform .45s var(--exp), box-shadow .45s var(--exp), border-color .4s; }
+.quote::before{ content:"\201C"; position:absolute; top:.1rem; left:1.2rem; z-index:0;
+  font-family:Georgia,'Times New Roman',serif; font-size:5.5rem; line-height:1; color:var(--accent); opacity:.2; }
+.quote::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(90% 70% at 100% 0%, rgba(232,179,61,.09), transparent 58%); }
+.quote:hover{ transform:translateY(-5px); border-color:rgba(232,179,61,.4);
+  box-shadow:0 34px 74px -30px rgba(232,179,61,.32); }
+.quote blockquote{ position:relative; z-index:1; margin:.4rem 0 1.5rem; font-size:1.06rem; line-height:1.55; color:var(--text); }
+.quote figcaption{ display:flex; align-items:center; gap:.75rem; color:var(--muted); font-size:.85rem; }
+.quote figcaption::before{ display:none; }
+.quote__av{ width:42px; height:42px; flex:none; border-radius:50%; display:grid; place-items:center;
+  font-family:var(--display); font-weight:600; font-size:1.15rem; color:#141007;
+  background:linear-gradient(135deg, var(--accent-hi), var(--accent));
+  box-shadow:0 6px 18px -6px rgba(232,179,61,.5); }
+.quote__by{ display:flex; flex-direction:column; line-height:1.25; }
+.quote__by b{ color:var(--text); font-family:var(--display); font-weight:600; font-size:.98rem; letter-spacing:.01em; }
+.quote__by span{ color:var(--faint); font-size:.78rem; }
+
+/* ---- Booking fallback, redesigned ---- */
+.cal-fb{ gap:.55rem; padding:2.4rem 2rem; }
+.cal-fb::before{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(70% 60% at 50% 30%, rgba(232,179,61,.12), transparent 62%); }
+.cal-fb > *{ position:relative; z-index:1; }
+.cal-fb__ico{ width:60px; height:60px; margin-bottom:.5rem; border-radius:16px; display:grid; place-items:center;
+  color:var(--accent-hi); background:rgba(232,179,61,.12); border:1px solid rgba(232,179,61,.3);
+  box-shadow:0 12px 34px -14px rgba(232,179,61,.5); animation:calFloat 4.5s ease-in-out infinite; }
+.cal-fb__ico svg{ width:28px; height:28px; }
+.cal-fb__t{ margin-bottom:.1rem; }
+.cal-fb__sub{ color:var(--muted); font-size:.92rem; max-width:26ch; margin-bottom:.7rem; }
+.cal-fb .btn{ margin-top:.2rem; }
+.cal-fb__link{ margin-top:.35rem; }
+@keyframes calFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+
+/* ---- Motion polish: card hovers + gentle reveal scale ---- */
+.rcard{ transition:transform .45s var(--exp), box-shadow .45s var(--exp), border-color .4s; }
+.rcard:hover{ transform:translateY(-4px); border-color:rgba(232,179,61,.35); box-shadow:0 30px 66px -32px rgba(232,179,61,.28); }
+.step{ transition:transform .4s var(--exp); }
+.reveal{ transition:opacity .75s var(--exp), transform .75s var(--exp); }
+.rcard.reveal, .quote.reveal, .tier.reveal{ transform:translateY(26px) scale(.985); }
+.rcard.reveal.in, .quote.reveal.in, .tier.reveal.in{ transform:none; }
+
+@media (prefers-reduced-motion:reduce){
+  .cal-fb__ico{ animation:none; }
+  .rcard.reveal, .quote.reveal, .tier.reveal{ transform:none; }
+}
