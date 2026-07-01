@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>PTNYC — Private Training. New York. | Marcus Vale</title>
+  <meta name="description" content="Private, appointment-only one-on-one personal training on the Upper West Side. One coach, one client, one hour that changes the week. Marcus Vale, NASM-CPT." />
+  <meta name="theme-color" content="#0A0A0B" />
+  <link rel="canonical" href="https://eye-uni.com/ptnyc/" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PTNYC" />
+  <meta property="og:title" content="PTNYC — Private Training. New York." />
+  <meta property="og:description" content="Private, appointment-only 1:1 personal training on the Upper West Side. Training, taught in person." />
+  <meta property="og:url" content="https://eye-uni.com/ptnyc/" />
+  <meta property="og:image" content="https://eye-uni.com/ptnyc/assets/img/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PTNYC — Private Training. New York." />
+  <meta name="twitter:description" content="Private, appointment-only 1:1 personal training on the Upper West Side." />
+  <meta name="twitter:image" content="https://eye-uni.com/ptnyc/assets/img/og.jpg" />
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/img/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preload" as="image" href="assets/img/hero.webp" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600&display=swap" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <!-- JSON-LD: LocalBusiness / HealthClub -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HealthClub",
+    "name": "PTNYC — Private Training. New York.",
+    "description": "Private, appointment-only one-on-one personal training studio on the Upper West Side, led by coach Marcus Vale.",
+    "image": "https://eye-uni.com/ptnyc/assets/img/og.jpg",
+    "url": "https://eye-uni.com/ptnyc/",
+    "founder": "Marcus Vale",
+    "priceRange": "$$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "214 W. 102nd St",
+      "addressLocality": "New York",
+      "addressRegion": "NY",
+      "addressCountry": "US"
+    },
+    "areaServed": "Upper West Side, New York, NY",
+    "makesOffer": [
+      { "@type": "Offer", "name": "Single Session" },
+      { "@type": "Offer", "name": "The Program" },
+      { "@type": "Offer", "name": "Habit + Nutrition" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <!-- Loading overlay -->
+  <div class="loader" id="loader" role="progressbar" aria-label="Loading PTNYC" aria-valuemin="0" aria-valuemax="100">
+    <div class="loader__inner">
+      <div class="loader__mark" aria-hidden="true">
+        <span>P</span><span>T</span><span>N</span><span>Y</span><span>C</span>
+      </div>
+      <div class="loader__bar"><i></i></div>
+    </div>
+  </div>
+
+  <a class="skip" href="#hero">Skip to content</a>
+
+  <!-- Nav -->
+  <header class="nav" id="nav">
+    <div class="nav__wrap">
+      <a class="nav__brand" href="#hero" aria-label="PTNYC home">PTNYC</a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#approach">Approach</a>
+        <a href="#sessions">Sessions</a>
+        <a href="#about">About</a>
+        <a href="#results">Results</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn btn--ghost nav__cta" href="#contact">Book a session</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="menu" id="mobileMenu" aria-hidden="true">
+    <nav class="menu__links" aria-label="Mobile">
+      <a href="#approach">Approach</a>
+      <a href="#sessions">Sessions</a>
+      <a href="#about">About</a>
+      <a href="#results">Results</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn--accent menu__cta" href="#contact">Book a session</a>
+    <p class="menu__meta">214 W. 102nd St · Upper West Side</p>
+  </div>
+
+  <main>
+    <!-- 1. Hero -->
+    <section class="hero" id="hero">
+      <picture class="hero__media">
+        <source srcset="assets/img/hero.webp" type="image/webp" />
+        <img src="assets/img/hero.jpg" alt="A client training in a quiet, light-filled private studio" fetchpriority="high" />
+      </picture>
+      <div class="hero__scrim"></div>
+      <div class="hero__content">
+        <p class="hero__eyebrow reveal">Private Training. New York.</p>
+        <h1 class="hero__title reveal">One coach. One client.<br />One hour that changes the week.</h1>
+        <p class="hero__sub reveal">Appointment-only, one-on-one training on the Upper West Side. No crowded gym floor — just the work, taught in person.</p>
+        <div class="hero__actions reveal">
+          <a class="btn btn--accent" href="#contact">Book a session</a>
+          <a class="btn btn--link" href="#approach">See the approach <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <a class="hero__cue" href="#trust" aria-label="Scroll down"><span></span></a>
+    </section>
+
+    <!-- 2. Trust strip -->
+    <section class="trust" id="trust" aria-label="Credentials">
+      <div class="wrap trust__row">
+        <div class="trust__item reveal"><b>12+</b><span>years coaching</span></div>
+        <div class="trust__item reveal"><b>1:1</b><span>only, always</span></div>
+        <div class="trust__item reveal"><b>NASM</b><span>CPT certified</span></div>
+        <div class="trust__item reveal"><b>UWS</b><span>Upper West Side</span></div>
+      </div>
+    </section>
+
+    <!-- 3. The Approach -->
+    <section class="approach section" id="approach">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">The approach</p>
+          <h2>A method, not a workout.</h2>
+          <p class="section__lead">Every client starts the same way and progresses on their own timeline. The plan is simple; the coaching is precise.</p>
+        </header>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__n">01</span>
+            <h3>Assess</h3>
+            <p>We start with how you move. Posture, range, old injuries, the goal behind the goal. Nothing gets programmed until it's understood.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">02</span>
+            <h3>Teach</h3>
+            <p>You learn the movements properly — under load, with cues you'll remember. Good form isn't a warm-up. It's the whole thing.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">03</span>
+            <h3>Build</h3>
+            <p>Progressive, measured strength. We add weight when your body has earned it, and we keep the record so progress is never a guess.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">04</span>
+            <h3>Sustain</h3>
+            <p>Habits that hold outside the studio — sleep, movement, food. The aim is a body that works for decades, not a six-week transformation.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Dark band divider / pull quote -->
+    <section class="band" aria-label="Philosophy">
+      <picture class="band__media">
+        <source srcset="assets/img/band.webp" type="image/webp" />
+        <img src="assets/img/band.jpg" alt="Close study of a loaded barbell in low light" loading="lazy" />
+      </picture>
+      <div class="band__scrim"></div>
+      <blockquote class="band__quote reveal">
+        <p>“Strength, built privately.”</p>
+        <cite>Training, taught in person — one client at a time.</cite>
+      </blockquote>
+    </section>
+
+    <!-- 4. Sessions -->
+    <section class="sessions section" id="sessions">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Sessions</p>
+          <h2>Three ways to train.</h2>
+          <p class="section__lead">Every option is private and one-on-one. Prices are a starting point — the plan is built around you.</p>
+        </header>
+        <div class="tiers">
+          <article class="tier reveal">
+            <h3 class="tier__name">Single Session</h3>
+            <p class="tier__price"><span class="tier__from">from</span> <b>$175</b><span class="tier__unit">/ hour</span></p>
+            <p class="tier__desc">A focused hour — movement, coaching, and a clear plan you leave with. Ideal for a tune-up or a first taste.</p>
+            <ul class="tier__list">
+              <li>Full 60-minute private session</li>
+              <li>Movement + technique coaching</li>
+              <li>Written takeaways after</li>
+            </ul>
+            <a class="btn btn--ghost tier__cta" href="#contact">Book a session</a>
+          </article>
+
+          <article class="tier tier--featured reveal">
+            <span class="tier__tag">Most chosen</span>
+            <h3 class="tier__name">The Program</h3>
+            <p class="tier__price"><span class="tier__from">from</span> <b>$540</b><span class="tier__unit">/ week</span></p>
+            <p class="tier__desc">Three sessions a week, progressive and programmed. The fastest honest route to real, lasting strength.</p>
+            <ul class="tier__list">
+              <li>3× weekly private sessions</li>
+              <li>Progressive, tracked programming</li>
+              <li>Between-session check-ins</li>
+              <li>Priority scheduling</li>
+            </ul>
+            <a class="btn btn--accent tier__cta" href="#contact">Start the program</a>
+          </article>
+
+          <article class="tier reveal">
+            <h3 class="tier__name">Habit + Nutrition</h3>
+            <p class="tier__price"><span class="tier__from">from</span> <b>$720</b><span class="tier__unit">/ month</span></p>
+            <p class="tier__desc">Training plus Precision Nutrition habit coaching, for the client who wants the whole picture handled.</p>
+            <ul class="tier__list">
+              <li>Everything in The Program</li>
+              <li>Precision Nutrition L1 coaching</li>
+              <li>Monthly habit + progress review</li>
+            </ul>
+            <a class="btn btn--ghost tier__cta" href="#contact">Enquire</a>
+          </article>
+        </div>
+        <p class="sessions__note reveal">Corporate and post-rehab arrangements available on request.</p>
+      </div>
+    </section>
+
+    <!-- 5. About -->
+    <section class="about section" id="about">
+      <div class="wrap about__grid">
+        <picture class="about__media reveal">
+          <source srcset="assets/img/about.webp" type="image/webp" />
+          <img src="assets/img/about.jpg" alt="Portrait of coach Marcus Vale" loading="lazy" width="1200" height="1500" />
+        </picture>
+        <div class="about__body">
+          <p class="eyebrow reveal">About</p>
+          <h2 class="reveal">Marcus Vale.</h2>
+          <p class="about__role reveal">Founder &amp; Head Coach — NASM-CPT, Precision Nutrition L1</p>
+          <p class="reveal">I've spent twelve years coaching one person at a time — executives, creatives, and clients coming back from injury. The work is quiet and specific: teach the movement, add the load, keep the record, protect the body for the long run.</p>
+          <p class="reveal">There's no gym floor here, no music, no audience. Just a light-filled room, a plan built for you, and an hour where the only thing that matters is doing it well.</p>
+          <ul class="about__creds reveal">
+            <li>NASM Certified Personal Trainer</li>
+            <li>Precision Nutrition Level 1</li>
+            <li>Post-rehabilitation &amp; strength specialist</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Results -->
+    <section class="results section" id="results">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Results</p>
+          <h2>Quietly, it works.</h2>
+        </header>
+        <div class="quotes">
+          <figure class="quote reveal">
+            <blockquote>The most useful hour of my week. I'm stronger than I was at thirty, and nothing hurts anymore.</blockquote>
+            <figcaption>David — founder</figcaption>
+          </figure>
+          <figure class="quote reveal">
+            <blockquote>Marcus rebuilt my shoulder after surgery with more care than my physio did. Precise, patient, no theatrics.</blockquote>
+            <figcaption>Ana — surgeon</figcaption>
+          </figure>
+          <figure class="quote reveal">
+            <blockquote>Private, calm, and genuinely expert. It feels less like a gym and more like seeing a very good specialist.</blockquote>
+            <figcaption>Lena — creative director</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Studio / Location -->
+    <section class="studio section" id="studio">
+      <div class="wrap studio__grid">
+        <div class="studio__info">
+          <p class="eyebrow reveal">The studio</p>
+          <h2 class="reveal">Upper West Side, by appointment.</h2>
+          <p class="reveal">A private, light-filled studio a block from Central Park. One client at a time, so the room is always calm and always yours.</p>
+          <address class="studio__addr reveal">
+            <span class="studio__line">214 W. 102nd St</span>
+            <span class="studio__line">New York, NY</span>
+            <span class="studio__tag">By appointment only</span>
+          </address>
+          <a class="btn btn--ghost reveal" href="https://maps.google.com/?q=214+W+102nd+St+New+York+NY" target="_blank" rel="noopener">Get directions <span aria-hidden="true">→</span></a>
+        </div>
+        <picture class="studio__media reveal">
+          <source srcset="assets/img/studio.webp" type="image/webp" />
+          <img src="assets/img/studio.jpg" alt="The interior of the private Upper West Side training studio" loading="lazy" width="1500" height="1100" />
+        </picture>
+      </div>
+    </section>
+
+    <!-- 8. Contact -->
+    <section class="contact section" id="contact">
+      <div class="wrap contact__grid">
+        <div class="contact__intro">
+          <p class="eyebrow reveal">Contact</p>
+          <h2 class="reveal">Book a session.</h2>
+          <p class="reveal">Tell me a little about your goal and when you'd like to train. I reply to every enquiry personally, usually within a day.</p>
+          <p class="contact__meta reveal">214 W. 102nd St · New York, NY<br />By appointment only</p>
+        </div>
+        <!-- TODO: form endpoint — replace the mailto action with a Formspree/Basin endpoint (e.g. action="https://formspree.io/f/xxxx" method="POST") and remove the JS mailto fallback in main.js. -->
+        <form class="form reveal" id="bookingForm" novalidate>
+          <div class="field">
+            <label for="f-name">Name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required />
+            <span class="field__err" data-for="f-name"></span>
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required />
+            <span class="field__err" data-for="f-email"></span>
+          </div>
+          <div class="field">
+            <label for="f-phone">Phone <span class="opt">(optional)</span></label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+          <div class="field">
+            <label for="f-goal">Your goal</label>
+            <textarea id="f-goal" name="goal" rows="3" required></textarea>
+            <span class="field__err" data-for="f-goal"></span>
+          </div>
+          <div class="field">
+            <label for="f-time">Preferred time</label>
+            <input id="f-time" name="time" type="text" placeholder="e.g. weekday mornings" />
+          </div>
+          <button class="btn btn--accent form__submit" type="submit">Send enquiry</button>
+          <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- 9. Footer -->
+  <footer class="foot">
+    <div class="wrap foot__grid">
+      <div>
+        <a class="foot__brand" href="#hero">PTNYC</a>
+        <p class="foot__tag">Private Training. New York.</p>
+      </div>
+      <address class="foot__addr">
+        214 W. 102nd St<br />New York, NY<br />By appointment only
+      </address>
+      <nav class="foot__links" aria-label="Footer">
+        <a href="#approach">Approach</a>
+        <a href="#sessions">Sessions</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <div class="wrap foot__bottom">
+      <span>© <span id="year">2026</span> PTNYC · Marcus Vale</span>
+      <span>Upper West Side, New York</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
