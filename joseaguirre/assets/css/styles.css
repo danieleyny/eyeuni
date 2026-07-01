@@ -317,4 +317,144 @@ body.menu-open .menu__links a{ animation:menuIn .55s var(--exp) forwards; }
   .hero__media img{ animation:none; transform:none; }
   .hero__title .line span,.loader__mark .ln{ transform:none; }
   .marquee__track{ animation:none; }
+  .atmos .orb{ animation:none!important; }
+}
+
+/* ============================================================================
+   ██  VISUAL UPGRADE v2 — atmosphere, color depth, richer components  ██
+   ============================================================================ */
+
+/* ---- Warm-dark base + drifting auroras (depth behind everything) ---- */
+body{ background:#08090B; }
+.atmos{ position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
+  background:radial-gradient(130% 90% at 50% -12%, #101116 0%, #0A0B0E 52%, #08090B 100%); }
+.atmos .orb{ position:absolute; border-radius:50%; filter:blur(72px); will-change:transform; }
+.atmos .orb--1{ width:54vw; height:54vw; max-width:740px; max-height:740px; top:-10%; right:-6%;
+  background:radial-gradient(circle, rgba(232,179,61,.40), transparent 66%); opacity:.9; animation:drift1 27s ease-in-out infinite alternate; }
+.atmos .orb--2{ width:48vw; height:48vw; max-width:660px; max-height:660px; bottom:-12%; left:-10%;
+  background:radial-gradient(circle, rgba(200,70,43,.34), transparent 66%); opacity:.85; animation:drift2 33s ease-in-out infinite alternate; }
+.atmos .orb--3{ width:42vw; height:42vw; max-width:600px; max-height:600px; top:42%; left:46%;
+  background:radial-gradient(circle, rgba(168,120,44,.30), transparent 66%); opacity:.8; animation:drift3 37s ease-in-out infinite alternate; }
+@keyframes drift1{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-6%,5%) scale(1.12); } }
+@keyframes drift2{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(7%,-6%) scale(1.15); } }
+@keyframes drift3{ from{ transform:translate(-3%,0) scale(1); } to{ transform:translate(5%,4%) scale(1.1); } }
+
+/* Let the atmosphere breathe through the sections (rhythm via translucency) */
+.hero{ background:transparent; }
+.problem,.results,.coaching,.content,.final{ background:transparent; }
+.proof{ background:rgba(14,15,19,.55); }
+.method,.about,.faq{ background:rgba(14,15,19,.5); border-top:1px solid rgba(255,255,255,.05); }
+.marquee{ background:rgba(13,14,18,.62); }
+
+/* Soft global vignette for cinematic framing */
+.grain{ opacity:.05; }
+body::after{ content:""; position:fixed; inset:0; z-index:390; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 30%, transparent 58%, rgba(0,0,0,.4) 100%); }
+
+/* ---- Scroll progress ---- */
+.scrollbar{ position:fixed; top:0; left:0; right:0; height:3px; z-index:1200; transform:scaleX(0); transform-origin:0 50%;
+  background:linear-gradient(90deg, var(--accent-hi), var(--accent) 55%, var(--ember));
+  box-shadow:0 0 14px rgba(232,179,61,.6); }
+
+/* ---- Eyebrows: leading accent line ---- */
+.eyebrow{ display:inline-flex; align-items:center; gap:.6rem; }
+.eyebrow::before{ content:""; width:1.7rem; height:1px; background:linear-gradient(90deg, var(--accent), transparent); flex:none; }
+
+/* ---- Gradient headlines (luxe) ---- */
+.hero__title .line span{ background:linear-gradient(178deg, #FFFFFF 8%, #EAD9B6 128%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+.section__head h2, .problem__head h2, .about__body h2, .coaching__info h2, .faq__head h2, .final h2, .content h2, .results h2, .method h2{
+  background:linear-gradient(180deg, #FFFFFF 0%, #C6CAD1 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+/* ---- Gradient, glowing stat numbers ---- */
+.stat b, .rcard b{ background:linear-gradient(180deg, var(--accent-hi), var(--accent) 55%, #B9791F);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 3px 16px rgba(232,179,61,.28)); }
+.stat b{ font-size:clamp(2rem,5.5vw,3.1rem); }
+
+/* ---- Location chips ---- */
+.chip{ display:inline-flex; align-items:center; gap:.5rem; padding:.42rem .9rem; border-radius:999px;
+  background:rgba(232,179,61,.09); border:1px solid rgba(232,179,61,.30); color:var(--accent-hi);
+  font-size:.8rem; letter-spacing:.02em; margin-bottom:1.1rem; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+.chip__pin{ width:14px; height:14px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.proof__loc{ display:flex; align-items:center; justify-content:center; gap:.55rem; text-align:center;
+  color:var(--muted); font-size:.86rem; letter-spacing:.04em; margin-bottom:clamp(1.6rem,3.5vw,2.4rem); }
+.proof__loc .chip__pin{ width:15px; height:15px; stroke:var(--accent); }
+.about__loc{ display:inline-flex; align-items:center; gap:.5rem; color:var(--accent-hi); font-size:.85rem; letter-spacing:.02em; margin:.2rem 0 .4rem; }
+
+/* ---- Proof band: glow + gradient + dividers ---- */
+.proof{ position:relative; overflow:hidden; }
+.proof::before{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(70% 130% at 50% 0%, rgba(232,179,61,.10), transparent 62%); }
+.proof .wrap{ position:relative; z-index:1; }
+@media (min-width:600px){
+  .proof__row .stat{ padding-left:1.4rem; border-left:1px solid rgba(255,255,255,.07); }
+  .proof__row .stat:first-child{ padding-left:0; border-left:none; }
+}
+
+/* ---- Richer buttons: gradient + sheen sweep + glow ---- */
+.btn--accent{ background:linear-gradient(135deg, var(--accent-hi), var(--accent) 52%, #D1912A);
+  color:#141007; position:relative; overflow:hidden; box-shadow:0 10px 30px -12px rgba(232,179,61,.5); }
+.btn--accent::after{ content:""; position:absolute; top:0; left:-130%; width:60%; height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.5), transparent); transform:skewX(-18deg); transition:left .7s var(--exp); pointer-events:none; }
+.btn--accent:hover::after{ left:150%; }
+.btn--accent:hover{ background:linear-gradient(135deg, #FBD989, var(--accent-hi) 55%, #E0A63A); box-shadow:0 18px 48px -14px rgba(232,179,61,.7); }
+
+/* ---- Cards: gradient surface, warm-tinted border, inner glow ---- */
+.rcard, .quote{ background:linear-gradient(180deg, rgba(28,31,37,.92), rgba(17,19,23,.92)); border-color:rgba(255,255,255,.07);
+  box-shadow:0 24px 60px -34px rgba(0,0,0,.85); position:relative; overflow:hidden; }
+.rcard::before{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(90% 120% at 0% 0%, rgba(232,179,61,.14), transparent 55%); }
+.rcard b, .rcard span{ position:relative; z-index:1; }
+.quote:hover{ border-color:rgba(232,179,61,.4); box-shadow:0 24px 60px -30px rgba(232,179,61,.25); }
+
+/* Image cards: warm glow ring + depth */
+.about__media, .ba__frame, .coaching__cal{ box-shadow:0 44px 90px -34px rgba(0,0,0,.85), 0 0 0 1px rgba(232,179,61,.12), 0 0 60px -20px rgba(232,179,61,.18); }
+.reel{ box-shadow:0 20px 44px -28px rgba(0,0,0,.8); transition:transform .5s var(--exp), box-shadow .5s var(--exp), border-color .4s; }
+.reel:hover{ transform:translateY(-4px); border-color:rgba(232,179,61,.35); box-shadow:0 30px 60px -28px rgba(232,179,61,.3); }
+
+/* ---- Brighter, warmer imagery ---- */
+.hero__media img{ filter:brightness(.9) contrast(1.07) saturate(1.02) sepia(.05); }
+.band__media img{ filter:brightness(.72) contrast(1.09) saturate(.98) sepia(.07); }
+.reel img{ filter:brightness(.9) contrast(1.05) saturate(1) sepia(.05); }
+.about__media img{ filter:brightness(1) contrast(1.04) saturate(1.02) sepia(.04); }
+.ba__img img{ filter:brightness(.98) contrast(1.05) saturate(1.02) sepia(.04); }
+
+/* ---- Hero: extra ambient light + warmer scrim ---- */
+.hero__glow{ width:64vw; height:64vw; max-width:720px; max-height:720px; background:radial-gradient(circle, rgba(232,179,61,.22), transparent 62%); }
+.hero::after{ content:""; position:absolute; z-index:1; left:-10%; bottom:-10%; width:46vw; height:46vw; max-width:520px; max-height:520px;
+  border-radius:50%; background:radial-gradient(circle, rgba(200,70,43,.16), transparent 64%); filter:blur(20px); pointer-events:none; }
+.hero__scrim{ background:linear-gradient(180deg, rgba(8,9,11,.74) 0%, rgba(8,9,11,.18) 32%, rgba(8,9,11,.5) 68%, #08090B 100%), linear-gradient(90deg, rgba(8,9,11,.72) 0%, transparent 60%); }
+
+/* ---- Method: ambient glow + bolder step numbers + glowing bf-scale card ---- */
+.method{ position:relative; overflow:hidden; }
+.method::before{ content:""; position:absolute; right:-8%; top:6%; width:34vw; height:34vw; max-width:480px; max-height:480px;
+  background:radial-gradient(circle, rgba(232,179,61,.13), transparent 62%); filter:blur(10px); pointer-events:none; }
+.method .wrap{ position:relative; z-index:1; }
+.step__n{ font-size:clamp(1.5rem,3.2vw,2.1rem); background:linear-gradient(180deg, var(--accent-hi), var(--accent));
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+.step{ transition:background .4s var(--exp); }
+.step h3{ transition:color .3s; }
+.step:hover h3{ color:var(--accent-hi); }
+.bfscale{ padding:clamp(1.4rem,3.4vw,2.2rem); border-radius:var(--r-lg);
+  background:linear-gradient(180deg, rgba(26,29,34,.65), rgba(15,17,21,.65)); border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 30px 70px -40px rgba(0,0,0,.8), 0 0 0 1px rgba(232,179,61,.08); position:relative; overflow:hidden; }
+.bfscale::before{ content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(70% 120% at 80% 0%, rgba(232,179,61,.10), transparent 60%); }
+.bfscale__track{ height:16px; box-shadow:0 0 24px -6px rgba(232,179,61,.35); }
+
+/* ---- Marquee: brighter, accent-tinted ---- */
+.marquee__item{ color:var(--muted); }
+.marquee__item::after{ color:var(--accent); text-shadow:0 0 10px rgba(232,179,61,.5); }
+
+/* ---- Final CTA: bigger warm aura + gradient ---- */
+.final{ background:transparent; }
+.final__scrim{ background:radial-gradient(64% 84% at 50% 42%, rgba(232,179,61,.18), transparent 62%), radial-gradient(50% 60% at 50% 100%, rgba(200,70,43,.12), transparent 70%); }
+
+/* ---- Section head accent for method/results/content (align gradient headings) ---- */
+.section__head--row h2{ background:linear-gradient(180deg,#FFFFFF,#C6CAD1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+/* ---- Desktop: fill the method/about negative space with a sticky visual balance ---- */
+@media (min-width:900px){
+  .method .section__head{ max-width:720px; }
 }
