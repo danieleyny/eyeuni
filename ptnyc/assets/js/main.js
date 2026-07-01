@@ -11,10 +11,19 @@
     var seen = false;
     try { seen = sessionStorage.getItem('ptnyc_seen') === '1'; } catch (e) {}
 
+    var pctEl = doc.getElementById('loaderPct');
+    var barEl = el.querySelector('.loader__bar i');
+
+    function setPct(v) {
+      if (pctEl) pctEl.textContent = String(v).padStart(2, '0');
+      if (barEl) barEl.style.width = v + '%';
+      el.setAttribute('aria-valuenow', String(v));
+    }
+
     function finish() {
-      el.classList.add('is-done');
-      el.setAttribute('aria-valuenow', '100');
-      window.setTimeout(function () { el.classList.add('is-hidden'); }, 750);
+      setPct(100);
+      el.classList.add('is-done');            // doors part + mark lifts away
+      window.setTimeout(function () { el.classList.add('is-hidden'); }, 850);
       try { sessionStorage.setItem('ptnyc_seen', '1'); } catch (e) {}
     }
 
@@ -25,9 +34,20 @@
       return;
     }
 
+    // Live count-up drives the counter + hairline together.
+    var DUR = 1200, t0 = null;
+    (function tick(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / DUR);
+      // ease-out so it decelerates toward 100
+      var eased = 1 - Math.pow(1 - p, 2);
+      setPct(Math.round(eased * 100));
+      if (p < 1) requestAnimationFrame(tick);
+    })(performance.now());
+
     // Exit as soon as the page is ready, but keep the intro on screen briefly,
     // and never longer than 2.2s total.
-    var minShow = 1450; // lets the mark + hairline play
+    var minShow = 1500; // lets the mark unmask + counter reach 100
     var start = Date.now();
     var done = false;
     function go() {

@@ -89,35 +89,51 @@ section[id], main [id]{ scroll-margin-top:calc(var(--nav-h) + 8px); }
 /* ===========================================================
    Loader
    =========================================================== */
-.loader{
-  position:fixed; inset:0; z-index:1000; background:var(--ink);
-  display:grid; place-items:center;
-  transition:transform .7s var(--ease);
-}
-.loader.is-done{ transform:translateY(-100%); }
+.loader{ position:fixed; inset:0; z-index:1000; overflow:hidden; }
 .loader.is-hidden{ display:none; }
+/* split "doors" — two ink panels that part to reveal the hero */
+.loader__panel{
+  position:absolute; left:0; right:0; height:calc(50% + 1px); background:var(--ink);
+  transition:transform .82s var(--ease);
+}
+.loader__panel--top{ top:0; }
+.loader__panel--bottom{ bottom:0; }
+.loader.is-done .loader__panel--top{ transform:translateY(-100%); }
+.loader.is-done .loader__panel--bottom{ transform:translateY(100%); }
+
+.loader__center{
+  position:absolute; inset:0; z-index:2; display:grid; place-content:center; text-align:center;
+  transition:opacity .45s var(--ease), transform .6s var(--ease);
+}
+.loader.is-done .loader__center{ opacity:0; transform:translateY(-10px) scale(1.04); }
+
 .loader__mark{
-  display:flex; gap:.06em; font-family:var(--display); font-weight:600;
-  font-size:clamp(2.4rem,10vw,4.5rem); color:var(--white); letter-spacing:.04em;
+  display:flex; justify-content:center; gap:.03em; font-family:var(--display); font-weight:600;
+  font-size:clamp(2.6rem,11vw,5rem); color:var(--white); letter-spacing:.03em;
 }
-.loader__mark span{
-  opacity:0; transform:translateY(115%);
-  animation:markIn .8s var(--ease) forwards;
+/* each glyph is "unmasked" upward — like ink filling in */
+.gl{
+  display:inline-block; clip-path:inset(0 0 112% 0); transform:translateY(.16em);
+  animation:glIn .8s var(--ease) forwards;
 }
-.loader__mark span:nth-child(1){ animation-delay:.05s; }
-.loader__mark span:nth-child(2){ animation-delay:.13s; }
-.loader__mark span:nth-child(3){ animation-delay:.21s; }
-.loader__mark span:nth-child(4){ animation-delay:.29s; }
-.loader__mark span:nth-child(5){ animation-delay:.37s; color:var(--accent); }
-@keyframes markIn{ to{ opacity:1; transform:translateY(0); } }
-.loader__bar{
-  width:min(240px,60vw); height:2px; background:#ffffff1a; margin:1.6rem auto 0; overflow:hidden; border-radius:2px;
+.gl:nth-child(1){ animation-delay:.06s; }
+.gl:nth-child(2){ animation-delay:.15s; color:var(--accent); }
+.gl:nth-child(3){ animation-delay:.24s; }
+.gl:nth-child(4){ animation-delay:.33s; }
+.gl:nth-child(5){ animation-delay:.42s; }
+@keyframes glIn{ to{ clip-path:inset(0 0 -12% 0); transform:translateY(0); } }
+
+.loader__meta{
+  display:flex; justify-content:space-between; align-items:center; gap:1.5rem;
+  width:min(260px,64vw); margin:1.4rem auto .55rem;
+  opacity:0; animation:loFade .5s ease .55s forwards;
 }
-.loader__bar i{
-  display:block; height:100%; width:0; background:var(--accent);
-  animation:barGrow 1.15s var(--ease) .35s forwards;
-}
-@keyframes barGrow{ to{ width:100%; } }
+.loader__label{ font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--slate); }
+.loader__pct{ font-size:.72rem; letter-spacing:.08em; color:#fff; font-variant-numeric:tabular-nums; }
+@keyframes loFade{ to{ opacity:1; } }
+
+.loader__bar{ width:min(260px,64vw); height:2px; background:#ffffff1a; margin:0 auto; overflow:hidden; border-radius:2px; }
+.loader__bar i{ display:block; height:100%; width:0; background:var(--accent); }
 
 /* ===========================================================
    Nav
@@ -386,5 +402,6 @@ body.menu-open .menu{ transform:translateY(0); visibility:visible; }
   *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
   .reveal{ opacity:1; transform:none; }
   .hero__cue span{ animation:none; }
-  .loader__mark span{ opacity:1; transform:none; }
+  .gl{ clip-path:none; transform:none; }
+  .loader__meta{ opacity:1; }
 }
