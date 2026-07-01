@@ -11,11 +11,16 @@ export default function Portfolio({ go }) {
   const [filter, setFilter] = useState('all')
   const f = t.portfolio.filters
 
+  const floatingTitle = t.portfolio.items.find((it) => it.cat === 'floating')?.title || f.floating
   const items = [
     ...t.portfolio.items.map((it, i) => ({ ...it, name: ITEM_MEDIA[i] })),
     { title: f.cleaning, cat: 'cleaning', tag: f.cleaning, name: 'robot-flag-hero' },
     { title: f.cleaning, cat: 'cleaning', tag: f.cleaning, name: 'robots-pair-ground' },
     { title: f.rooftop, cat: 'rooftop', tag: f.rooftop, name: 'robot-closeup-sky' },
+    { title: floatingTitle, cat: 'floating', tag: f.floating, name: 'floating-pv-02' },
+    { title: floatingTitle, cat: 'floating', tag: f.floating, name: 'floating-pv-03' },
+    { title: floatingTitle, cat: 'floating', tag: f.floating, name: 'floating-pv-04' },
+    { title: floatingTitle, cat: 'floating', tag: f.floating, name: 'floating-pv-05' },
   ]
   const shown = filter === 'all' ? items : items.filter((i) => i.cat === filter)
 
