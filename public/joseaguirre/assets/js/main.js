@@ -15,12 +15,13 @@
     'loader.tag': 'Fat-Loss Coach', 'a11y.skip': 'Skip to content',
     'nav.method': 'Method', 'nav.results': 'Results', 'nav.about': 'About', 'nav.coaching': 'Coaching',
     'cta.book': 'Book your call',
-    'hero.eyebrow': 'Fat-Loss Coach',
+    'hero.eyebrow': 'Fat-Loss Coach', 'hero.loc': 'Lima, Peru · Online coaching',
     'hero.h1a': 'Lose fat without living', 'hero.h1b': 'at the gym.',
     'hero.sub': 'I help men 30+ build a lean, athletic physique they can actually keep — and feel good again.',
     'hero.cta': 'Book your free call', 'hero.cta2': 'See the method',
     'hero.trust': 'Online 1:1 coaching · 33,000+ men follow his method',
-    'proof.followers': 'followers', 'proof.clients': 'men transformed', 'proof.years': 'of experience', 'proof.online': 'online',
+    'proof.loc': 'Lima, Peru · Training since 2013 · 100% online coaching',
+    'proof.followers': 'followers', 'proof.clients': 'men transformed', 'proof.years': 'training since 2013', 'proof.online': 'online · at your pace',
     'prob.kicker': 'Who it’s for',
     'prob.h2': 'You’re 30+, you’ve tried everything… and nothing sticks.',
     'prob.body': 'Impossible diets, two-hour workouts, plans that ignore your job, your family and your real life. You don’t need a magazine-cover body. You need a method you can sustain — and to feel strong, light and energetic again.',
@@ -37,7 +38,8 @@
     'res.q1': 'I looked in the mirror and recognised myself again. And this time I didn’t gain it back.',
     'res.q2': 'No crazy diets or hours at the gym. It fit around my work and my kids.',
     'about.kicker': 'About Jose', 'about.h2': 'An athletic body, built for real life.',
-    'about.p1': 'I’m an online fat-loss coach. I’ve spent years helping men 30+ get back in shape without putting their life on hold — because what you can’t sustain doesn’t count.',
+    'about.loc': 'Lima, Peru · Training since 2013',
+    'about.p1': 'I’m an online fat-loss coach, based in Lima, Peru. I’ve been training since 2013 and have spent years helping men 30+ get back in shape without putting their life on hold — because what you can’t sustain doesn’t count.',
     'about.p2': 'Most men don’t want a huge physique. They want to feel good again: strong, light, full of energy. That’s my whole job.',
     'about.sig': 'I won’t promise you abs in 30 days. I’ll teach you to keep them for life.',
     'coach.kicker': '1:1 Coaching', 'coach.h2': 'One program. Made for you.',
@@ -107,6 +109,22 @@
     function go() { if (done) return; done = true; setTimeout(finish, Math.max(0, minShow - (Date.now() - start))); }
     if (doc.readyState === 'complete') go(); else W.addEventListener('load', go, { once: true });
     setTimeout(go, 2200);
+  })();
+
+  /* ============ Scroll progress bar ============ */
+  (function scrollbar() {
+    var bar = doc.getElementById('scrollbar'); if (!bar) return;
+    var ticking = false;
+    function update() {
+      var h = doc.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var p = max > 0 ? (W.scrollY / max) : 0;
+      bar.style.transform = 'scaleX(' + Math.max(0, Math.min(1, p)) + ')';
+      ticking = false;
+    }
+    update();
+    W.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    W.addEventListener('resize', update, { passive: true });
   })();
 
   /* ============ Nav + mobile menu ============ */
