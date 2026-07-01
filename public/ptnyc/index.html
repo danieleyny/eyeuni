@@ -62,9 +62,15 @@
 <body>
   <!-- Loading overlay -->
   <div class="loader" id="loader" role="progressbar" aria-label="Loading PTNYC" aria-valuemin="0" aria-valuemax="100">
-    <div class="loader__inner">
-      <div class="loader__mark" aria-hidden="true">
-        <span>P</span><span>T</span><span>N</span><span>Y</span><span>C</span>
+    <div class="loader__panel loader__panel--top" aria-hidden="true"></div>
+    <div class="loader__panel loader__panel--bottom" aria-hidden="true"></div>
+    <div class="loader__center" aria-hidden="true">
+      <div class="loader__mark">
+        <span class="gl">P</span><span class="gl">T</span><span class="gl">N</span><span class="gl">Y</span><span class="gl">C</span>
+      </div>
+      <div class="loader__meta">
+        <span class="loader__label">Private Training · New York</span>
+        <span class="loader__pct" id="loaderPct">00</span>
       </div>
       <div class="loader__bar"><i></i></div>
     </div>
