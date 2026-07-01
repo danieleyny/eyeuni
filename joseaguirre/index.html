@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,500&f[]=general-sans@400,500,600&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <noscript><style>.loader{display:none!important}.reveal,.mask{opacity:1!important;transform:none!important}.hero__title .line span{transform:none!important}.bookbar{display:none!important}</style></noscript>
+  <noscript><style>.loader{display:none!important}.reveal,.mask{opacity:1!important;transform:none!important}.hero__title .line > span{transform:none!important}.bookbar{display:none!important}</style></noscript>
 
   <!-- Calendly -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
@@ -107,7 +107,7 @@
       <div class="hero__content">
         <span class="chip reveal"><svg class="chip__pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span data-i18n="hero.loc">Lima, Perú · Coaching online</span></span>
         <p class="eyebrow reveal" data-i18n="hero.eyebrow">Coach de Pérdida de Grasa</p>
-        <h1 class="hero__title"><span class="line"><span data-i18n="hero.h1a">Pierde grasa sin vivir</span></span><span class="line"><span data-i18n="hero.h1b">en el gimnasio.</span></span></h1>
+        <h1 class="hero__title"><span class="line"><span><span data-i18n="hero.h1a1">Pierde </span><span class="hl" data-i18n="hero.h1grasa">grasa</span><span data-i18n="hero.h1a2"> sin vivir</span></span></span><span class="line"><span data-i18n="hero.h1b">en el gimnasio.</span></span></h1>
         <p class="hero__sub reveal" data-i18n="hero.sub">Ayudo a hombres +30 a construir un físico atlético y sostenible — y a volver a sentirse bien.</p>
         <div class="hero__actions reveal">
           <button class="btn btn--accent btn--mag" data-cal><span data-i18n="hero.cta">Agenda tu llamada gratis</span> <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -208,13 +208,20 @@
     <!-- 6 · Sobre Jose -->
     <section class="about section" id="sobre">
       <div class="wrap about__grid">
-        <picture class="about__media reveal"><source srcset="assets/media/about.webp" type="image/webp" /><img src="assets/media/about.jpg" alt="Retrato de Jose Aguirre" loading="lazy" width="1200" height="1500" /></picture>
+        <div class="about__figs reveal">
+          <picture class="about__media"><source srcset="assets/media/about.webp" type="image/webp" /><img src="assets/media/about.jpg" alt="Retrato de Jose Aguirre en el gimnasio" loading="lazy" width="1200" height="1500" /></picture>
+          <figure class="about__then">
+            <picture><source srcset="assets/media/then.webp" type="image/webp" /><img src="assets/media/then.jpg" alt="Jose de niño en una playa de Lima, 2013" loading="lazy" width="900" height="900" /></picture>
+            <figcaption data-i18n="then.cap">Lima, 2013 — donde empezó todo.</figcaption>
+          </figure>
+        </div>
         <div class="about__body">
           <p class="eyebrow reveal" data-i18n="about.kicker">Sobre Jose</p>
           <h2 class="mask" data-i18n="about.h2">Un físico atlético, construido para la vida real.</h2>
           <p class="about__loc reveal"><svg class="chip__pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span data-i18n="about.loc">Lima, Perú · Entrenando desde 2013</span></p>
           <p class="reveal" data-i18n="about.p1">Soy coach online de pérdida de grasa, desde Lima, Perú. Entreno desde 2013 y llevo años ayudando a hombres +30 a recuperar su forma sin poner su vida en pausa — porque lo que no puedes sostener, no sirve.</p>
           <p class="reveal" data-i18n="about.p2">La mayoría no quiere un físico enorme. Quiere volver a sentirse bien: fuerte, ligero, con energía. Ese es todo mi trabajo.</p>
+          <p class="about__story reveal" data-i18n="about.story">De ese niño de Lima al coach que soy hoy.</p>
           <p class="about__sig reveal" data-i18n="about.sig">No te voy a prometer abdominales en 30 días. Te voy a enseñar a mantenerlos toda la vida.</p>
           <p class="about__name reveal">— Jose Aguirre</p>
         </div>

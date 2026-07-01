@@ -17,6 +17,7 @@
     'cta.book': 'Book your call',
     'hero.eyebrow': 'Fat-Loss Coach', 'hero.loc': 'Lima, Peru · Online coaching',
     'hero.h1a': 'Lose fat without living', 'hero.h1b': 'at the gym.',
+    'hero.h1a1': 'Lose ', 'hero.h1grasa': 'fat', 'hero.h1a2': ' without living',
     'hero.sub': 'I help men 30+ build a lean, athletic physique they can actually keep — and feel good again.',
     'hero.cta': 'Book your free call', 'hero.cta2': 'See the method',
     'hero.trust': 'Online 1:1 coaching · 33,000+ men follow his method',
@@ -39,6 +40,8 @@
     'res.q2': 'No crazy diets or hours at the gym. It fit around my work and my kids.',
     'about.kicker': 'About Jose', 'about.h2': 'An athletic body, built for real life.',
     'about.loc': 'Lima, Peru · Training since 2013',
+    'then.cap': 'Lima, 2013 — where it all started.',
+    'about.story': 'From that kid in Lima to the coach I am today.',
     'about.p1': 'I’m an online fat-loss coach, based in Lima, Peru. I’ve been training since 2013 and have spent years helping men 30+ get back in shape without putting their life on hold — because what you can’t sustain doesn’t count.',
     'about.p2': 'Most men don’t want a huge physique. They want to feel good again: strong, light, full of energy. That’s my whole job.',
     'about.sig': 'I won’t promise you abs in 30 days. I’ll teach you to keep them for life.',
@@ -211,15 +214,33 @@
       handle.setAttribute('aria-valuenow', Math.round(pct));
     }
     function fromX(clientX) { var r = frame.getBoundingClientRect(); set(((clientX - r.left) / r.width) * 100); }
-    frame.addEventListener('pointerdown', function (e) { dragging = true; handle.setPointerCapture && handle.setPointerCapture(e.pointerId); fromX(e.clientX); });
+    function clearGlide() { clip.style.transition = ''; handle.style.transition = ''; }
+    frame.addEventListener('pointerdown', function (e) { nudged = true; clearGlide(); dragging = true; handle.setPointerCapture && handle.setPointerCapture(e.pointerId); fromX(e.clientX); });
     W.addEventListener('pointermove', function (e) { if (dragging) fromX(e.clientX); });
     W.addEventListener('pointerup', function () { dragging = false; });
     handle.addEventListener('keydown', function (e) {
       var cur = parseFloat(handle.getAttribute('aria-valuenow')) || 50;
-      if (e.key === 'ArrowLeft') { set(cur - 4); e.preventDefault(); }
-      if (e.key === 'ArrowRight') { set(cur + 4); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { nudged = true; clearGlide(); set(cur - 4); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { nudged = true; clearGlide(); set(cur + 4); e.preventDefault(); }
     });
     set(50);
+
+    // Auto-nudge once on first scroll into view (50 → 63 → 50) to invite interaction.
+    var nudged = false;
+    function nudge() {
+      if (nudged || dragging) return; nudged = true;
+      var glide = 'clip-path .55s cubic-bezier(0.16,1,0.3,1)';
+      clip.style.transition = glide; handle.style.transition = 'left .55s cubic-bezier(0.16,1,0.3,1)';
+      set(63);
+      setTimeout(function () { if (!dragging) set(50); }, 620);
+      setTimeout(clearGlide, 1250);
+    }
+    if (!reduce && 'IntersectionObserver' in W) {
+      var nio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { setTimeout(nudge, 400); nio.unobserve(e.target); } });
+      }, { threshold: 0.55 });
+      nio.observe(frame);
+    }
   })();
 
   /* ============ Magnetic CTAs (desktop) ============ */
