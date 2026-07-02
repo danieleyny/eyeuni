@@ -180,14 +180,14 @@ body.menu-open .menu__links a{ animation:mIn .5s var(--exp) forwards; }
   .mpanel__n{ grid-row:1; }
   .mpanel__body{ grid-column:1; }
   .mpanel__img{ display:block; grid-column:2; grid-row:1 / span 2; aspect-ratio:3/4; align-self:center; max-height:66vh; }
-  .mpanel__dia{ display:grid; place-items:center; background:linear-gradient(180deg,rgba(245,241,234,.035),rgba(245,241,234,0)); border:1px solid rgba(245,241,234,.10); box-shadow:none; }
   .metodo__prog{ display:block; }
   .metodo__dots{ display:none; }
 }
 @media (max-width:1079px){
   .metodo__track{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-block:2rem; }
   .metodo__track::-webkit-scrollbar{ display:none; }
-  .mpanel{ width:82vw; scroll-snap-align:center; }
+  .mpanel{ width:82vw; scroll-snap-align:center; gap:1.2rem; }
+  .mpanel__img{ display:block; order:-1; aspect-ratio:4/5; max-height:44vh; }
 }
 
 /* ============================================================ 03 Historia timeline */
@@ -245,14 +245,11 @@ body.menu-open .menu__links a{ animation:mIn .5s var(--exp) forwards; }
 .story__tlhead .chead__l{ display:block; margin-bottom:1rem; }
 .story__tlhead .story__h{ font-size:clamp(2rem,4.6vw,3.4rem); }
 
-/* Método fine-line diagrams (desktop) */
-.dia{ width:min(70%,320px); height:auto; }
-.dia-frame{ stroke:rgba(245,241,234,.14); stroke-width:1; fill:none; }
-.dia-line{ stroke:var(--bronze); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; fill:none; }
-.dia-fill{ fill:var(--bronze); }
+/* Picture wrappers must fill their aspect-ratio box so object-fit:cover works (no letterboxing) */
+.hero__media picture,.spread__media picture,.mpanel__img picture,.tlnode__img picture,.about__main picture,.break picture,.film picture{ display:block; width:100%; height:100%; }
 
 /* Warm-unify stock imagery */
-.tlnode__img.stock img,.film--stock img{ filter:saturate(1.03) contrast(1.03) brightness(1.02) sepia(.08); }
+.tlnode__img.stock img,.film--stock img,.mpanel__img.stock img{ filter:saturate(1.03) contrast(1.03) brightness(1.03) sepia(.08); }
 
 /* Full-bleed break */
 .break{ position:relative; margin:0; height:clamp(340px,52vw,660px); overflow:hidden; }
