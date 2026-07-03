@@ -1,317 +1,265 @@
-/* Jose Aguirre — interactions. Vanilla JS. */
+/* Jose Aguirre — "Athletic Performance System" (Option A). Vanilla JS. */
 (function () {
   'use strict';
   var doc = document, W = window;
-  var reduce = W.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = W.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var reduce = W.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var CAL = 'https://calendly.com/joseaguirrefitness/onlinecoaching';
 
-  /* ============ Calendly config (single source of truth) ============ */
-  var CAL_URL = 'https://calendly.com/joseaguirrefitness/onlinecoaching';
-  var CAL_THEME = '?hide_gdpr_banner=1&background_color=14161a&text_color=f4f5f7&primary_color=e8b33d';
-
-  /* ============ i18n (ES captured from DOM; EN dictionary below) ============ */
+  /* ---------- i18n ---------- */
   var EN = {
-    'meta.desc': 'Online 1:1 coaching for men 30+. Lose fat without living at the gym and build a lean, sustainable physique with Jose Aguirre.',
-    'loader.tag': 'Fat-Loss Coach', 'a11y.skip': 'Skip to content',
-    'nav.method': 'Method', 'nav.results': 'Results', 'nav.about': 'About', 'nav.coaching': 'Coaching',
+    'meta.desc': 'Online coaching system for men 30+. Lose fat without living at the gym and keep an athletic body. Lima, since 2013.',
+    'a11y.skip': 'Skip to content',
+    'loader.sys': 'Loading system',
+    'nav.system': 'System', 'nav.results': 'Results', 'nav.coach': 'Coach', 'nav.program': 'Program', 'nav.faq': 'FAQ',
     'cta.book': 'Book your call',
-    'hero.eyebrow': 'Fat-Loss Coach', 'hero.loc': 'Lima, Peru · Online coaching',
-    'hero.h1a': 'Lose fat without living', 'hero.h1b': 'at the gym.',
-    'hero.h1a1': 'Lose ', 'hero.h1grasa': 'fat', 'hero.h1a2': ' without living',
-    'hero.sub': 'I help men 30+ build a lean, athletic physique they can actually keep — and feel good again.',
-    'hero.cta': 'Book your free call', 'hero.cta2': 'See the method',
-    'hero.trust': 'Online 1:1 coaching · 33,000+ men follow his method',
-    'proof.loc': 'Lima, Peru · Training since 2013 · 100% online coaching',
-    'proof.followers': 'followers', 'proof.clients': 'men transformed', 'proof.years': 'training since 2013', 'proof.online': 'online · at your pace',
-    'prob.kicker': 'Who it’s for',
-    'prob.h2': 'You’re 30+, you’ve tried everything… and nothing sticks.',
-    'prob.body': 'Impossible diets, two-hour workouts, plans that ignore your job, your family and your real life. You don’t need a magazine-cover body. You need a method you can sustain — and to feel strong, light and energetic again.',
-    'prob.b1': 'No extreme diets', 'prob.b2': 'No living at the gym', 'prob.b3': 'No gaining it back',
-    'method.kicker': 'The method', 'method.h2': 'A method that fits your real life.',
-    'method.s1t': 'We assess your starting point', 'method.s1b': 'Body composition, habits, schedule and your real goal. No guessing.',
-    'method.s2t': 'You train smart', 'method.s2b': 'Sessions built around your time, not your exhaustion.',
-    'method.s3t': 'You eat without suffering', 'method.s3b': 'Flexible nutrition that fits your life — no absurd bans.',
-    'method.s4t': 'You keep it', 'method.s4b': 'Habits that stay for good, not one more diet.',
-    'method.bfcap': 'Your goal isn’t an impossible number. It’s a lean physique you can maintain.',
-    'res.kicker': 'Results', 'res.h2': 'Real bodies. Changes that last.',
+    'hero.eyebrow': 'Lima, Peru · Since 2013 · Online coaching',
+    'hero.h1a': 'Lose fat.', 'hero.h1b': 'Without living', 'hero.h1c': 'at the gym.',
+    'hero.sub': 'A system for men 30+ who want to feel strong, light and energized again — and keep it.',
+    'hero.cta2': 'See the system',
+    'score.community': 'Community', 'score.years': 'Years', 'score.men': 'Men', 'score.online': 'Online',
+    'fit.kicker': 'Qualification', 'fit.h2': 'Is it for you?',
+    'fit.yes': 'It’s for you if', 'fit.no': 'It’s not for you if',
+    'fit.y1': 'You’re 30+ and want to get back in shape.',
+    'fit.y2': 'You tried it alone and it didn’t stick.',
+    'fit.y3': 'You want something sustainable, not a crash diet.',
+    'fit.y4': 'You’re short on time and need a clear plan.',
+    'fit.n1': 'You want a miracle transformation in 30 days.',
+    'fit.n2': 'You want to live inside the gym.',
+    'fit.n3': 'You’re not ready to be consistent.',
+    'fit.n4': 'You want shortcuts instead of a method.',
+    'sys.kicker': 'The system', 'sys.h2': 'Four phases. One method.', 'sys.protocol': 'Protocol',
+    'sys.p1t': 'Assess', 'sys.p1d': 'Your starting point — composition, habits and schedule. No guessing.',
+    'sys.p2t': 'Train', 'sys.p2d': 'Smart sessions, built for your time — not for your exhaustion.',
+    'sys.p3t': 'Nourish', 'sys.p3d': 'Flexible nutrition that fits your life. No punishment, no absurd bans.',
+    'sys.p4t': 'Sustain', 'sys.p4d': 'Habits that stay for good. The goal isn’t to start — it’s to not stop.',
+    'break.t': 'Consistency', 'break.t2': 'perfection',
+    'res.kicker': 'Results', 'res.h2': 'The scoreboard doesn’t lie.',
+    'res.s1': 'Average', 'res.s2': 'Weeks', 'res.s3': 'Keep it off',
     'res.before': 'Before', 'res.after': 'After',
-    'res.c1': 'fat lost · 5 months', 'res.c2': 'to a sustainable physique',
-    'res.q1': 'I looked in the mirror and recognised myself again. And this time I didn’t gain it back.',
-    'res.q2': 'No crazy diets or hours at the gym. It fit around my work and my kids.',
-    'res.q1m': '41 · client', 'res.q2m': '38 · client',
-    'about.kicker': 'About Jose', 'about.h2': 'An athletic body, built for real life.',
-    'about.loc': 'Lima, Peru · Training since 2013',
-    'then.cap': 'Lima, 2013 — where it all started.',
-    'about.story': 'From that kid in Lima to the coach I am today.',
-    'about.p1': 'I’m an online fat-loss coach, based in Lima, Peru. I’ve been training since 2013 and have spent years helping men 30+ get back in shape without putting their life on hold — because what you can’t sustain doesn’t count.',
-    'about.p2': 'Most men don’t want a huge physique. They want to feel good again: strong, light, full of energy. That’s my whole job.',
-    'about.sig': 'I won’t promise you abs in 30 days. I’ll teach you to keep them for life.',
-    'coach.kicker': '1:1 Coaching', 'coach.h2': 'One program. Made for you.',
-    'coach.f1': 'Personalised training plan', 'coach.f2': 'Flexible nutrition, your way',
-    'coach.f3': 'Weekly tracking and adjustments', 'coach.f4': 'Direct support with me',
-    'coach.f5': 'Built around your time and life',
-    'coach.note': 'Limited spots. First a call to see if we’re a fit — no commitment.',
-    'coach.loading': 'Loading calendar…', 'coach.fallback': 'Open the calendar in a new tab',
-    'coach.fbtitle': 'Book your free call', 'coach.fbsub': '15 minutes, no commitment — let’s see if we’re a fit.',
-    'cont.kicker': 'Content', 'cont.h2': 'See it in action.',
-    'faq.kicker': 'Questions', 'faq.h2': 'What I get asked most.',
-    'faq.q1': 'Do I need a gym?', 'faq.a1': 'Not required. I adapt the plan to what you have — gym, home or minimal equipment. What matters is that it’s sustainable for you.',
-    'faq.q2': 'How much time do I need per day?', 'faq.a2': 'Less than you think. I design efficient 30–45 min sessions that fit your schedule, not your exhaustion.',
-    'faq.q3': 'Does it work if I’m 40 or 50+?', 'faq.a3': 'That’s exactly who I work with. The method adjusts to your age, recovery and starting point.',
-    'faq.q4': 'How does online coaching work?', 'faq.a4': 'You get your plan, weekly check-ins and direct contact with me. We adjust as we go based on your results.',
-    'faq.q5': 'What if I have little time or travel a lot?', 'faq.a5': 'The plan adapts to your real life: travel, hotels, eating out. No excuses, but no punishment either.',
-    'faq.q6': 'What happens on the call?', 'faq.a6': 'We talk about your situation and goal, and see if we’re a fit. No pressure, no commitment.',
-    'final.h2': 'Ready to feel good again?', 'final.sub': 'Start with a free call. No commitment.',
-    'bar.title': '1:1 Coaching', 'bar.sub': 'Start with a free call'
+    'res.quote': '“I recognized myself again — and this time I didn’t gain it back.”',
+    'res.loss': 'Every week you wait is a week you don’t get back. The best time to start was yesterday. The second best is today.',
+    'coach.kicker': 'Your coach', 'coach.h2': 'A coach in your corner.',
+    'coach.p1': '13 years helping men 30+ get back in shape without putting their life on hold. I don’t believe in punishing diets or impossible routines — I believe in a method that fits you and that you can sustain.',
+    'coach.t1': 'I started', 'coach.t2': '+250 men',
+    'coach.sig': '“I won’t promise you abs in 30 days. I’ll teach you to keep them for life.”',
+    'tst.kicker': 'Testimonials',
+    'tst.q1': 'I lost 12 kilos without giving up nights out with friends. Finally something I can keep.',
+    'tst.q2': 'I thought it was too late at my age. I was wrong. I have more energy now than at 25.',
+    'tst.q3': 'I train 3 times a week, eat normally, and keep losing. It’s a system, not a diet.',
+    'prog.kicker': 'The program', 'prog.h2': '1:1 online coaching.',
+    'prog.scarcity': 'Limited spots · By application',
+    'prog.f1': 'Personalized training plan',
+    'prog.f2': 'Flexible nutrition built for you',
+    'prog.f3': 'Weekly tracking and adjustments',
+    'prog.f4': 'Direct contact with me',
+    'prog.f5': 'A method that adapts to your life',
+    'prog.note': 'First a call to see if we’re a fit. No commitment.',
+    'prog.loading': 'Loading calendar…',
+    'prog.fbt': 'Book your free call', 'prog.fbsub': '15 minutes, no commitment.', 'prog.fblink': 'Open calendar',
+    'faq.h2': 'Frequently asked.',
+    'faq.q1': 'Do I need to go to a gym?', 'faq.a1': 'Not required. I adapt the plan to what you have — gym, home or minimal equipment. What matters is that it’s sustainable for you.',
+    'faq.q2': 'How much time do I need a day?', 'faq.a2': 'Less than you think. Efficient 30–45 minute sessions that fit your schedule.',
+    'faq.q3': 'Does it work if I’m 40+ or 50+?', 'faq.a3': 'That’s exactly who I work with. The method adjusts to your age, recovery and starting point.',
+    'faq.q4': 'How does online coaching work?', 'faq.a4': 'You get your plan, weekly tracking and direct contact with me. We adjust as we go.',
+    'faq.q5': 'What if I travel or have little time?', 'faq.a5': 'The plan adapts to real life: travel, hotels, dinners out. No excuses, but no punishment either.',
+    'faq.q6': 'What happens on the call?', 'faq.a6': 'We talk about your situation and goal, and see if we’re a fit. No pressure.',
+    'final.h2': 'Start today.', 'final.sub': 'Book a free call. No commitment.'
   };
+  var TICKER = {
+    es: ['Físico sostenible', 'Sin vivir en el gimnasio', 'Para hombres +30', 'Volver a sentirte bien', 'Un sistema, no una dieta'],
+    en: ['Sustainable body', 'Without living at the gym', 'For men 30+', 'Feel good again', 'A system, not a diet']
+  };
+  var TITLE = { es: 'Jose Aguirre — Sistema de Pérdida de Grasa · Lima', en: 'Jose Aguirre — Fat-Loss System · Lima' };
 
   var nodes = [].slice.call(doc.querySelectorAll('[data-i18n]'));
   var ES = {};
-  nodes.forEach(function (n) {
-    var k = n.getAttribute('data-i18n'), attr = n.getAttribute('data-i18n-attr');
-    ES[k] = attr ? n.getAttribute(attr) : n.textContent;
-  });
-  var TITLE = { es: 'Jose Aguirre — Coach de Pérdida de Grasa', en: 'Jose Aguirre — Fat-Loss Coach' };
-  var SUF_EN = { '+ años': '+ years', ' años': ' years', ' sem': ' wks' };
-  var curLang = 'es';
-
+  nodes.forEach(function (n) { var k = n.getAttribute('data-i18n'), a = n.getAttribute('data-i18n-attr'); ES[k] = a ? n.getAttribute(a) : n.textContent; });
+  var counters;
+  function buildTicker(lang) {
+    var t = doc.getElementById('ticker'); if (!t) return;
+    var one = (TICKER[lang] || TICKER.es).map(function (p) { return '<span class="ticker__i">' + p + '</span>'; }).join('');
+    t.innerHTML = one + one + one + one;
+  }
   function applyLang(lang) {
-    curLang = lang;
     var dict = lang === 'en' ? EN : ES;
-    nodes.forEach(function (n) {
-      var k = n.getAttribute('data-i18n'); if (dict[k] == null) return;
-      var attr = n.getAttribute('data-i18n-attr');
-      if (attr) n.setAttribute(attr, dict[k]); else n.textContent = dict[k];
-    });
-    doc.documentElement.lang = lang;
-    doc.title = TITLE[lang] || TITLE.es;
+    nodes.forEach(function (n) { var k = n.getAttribute('data-i18n'); if (dict[k] == null) return; var a = n.getAttribute('data-i18n-attr'); if (a) n.setAttribute(a, dict[k]); else n.textContent = dict[k]; });
+    buildTicker(lang);
+    doc.documentElement.lang = lang; doc.title = TITLE[lang] || TITLE.es;
     doc.querySelectorAll('.lang button').forEach(function (b) { b.classList.toggle('is-active', b.dataset.lang === lang); });
-    repaintCounters();
-    try { localStorage.setItem('ja_lang', lang); } catch (e) {}
+    if (counters) counters.forEach(function (el) { if (el._done) el.textContent = fmt(el); });
+    try { localStorage.setItem('ja1_lang', lang); } catch (e) {}
   }
   (function initLang() {
-    var q = new URLSearchParams(location.search).get('lang');
-    var saved; try { saved = localStorage.getItem('ja_lang'); } catch (e) {}
-    applyLang(q === 'en' || q === 'es' ? q : (saved || 'es'));
-    doc.querySelectorAll('.lang button').forEach(function (b) {
-      b.addEventListener('click', function () { applyLang(b.dataset.lang); });
-    });
+    var q = new URLSearchParams(location.search).get('lang'), s; try { s = localStorage.getItem('ja1_lang'); } catch (e) {}
+    applyLang(q === 'en' || q === 'es' ? q : (s || 'es'));
+    doc.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.dataset.lang); }); });
   })();
 
-  /* ============ Loader ============ */
+  /* ---------- Loader ---------- */
   (function loader() {
-    var el = doc.getElementById('loader'); if (!el) return;
-    var hero = doc.querySelector('.hero');
-    var seen = false; try { seen = sessionStorage.getItem('ja_seen') === '1'; } catch (e) {}
-    var pctEl = doc.getElementById('loaderPct'), barEl = el.querySelector('.loader__bar i');
-    function setPct(v) { if (pctEl) pctEl.textContent = String(v).padStart(2, '0'); if (barEl) barEl.style.width = v + '%'; el.setAttribute('aria-valuenow', v); }
-    function reveal() { if (hero) hero.classList.add('on'); }
-    function finish() { setPct(100); el.classList.add('is-done'); reveal(); setTimeout(function () { el.classList.add('is-hidden'); }, 850); try { sessionStorage.setItem('ja_seen', '1'); } catch (e) {} }
-    if (seen || reduce) { el.classList.add('is-done', 'is-hidden'); reveal(); return; }
-    var DUR = 1200, t0 = null;
-    (function tick(now) { if (t0 === null) t0 = now; var p = Math.min(1, (now - t0) / DUR); setPct(Math.round((1 - Math.pow(1 - p, 2)) * 100)); if (p < 1) requestAnimationFrame(tick); })(performance.now());
-    var minShow = 1500, start = Date.now(), done = false;
-    function go() { if (done) return; done = true; setTimeout(finish, Math.max(0, minShow - (Date.now() - start))); }
-    if (doc.readyState === 'complete') go(); else W.addEventListener('load', go, { once: true });
-    setTimeout(go, 2200);
+    var el = doc.getElementById('loader'), bar = doc.getElementById('loaderBar'), num = doc.getElementById('loaderNum');
+    if (!el) return;
+    if (reduce) { el.classList.add('is-done'); return; }
+    var p = 0, done = false;
+    var iv = setInterval(function () {
+      p += Math.max(2, (100 - p) * 0.12);
+      if (p >= 100) { p = 100; clearInterval(iv); finish(); }
+      if (bar) bar.style.width = p + '%';
+      if (num) num.textContent = ('0' + Math.round(p)).slice(-2);
+    }, 45);
+    function finish() { if (done) return; done = true; setTimeout(function () { el.classList.add('is-done'); }, 200); }
+    setTimeout(finish, 2200);
+    W.addEventListener('load', function () { setTimeout(finish, 300); });
   })();
 
-  /* ============ Scroll progress bar ============ */
-  (function scrollbar() {
-    var bar = doc.getElementById('scrollbar'); if (!bar) return;
-    var ticking = false;
-    function update() {
-      var h = doc.documentElement;
-      var max = h.scrollHeight - h.clientHeight;
-      var p = max > 0 ? (W.scrollY / max) : 0;
-      bar.style.transform = 'scaleX(' + Math.max(0, Math.min(1, p)) + ')';
-      ticking = false;
+  /* ---------- Nav / menu / action bar / progress ---------- */
+  (function chrome() {
+    var nav = doc.getElementById('nav'), burger = doc.getElementById('burger'), menu = doc.getElementById('menu'),
+        bar = doc.getElementById('actionbar'), prog = doc.getElementById('prog'), hero = doc.querySelector('.hero');
+    function onScroll() {
+      var y = W.scrollY;
+      if (nav) nav.classList.toggle('is-scrolled', y > 20);
+      if (bar && hero) bar.classList.toggle('on', y > hero.offsetHeight * 0.6);
+      if (prog) { var h = doc.documentElement.scrollHeight - W.innerHeight; prog.style.width = (h > 0 ? (y / h) * 100 : 0) + '%'; }
     }
-    update();
-    W.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    W.addEventListener('resize', update, { passive: true });
+    W.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    function toggleMenu(open) {
+      if (!menu || !burger) return;
+      var isOpen = open == null ? !menu.classList.contains('is-open') : open;
+      menu.classList.toggle('is-open', isOpen); burger.classList.toggle('is-open', isOpen);
+      burger.setAttribute('aria-expanded', isOpen); menu.setAttribute('aria-hidden', !isOpen);
+      doc.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+    if (burger) burger.addEventListener('click', function () { toggleMenu(); });
+    if (menu) menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { toggleMenu(false); }); });
   })();
 
-  /* ============ Nav + mobile menu ============ */
-  (function nav() {
-    var n = doc.getElementById('nav');
-    var onScroll = function () { n.classList.toggle('is-scrolled', W.scrollY > 40); };
-    onScroll(); W.addEventListener('scroll', onScroll, { passive: true });
-    var toggle = doc.getElementById('navToggle'), menu = doc.getElementById('menu');
-    function setOpen(o) { doc.body.classList.toggle('menu-open', o); toggle.setAttribute('aria-expanded', o); menu.setAttribute('aria-hidden', !o); }
-    toggle.addEventListener('click', function () { setOpen(!doc.body.classList.contains('menu-open')); });
-    menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
-    doc.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
-  })();
-
-  /* ============ Smooth anchor scroll with offset ============ */
-  (function anchors() {
-    var navH = function () { return parseInt(getComputedStyle(doc.documentElement).getPropertyValue('--nav-h'), 10) || 72; };
-    doc.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        var id = a.getAttribute('href'); if (id.length < 2) return;
-        var t = doc.querySelector(id); if (!t) return;
-        e.preventDefault();
-        W.scrollTo({ top: t.getBoundingClientRect().top + W.scrollY - navH() - 8, behavior: reduce ? 'auto' : 'smooth' });
-      });
-    });
-  })();
-
-  /* ============ Reveals + trigger counters/bf-scale ============ */
-  var counters = [].slice.call(doc.querySelectorAll('.count'));
-  function paintCount(el, v) {
-    var suf = el.dataset.suffix || '';
-    if (curLang === 'en' && SUF_EN[suf]) suf = SUF_EN[suf];
-    el.textContent = v.toLocaleString('es-ES') + suf;
-    el._val = v;
+  /* ---------- Counters ---------- */
+  function fmt(el) {
+    var lang = doc.documentElement.lang;
+    var v = (+el.dataset.to).toLocaleString(lang === 'en' ? 'en-US' : 'es-ES');
+    return (el.dataset.prefix || '') + v + (el.dataset.suffix || '');
   }
-  function repaintCounters() { if (!counters) return; counters.forEach(function (el) { if (el._done) paintCount(el, +el.dataset.to); }); }
-  function runCount(el) {
-    if (el._done) return; el._done = true;
-    if (reduce) { paintCount(el, +el.dataset.to); return; }
-    var to = +el.dataset.to, t0 = null, DUR = 1400;
-    (function t(now) { if (t0 === null) t0 = now; var p = Math.min(1, (now - t0) / DUR); paintCount(el, Math.round((1 - Math.pow(1 - p, 3)) * to)); if (p < 1) requestAnimationFrame(t); })(performance.now());
-  }
-  (function reveals() {
-    var items = doc.querySelectorAll('.reveal, .mask');
-    if (reduce || !('IntersectionObserver' in W)) {
-      items.forEach(function (el) { el.classList.add('in'); });
-      counters.forEach(function (el) { paintCount(el, +el.dataset.to); el._done = true; });
-      var m = doc.getElementById('bfMarker'); if (m) m.style.left = '70%';
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        var sibs = [].slice.call(el.parentNode.querySelectorAll(':scope > .reveal'));
-        var i = sibs.indexOf(el);
-        if (i > 0) el.style.transitionDelay = Math.min(i * 60, 300) + 'ms';
-        el.classList.add('in');
-        el.querySelectorAll && el.querySelectorAll('.count').forEach(runCount);
-        if (el.classList.contains('count')) runCount(el);
-        io.unobserve(el);
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
-    items.forEach(function (el) { io.observe(el); });
-    // counters may live inside .reveal (handled) or standalone
-    counters.forEach(function (el) { io.observe(el); });
-    // bf-scale marker
-    var scale = doc.querySelector('.bfscale'), marker = doc.getElementById('bfMarker');
-    if (scale && marker) {
-      var io2 = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { marker.style.left = '70%'; io2.unobserve(e.target); } }); }, { threshold: 0.4 });
-      io2.observe(scale);
-    }
-  })();
-
-  /* ============ Before/After slider ============ */
-  (function ba() {
-    var frame = doc.querySelector('.ba__frame'); if (!frame) return;
-    var clip = doc.getElementById('baClip'), handle = doc.getElementById('baHandle');
-    var dragging = false;
-    function set(pct) {
-      pct = Math.max(0, Math.min(100, pct));
-      clip.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
-      handle.style.left = pct + '%';
-      handle.setAttribute('aria-valuenow', Math.round(pct));
-    }
-    function fromX(clientX) { var r = frame.getBoundingClientRect(); set(((clientX - r.left) / r.width) * 100); }
-    function clearGlide() { clip.style.transition = ''; handle.style.transition = ''; }
-    frame.addEventListener('pointerdown', function (e) { nudged = true; clearGlide(); dragging = true; handle.setPointerCapture && handle.setPointerCapture(e.pointerId); fromX(e.clientX); });
-    W.addEventListener('pointermove', function (e) { if (dragging) fromX(e.clientX); });
-    W.addEventListener('pointerup', function () { dragging = false; });
-    handle.addEventListener('keydown', function (e) {
-      var cur = parseFloat(handle.getAttribute('aria-valuenow')) || 50;
-      if (e.key === 'ArrowLeft') { nudged = true; clearGlide(); set(cur - 4); e.preventDefault(); }
-      if (e.key === 'ArrowRight') { nudged = true; clearGlide(); set(cur + 4); e.preventDefault(); }
-    });
-    set(50);
-
-    // Auto-nudge once on first scroll into view (50 → 63 → 50) to invite interaction.
-    var nudged = false;
-    function nudge() {
-      if (nudged || dragging) return; nudged = true;
-      var glide = 'clip-path .55s cubic-bezier(0.16,1,0.3,1)';
-      clip.style.transition = glide; handle.style.transition = 'left .55s cubic-bezier(0.16,1,0.3,1)';
-      set(63);
-      setTimeout(function () { if (!dragging) set(50); }, 620);
-      setTimeout(clearGlide, 1250);
-    }
-    if (!reduce && 'IntersectionObserver' in W) {
-      var nio = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { setTimeout(nudge, 400); nio.unobserve(e.target); } });
-      }, { threshold: 0.55 });
-      nio.observe(frame);
-    }
-  })();
-
-  /* ============ Magnetic CTAs (desktop) ============ */
-  if (finePointer && !reduce) {
-    doc.querySelectorAll('.btn--mag').forEach(function (btn) {
-      btn.addEventListener('pointermove', function (e) {
-        var r = btn.getBoundingClientRect();
-        var x = (e.clientX - r.left - r.width / 2) / (r.width / 2);
-        var y = (e.clientY - r.top - r.height / 2) / (r.height / 2);
-        btn.style.transform = 'translate(' + (x * 8) + 'px,' + (y * 6) + 'px)';
-      });
-      btn.addEventListener('pointerleave', function () { btn.style.transform = ''; });
-    });
-  }
-
-  /* ============ Marquee ============ */
-  (function marquee() {
-    var track = doc.getElementById('marquee'); if (!track) return;
-    var phrases = ['Físicos reales, no de portada', 'Sostenible', 'Para hombres +30', 'Sin dietas extremas', 'Vida real', 'Coaching 1:1', 'Volver a sentirte bien', 'Atlético y ligero'];
-    var html = phrases.map(function (p) { return '<span class="marquee__item">' + p + '</span>'; }).join('');
-    track.innerHTML = html + html; // duplicate for seamless loop
-  })();
-
-  /* ============ FAQ: single-open ============ */
-  (function faq() {
-    var list = doc.querySelectorAll('.faq__list .ac');
-    list.forEach(function (d) {
-      d.addEventListener('toggle', function () {
-        if (d.open) list.forEach(function (o) { if (o !== d) o.open = false; });
-      });
-    });
-  })();
-
-  /* ============ Sticky mobile booking bar ============ */
-  (function bookbar() {
-    var bar = doc.getElementById('bookbar'), hero = doc.querySelector('.hero'); if (!bar || !hero) return;
-    var onScroll = function () { bar.classList.toggle('on', W.scrollY > hero.offsetHeight * 0.6); };
-    onScroll(); W.addEventListener('scroll', onScroll, { passive: true });
-  })();
-
-  /* ============ Calendly (popup + inline + skeleton) ============ */
-  (function calendly() {
-    doc.querySelectorAll('[data-cal]').forEach(function (b) {
-      b.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (W.Calendly && Calendly.initPopupWidget) Calendly.initPopupWidget({ url: CAL_URL + CAL_THEME });
-        else W.open(CAL_URL, '_blank');
-      });
-    });
-    var inline = doc.getElementById('calInline'), wrap = doc.querySelector('.coaching__cal');
-    var settled = false, tries = 0;
-    function done(fail) { if (settled) return; settled = true; wrap.classList.add('is-ready'); if (fail) wrap.classList.add('cal-failed'); }
-    (function init() {
-      if (W.Calendly && Calendly.initInlineWidget) {
-        if (inline.dataset.init) return; inline.dataset.init = '1';
-        Calendly.initInlineWidget({ url: CAL_URL + CAL_THEME, parentElement: inline });
-        var iv = setInterval(function () {
-          var f = inline.querySelector('iframe');
-          if (f) { f.addEventListener('load', function () { done(false); }); clearInterval(iv); }
-        }, 150);
-        setTimeout(function () { done(false); }, 4500);
-        return;
+  counters = [].slice.call(doc.querySelectorAll('.num'));
+  (function countUp() {
+    function run(el) {
+      if (el._done) return; el._done = true;
+      var to = +el.dataset.to, t0 = null, dur = 1300;
+      if (reduce) { el.textContent = fmt(el); return; }
+      function step(t) {
+        if (!t0) t0 = t; var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        var cur = Math.round(to * e);
+        el.textContent = (el.dataset.prefix || '') + cur.toLocaleString(doc.documentElement.lang === 'en' ? 'en-US' : 'es-ES') + (el.dataset.suffix || '');
+        if (k < 1) requestAnimationFrame(step); else el.textContent = fmt(el);
       }
-      if (++tries < 28) setTimeout(init, 200); // ~5.6s of retries, then give up
-    })();
-    // Hard fallback: if Calendly is blocked/unavailable and no calendar renders,
-    // show a clean "book a call" CTA instead of spinning forever.
-    setTimeout(function () { if (!inline.querySelector('iframe')) done(true); }, 5500);
+      requestAnimationFrame(step);
+    }
+    if (!('IntersectionObserver' in W)) { counters.forEach(run); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { run(en.target); io.unobserve(en.target); } }); }, { threshold: 0.4 });
+    counters.forEach(function (el) { io.observe(el); });
+    // Backstop: never leave a counter stuck at 0 if IO misbehaves
+    setTimeout(function () { counters.forEach(function (el) { if (!el._done) { el._done = true; el.textContent = fmt(el); } }); }, 5000);
   })();
 
-  var y = doc.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  /* ---------- Protocol phases ---------- */
+  (function protocol() {
+    var list = doc.getElementById('sysList'); if (!list) return;
+    var phases = [].slice.call(list.querySelectorAll('.phase'));
+    var imgs = [].slice.call(doc.querySelectorAll('.sys__img'));
+    var meta = doc.getElementById('sysMeta');
+    function open(i) {
+      phases.forEach(function (p, idx) { var on = idx === i; p.classList.toggle('is-open', on); p.setAttribute('aria-expanded', on); });
+      imgs.forEach(function (m, idx) { m.classList.toggle('is-on', idx === i); });
+      if (meta) meta.textContent = ('0' + (i + 1)).slice(-2) + ' / 04';
+    }
+    phases.forEach(function (p, i) { p.addEventListener('click', function () { open(i); }); });
+    open(0);
+  })();
+
+  /* ---------- Before / after slider ---------- */
+  (function ba() {
+    var frame = doc.getElementById('baFrame'), before = doc.getElementById('baBefore'), handle = doc.getElementById('baHandle');
+    if (!frame || !before || !handle) return;
+    var pct = 50, nudged = false;
+    function set(p) { pct = Math.max(2, Math.min(98, p)); before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)'; handle.style.left = pct + '%'; }
+    function fromX(x) { var r = frame.getBoundingClientRect(); set(((x - r.left) / r.width) * 100); }
+    var drag = false;
+    function down(e) { drag = true; fromX((e.touches ? e.touches[0] : e).clientX); e.preventDefault(); }
+    function move(e) { if (!drag) return; fromX((e.touches ? e.touches[0] : e).clientX); }
+    function up() { drag = false; }
+    handle.addEventListener('mousedown', down); frame.addEventListener('mousedown', down);
+    W.addEventListener('mousemove', move); W.addEventListener('mouseup', up);
+    handle.addEventListener('touchstart', down, { passive: false }); frame.addEventListener('touchstart', down, { passive: false });
+    W.addEventListener('touchmove', move, { passive: true }); W.addEventListener('touchend', up);
+    handle.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') set(pct - 4); if (e.key === 'ArrowRight') set(pct + 4); });
+    set(50);
+    if (!reduce && 'IntersectionObserver' in W) {
+      var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting && !nudged) { nudged = true; var s = Date.now(); (function a() { var k = (Date.now() - s) / 700; if (k < 1) { set(50 + Math.sin(k * Math.PI) * 16); requestAnimationFrame(a); } else set(50); })(); } }); }, { threshold: 0.5 });
+      io.observe(frame);
+    }
+  })();
+
+  /* ---------- Testimonials carousel ---------- */
+  (function tst() {
+    var track = doc.getElementById('tstTrack'), prev = doc.getElementById('tstPrev'), next = doc.getElementById('tstNext'), dotsW = doc.getElementById('tstDots');
+    if (!track) return;
+    var items = track.children.length, i = 0;
+    if (dotsW) for (var d = 0; d < items; d++) { var b = doc.createElement('b'); b.dataset.i = d; dotsW.appendChild(b); }
+    var dots = dotsW ? [].slice.call(dotsW.children) : [];
+    function go(n) { i = (n + items) % items; track.style.transform = 'translateX(-' + (i * 100) + '%)'; dots.forEach(function (dd, idx) { dd.classList.toggle('on', idx === i); }); }
+    if (prev) prev.addEventListener('click', function () { go(i - 1); });
+    if (next) next.addEventListener('click', function () { go(i + 1); });
+    dots.forEach(function (dd) { dd.addEventListener('click', function () { go(+dd.dataset.i); }); });
+    var x0 = null;
+    track.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', function (e) { if (x0 == null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); x0 = null; });
+    go(0);
+  })();
+
+  /* ---------- Reveals ---------- */
+  (function reveals() {
+    var els = [].slice.call(doc.querySelectorAll('.shead, .fit__cols, .sys__list, .res__stats, .res__grid, .coach__grid, .prog__grid, .faq__list, .final .wrap'));
+    els.forEach(function (e) { e.classList.add('reveal'); });
+    if (reduce || !('IntersectionObserver' in W)) { els.forEach(function (e) { e.classList.add('is-in'); }); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } }); }, { threshold: 0.14 });
+    els.forEach(function (e) { io.observe(e); });
+    // Backstop: never leave content hidden if IO misbehaves
+    setTimeout(function () { els.forEach(function (e) { e.classList.add('is-in'); }); }, 3500);
+    // hero headline clip reveal
+    doc.querySelectorAll('.hero__h1 .l').forEach(function (l, i) { l.classList.add('clip'); setTimeout(function () { l.classList.add('is-in'); }, 300 + i * 120); });
+  })();
+
+  /* ---------- Calendly ---------- */
+  (function calendly() {
+    var loaded = false, failed = false;
+    function load(cb) {
+      if (loaded) return cb && cb();
+      var css = doc.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://assets.calendly.com/assets/external/widget.css'; doc.head.appendChild(css);
+      var s = doc.createElement('script'); s.src = 'https://assets.calendly.com/assets/external/widget.js'; s.async = true;
+      s.onload = function () { loaded = true; cb && cb(); };
+      s.onerror = function () { failed = true; markFail(); };
+      doc.head.appendChild(s);
+      setTimeout(function () { if (!W.Calendly && !loaded) { failed = true; markFail(); } }, 6000);
+    }
+    function markFail() { var w = doc.getElementById('calWrap'); if (w) w.classList.add('cal-failed'); }
+    var color = { background: '0C0D0F', text: 'ECEDEA', primary: 'C8F14A' };
+    var url = CAL + '?hide_gdpr_banner=1&background_color=' + color.background + '&text_color=' + color.text + '&primary_color=' + color.primary;
+    doc.querySelectorAll('[data-cal]').forEach(function (b) {
+      b.addEventListener('click', function (e) { e.preventDefault(); load(function () { if (W.Calendly) W.Calendly.initPopupWidget({ url: url }); else W.open(CAL, '_blank'); }); });
+    });
+    var inline = doc.getElementById('calInline');
+    if (inline && 'IntersectionObserver' in W) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (!en.isIntersecting) return; io.disconnect();
+          load(function () {
+            var wrap = doc.getElementById('calWrap');
+            if (W.Calendly) { W.Calendly.initInlineWidget({ url: url, parentElement: inline }); if (wrap) wrap.classList.add('is-ready'); }
+            else if (wrap) wrap.classList.add('cal-failed');
+          });
+        });
+      }, { rootMargin: '400px' });
+      io.observe(inline);
+    }
+  })();
 })();

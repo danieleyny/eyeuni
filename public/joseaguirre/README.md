@@ -1,50 +1,23 @@
-# Jose Aguirre — Coach de Pérdida de Grasa
+# Jose Aguirre — "Athletic Performance System" (Option A)
 
-Self-contained static site (HTML/CSS/vanilla JS, no build step) served at
-**https://eye-uni.com/joseaguirre/**. Bilingual (Spanish default, ES/EN toggle),
-cinematic dark theme, single conversion path to Calendly. All paths are relative,
-so it works under the `/joseaguirre/` sub-path.
+Bold, cool, structural performance-lab site — the counterpoint to the light editorial
+Option B at `/joseaguirre-v2/`. Plain HTML + CSS + vanilla JS, served statically at
+`https://eye-uni.com/joseaguirre/`. Mobile-first.
 
-```
-joseaguirre/
-  index.html
-  assets/
-    css/styles.css     # design tokens (:root), all sections, slider, grain
-    js/main.js         # i18n, loader, Calendly, slider, counters, interactions
-    media/             # his photos/videos (see MEDIA.md)
-    img/               # og.jpg, favicon.svg
-  MEDIA.md             # which IG post fills each media slot
-  README.md
-```
+## Editing
+- **Copy / i18n:** Spanish is the default text in `index.html` (in `data-i18n` elements).
+  English lives in the `EN` object in `assets/js/main.js`. To change ES, edit the HTML.
+  To change EN, edit `EN`. The hero ticker phrases live in the `TICKER` object (both langs).
+  Language toggle persists in `localStorage` (`ja1_lang`) and honours `?lang=en`.
+- **Media:** see `assets/media/MEDIA.md`. All photos are graded to one cool charcoal
+  **duotone** at runtime via the SVG `#duotone` filter (in `index.html`) — swap any file
+  keeping the same name; the duotone applies automatically. `object-fit:cover` everywhere.
+- **Calendly:** the booking URL is the single constant `CAL` at the top of `main.js`
+  (`.../onlinecoaching`). Buttons with `data-cal` open the themed popup; the inline embed
+  in "El Programa" is themed dark + volt via colour params.
+- **Accent colour:** `--volt` (electric lime) in `assets/css/styles.css`. Swap it there to
+  retint every accent (CTAs, active states, ticks). Keep it a single accent.
 
-## Edit the copy (both languages)
-- **Spanish** text lives directly in `index.html` (each translatable element has a
-  `data-i18n="key"` attribute; the Spanish is the visible text and the default).
-- **English** translations live in `assets/js/main.js` in the `EN = { … }` object —
-  edit the value for the matching key. (Spanish is captured automatically from the
-  HTML, so you only maintain English in JS.)
-- The **ES/EN toggle** is in the nav; the choice persists per visitor (`localStorage`),
-  and `?lang=en` forces English.
-
-## Change the Calendly link
-One constant at the top of `assets/js/main.js`:
-```js
-var CAL_URL = 'https://calendly.com/joseaguirrefitness/onlinecoaching';
-```
-It powers every CTA (themed popup) **and** the inline embed in the Coaching section.
-`CAL_THEME` next to it sets the dark/amber colors passed to Calendly.
-
-## Swap the media
-See **MEDIA.md**. Replace files in `assets/media/` keeping the same names (`hero`,
-`about`, `band`, `before`, `after`, `content-1…4`), each as `.webp` + `.jpg`. Photos
-are graded by CSS, so color originals work. Update `assets/img/og.jpg` (1200×630) too.
-
-## Colors / feel
-`assets/css/styles.css`, the `:root{}` block. `--accent` (`#E8B33D`, amber) is the only
-lead chroma — change it once to re-tint. Radii (`--r-sm/md/lg`) and easing tokens are
-reused everywhere; keep them consistent.
-
-## Notes
-- Mobile-first; the sticky bottom booking bar appears after the hero on phones.
-- Respects `prefers-reduced-motion`; the intro loader shows once per browser session.
-- No framework, no dependencies (besides Calendly's widget), no server needed.
+## Deploy
+From the repo root: `npm run build` then `npx gh-pages -d dist --dotfiles`.
+Vite copies `public/` → `dist/`. Do not touch `/joseaguirre-v2/`.
