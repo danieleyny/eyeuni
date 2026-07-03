@@ -54,18 +54,28 @@
     'faq.q5': 'What if I travel or have little time?', 'faq.a5': 'The plan adapts to your real life: travel, hotels, eating out. No excuses, but no punishment either.',
     'faq.q6': 'What happens on the call?', 'faq.a6': 'We talk about your situation and goal, and see if we’re a fit. No pressure.',
     'final.h2': 'Shall we start?', 'final.sub': 'Book a free call. No commitment.',
-    'foot.loc': 'Lima, Peru · Online coaching', 'bar.title': '1:1 Coaching · start with a call'
+    'foot.loc': 'Lima, Peru · Online coaching', 'bar.title': '1:1 Coaching · start with a call', 'hero.tag': 'LIMA · SINCE 2013'
   };
   var nodes = [].slice.call(doc.querySelectorAll('[data-i18n]'));
   var ES = {};
   nodes.forEach(function (n) { var k = n.getAttribute('data-i18n'), a = n.getAttribute('data-i18n-attr'); ES[k] = a ? n.getAttribute(a) : n.textContent; });
   var TITLE = { es: 'Jose Aguirre — Coach de Pérdida de Grasa · Lima', en: 'Jose Aguirre — Fat-Loss Coach · Lima' };
+  var TICKER = {
+    es: ['Sostenible, no extremo', 'Para hombres +30', 'Sin vivir en el gimnasio', 'Vida real', 'Lima · desde 2013', 'Volver a sentirte bien'],
+    en: ['Sustainable, not extreme', 'For men 30+', 'Without living at the gym', 'Real life', 'Lima · since 2013', 'Feel good again']
+  };
+  function buildTicker(lang) {
+    var t = doc.getElementById('ticker'); if (!t) return;
+    var html = (TICKER[lang] || TICKER.es).map(function (p) { return '<span class="ticker__i">' + p + '</span>'; }).join('');
+    t.innerHTML = html + html;
+  }
   var counters, curLang = 'es';
   function splitWords(el) { var t = (el.getAttribute('data-src') || el.textContent).trim(); el.innerHTML = t.split(/\s+/).map(function (w, i) { return '<span class="mw"><span style="animation-delay:' + (i * 55) + 'ms">' + w + '</span></span>'; }).join(' '); }
   function applyLang(lang) {
     curLang = lang; var dict = lang === 'en' ? EN : ES;
     nodes.forEach(function (n) { var k = n.getAttribute('data-i18n'); if (dict[k] == null) return; var a = n.getAttribute('data-i18n-attr'); if (a) n.setAttribute(a, dict[k]); else n.textContent = dict[k]; });
     doc.querySelectorAll('[data-words]').forEach(splitWords);
+    buildTicker(lang);
     doc.documentElement.lang = lang; doc.title = TITLE[lang] || TITLE.es;
     doc.querySelectorAll('.lang button').forEach(function (b) { b.classList.toggle('is-active', b.dataset.lang === lang); });
     if (counters) counters.forEach(function (el) { if (el._done) el.textContent = (+el.dataset.to).toLocaleString('es-ES') + (el.dataset.suffix || ''); });
@@ -129,13 +139,6 @@
   })();
 
   /* Ticker */
-  (function ticker() {
-    var t = doc.getElementById('ticker'); if (!t) return;
-    var ph = ['Sostenible, no extremo', 'Para hombres +30', 'Sin vivir en el gimnasio', 'Vida real', 'Lima · desde 2013', 'Volver a sentirte bien'];
-    var html = ph.map(function (p) { return '<span class="ticker__i">' + p + '</span>'; }).join('');
-    t.innerHTML = html + html;
-  })();
-
   /* Método — horizontal pin (desktop) / carousel dots (mobile) */
   (function metodo() {
     var sec = doc.getElementById('c02'), track = doc.getElementById('metodoTrack'), barI = doc.getElementById('metodoBar'), dotsW = doc.getElementById('metodoDots');
