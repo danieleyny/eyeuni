@@ -36,7 +36,7 @@
     'train.p4t': 'Technique', 'train.p4d': 'Train safely — for good.',
     'train.spec': '30–45 min sessions · at home or the gym · adapted to your time',
     'prueba.kicker': 'Results', 'prueba.h': 'Real change. That lasts.',
-    'prueba.before': 'Before', 'prueba.after': 'After', 'prueba.num': '20 weeks',
+    'prueba.before': 'Before', 'prueba.after': 'After', 'prueba.avg': 'Average', 'prueba.weeks': 'Weeks',
     'prueba.q': '“I recognized myself in the mirror again — and this time I didn’t gain it back.”',
     'prueba.cite': '— Carlos, 41',
     'coach.h': 'I’m Jose Aguirre.',
