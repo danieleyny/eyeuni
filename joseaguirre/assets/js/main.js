@@ -82,11 +82,38 @@
   /* ---------- Loader ---------- */
   (function loader() {
     var el = doc.getElementById('loader'); if (!el) return;
-    if (reduce) { setTimeout(function () { el.classList.add('is-done'); }, 300); return; }
-    var done = false;
-    function finish() { if (done) return; done = true; el.classList.add('is-done'); }
-    setTimeout(finish, 2000);
-    W.addEventListener('load', function () { setTimeout(finish, 500); });
+    var scene = doc.getElementById('loaderScene'), shatter = doc.getElementById('shatter');
+    function hide() { el.classList.add('is-hidden'); }
+    if (reduce || !shatter) { setTimeout(hide, 500); return; }
+    // Build navy shards tiling the screen; they fly apart from the smash point on cue.
+    var W_ = W.innerWidth, H_ = W.innerHeight;
+    var cols = Math.max(4, Math.round(W_ / 96)), rows = Math.max(6, Math.round(H_ / 96));
+    var ox = W_ / 2, oy = H_ * 0.42, frag = doc.createDocumentFragment();
+    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+      var x = c * W_ / cols, y = r * H_ / rows, w = W_ / cols, h = H_ / rows;
+      for (var t = 0; t < 2; t++) {
+        var s = doc.createElement('div'); s.className = 'shard';
+        s.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;clip-path:' + (t ? 'polygon(100% 0,100% 100%,0 100%)' : 'polygon(0 0,100% 0,0 100%)');
+        var cx = x + w / 2, cy = y + h / 2, dx = cx - ox, dy = cy - oy, d = Math.max(1, Math.sqrt(dx * dx + dy * dy)), f = 140 + Math.random() * 300;
+        s.style.setProperty('--tx', (dx / d * f + (Math.random() - 0.5) * 46) + 'px');
+        s.style.setProperty('--ty', (dy / d * f + (Math.random() - 0.5) * 46 + 70) + 'px');
+        s.style.setProperty('--rot', ((Math.random() - 0.5) * 100) + 'deg');
+        s.style.transitionDelay = (Math.random() * 90) + 'ms';
+        frag.appendChild(s);
+      }
+    }
+    shatter.appendChild(frag);
+    var SMASH = 700;
+    setTimeout(function () {
+      if (scene) { scene.classList.add('smash'); }
+      setTimeout(function () {
+        if (scene) scene.classList.add('gone');
+        el.classList.add('shattering');
+        if (el.animate) try { el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(4px,-3px)' }, { transform: 'translate(-4px,3px)' }, { transform: 'translate(0,0)' }], { duration: 130 }); } catch (e) {}
+        shatter.classList.add('go');
+        setTimeout(hide, 850);
+      }, 110);
+    }, SMASH);
   })();
 
   /* ---------- Bar / progress / dock / menu ---------- */

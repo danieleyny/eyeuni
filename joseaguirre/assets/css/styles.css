@@ -55,12 +55,31 @@ img.duo,.kb img,.coach__keep img,.ba__img img{ filter:url(#navyduo); }
 .btn:focus-visible,a:focus-visible,summary:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--navy),0 0 0 5px var(--ice); }
 
 /* Loader */
-.loader{ position:fixed; inset:0; z-index:2000; background:var(--navy); display:grid; place-items:center; transition:opacity .8s var(--ease),visibility .8s; }
-.loader.is-done{ opacity:0; visibility:hidden; }
-.loader__in{ display:grid; gap:1.4rem; justify-items:center; }
-.loader__wm{ font-size:clamp(1.6rem,6vw,2.4rem); font-weight:400; letter-spacing:.01em; opacity:0; transform:translateY(8px); animation:lup 1s var(--ease) .1s forwards; text-shadow:0 0 40px rgba(134,174,203,.35); }
-.loader__line{ display:block; width:min(180px,44vw); height:1px; background:var(--steel); overflow:hidden; }
-.loader__line i{ display:block; height:100%; width:0; background:var(--ice); animation:draw 1.4s var(--ease) .3s forwards; }
+.loader{ position:fixed; inset:0; z-index:2000; background:var(--navy); display:grid; place-items:center; overflow:hidden; }
+.loader.shattering{ background:transparent; pointer-events:none; }
+.loader.is-hidden{ display:none; }
+.loader__scene{ position:relative; z-index:2; display:grid; gap:1.1rem; justify-items:center; transition:opacity .16s ease; }
+.loader__scene.gone{ opacity:0; }
+.lifter{ width:min(150px,42vw); height:auto; overflow:visible; }
+.loader__wm{ font-size:clamp(1.3rem,5vw,1.9rem); font-weight:400; letter-spacing:.02em; color:var(--off); opacity:0; animation:lup .55s var(--ease) .15s forwards; text-shadow:0 0 30px rgba(134,174,203,.35); }
+.lf-arm{ transform-box:view-box; }
+.lf-arm--l{ transform-origin:108px 90px; animation:armL .72s var(--ease) forwards; }
+.lf-arm--r{ transform-origin:132px 90px; animation:armR .72s var(--ease) forwards; }
+@keyframes armL{ 0%{ transform:rotate(0); } 26%{ transform:rotate(15deg); } 66%,100%{ transform:rotate(-202deg); } }
+@keyframes armR{ 0%{ transform:rotate(0); } 26%{ transform:rotate(-15deg); } 66%,100%{ transform:rotate(202deg); } }
+.lf-legs{ transform-box:view-box; transform-origin:120px 150px; animation:lfCrouch .72s var(--ease) forwards; }
+@keyframes lfCrouch{ 0%,58%{ transform:translateY(0); } 66%{ transform:translateY(7px); } 100%{ transform:translateY(0); } }
+.lf-spark{ opacity:0; transform-box:view-box; transform-origin:120px 20px; }
+.loader__scene.smash .lf-spark{ animation:lfSpark .35s ease-out forwards; }
+@keyframes lfSpark{ 0%{ opacity:0; transform:scale(0); } 30%{ opacity:1; transform:scale(6); } 100%{ opacity:0; transform:scale(11); } }
+/* shatter overlay — navy shards that fly apart to reveal the site */
+.shatter{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+.shard{ position:absolute; background:var(--navy); will-change:transform,opacity; }
+.shatter.go .shard{ transform:translate(var(--tx,0),var(--ty,0)) rotate(var(--rot,0)) scale(.85); opacity:0; transition:transform .72s cubic-bezier(.32,.12,.3,1), opacity .72s ease-in; }
+@media (prefers-reduced-motion:reduce){
+  .lf-arm--l{ animation:none; transform:rotate(-202deg); } .lf-arm--r{ animation:none; transform:rotate(202deg); }
+  .lf-legs,.lf-spark,.loader__wm{ animation:none; } .loader__wm{ opacity:1; }
+}
 @keyframes lup{ to{opacity:1;transform:none} }
 @keyframes draw{ to{ width:100%; } }
 

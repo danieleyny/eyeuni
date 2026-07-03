@@ -32,12 +32,26 @@
 <body>
 <a class="skip" href="#hero" data-i18n="a11y.skip">Saltar al contenido</a>
 
-<!-- Loader -->
+<!-- Loader — stick-figure overhead smash, then shatter -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__in">
+  <div class="loader__scene" id="loaderScene">
+    <svg class="lifter" viewBox="0 0 240 260" fill="none" stroke="var(--ice)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="120" cy="52" r="17"/>
+      <line x1="120" y1="69" x2="120" y2="150"/>
+      <path class="lf-legs" d="M120 150 L98 214 M120 150 L142 214"/>
+      <g class="lf-arm lf-arm--l">
+        <line x1="108" y1="90" x2="84" y2="152"/>
+        <g fill="var(--ice)" stroke="none"><rect x="63" y="145" width="42" height="8" rx="3"/><rect x="61" y="137" width="9" height="24" rx="2"/><rect x="98" y="137" width="9" height="24" rx="2"/></g>
+      </g>
+      <g class="lf-arm lf-arm--r">
+        <line x1="132" y1="90" x2="156" y2="152"/>
+        <g fill="var(--ice)" stroke="none"><rect x="135" y="145" width="42" height="8" rx="3"/><rect x="133" y="137" width="9" height="24" rx="2"/><rect x="170" y="137" width="9" height="24" rx="2"/></g>
+      </g>
+      <circle class="lf-spark" cx="120" cy="20" r="4" fill="var(--off)" stroke="none"/>
+    </svg>
     <p class="loader__wm">Jose Aguirre</p>
-    <span class="loader__line"><i></i></span>
   </div>
+  <div class="shatter" id="shatter" aria-hidden="true"></div>
 </div>
 
 <!-- Progress line -->
