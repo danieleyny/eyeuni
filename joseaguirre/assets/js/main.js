@@ -102,7 +102,7 @@
       }
     }
     shatter.appendChild(frag);
-    var SMASH = 740;
+    var SMASH = 1780;
     setTimeout(function () {
       if (scene) { scene.classList.add('smash'); }
       setTimeout(function () {
@@ -111,7 +111,7 @@
         if (el.animate) try { el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(4px,-3px)' }, { transform: 'translate(-4px,3px)' }, { transform: 'translate(0,0)' }], { duration: 130 }); } catch (e) {}
         shatter.classList.add('go');
         setTimeout(hide, 850);
-      }, 110);
+      }, 300);
     }, SMASH);
   })();
 
