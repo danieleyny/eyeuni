@@ -10,7 +10,7 @@
     'meta.desc': '1:1 online coaching for men 30+. Lose fat and build an athletic body without living at the gym. Lima, since 2013.',
     'a11y.skip': 'Skip to content',
     'cta.book': 'Book your call',
-    'nav.who': 'Who it’s for', 'nav.method': 'The method', 'nav.proof': 'Results', 'nav.coach': 'Your coach', 'nav.program': 'The program',
+    'nav.who': 'Who it’s for', 'nav.method': 'The method', 'nav.training': 'The training', 'nav.proof': 'Results', 'nav.coach': 'Your coach', 'nav.program': 'The program',
     'hero.eyebrow': 'Online coaching · Lima, Peru',
     'hero.h1': 'Feel good in your body again.',
     'hero.sub': '1:1 coaching for men 30+ who want to lose fat and build an athletic body — without living at the gym.',
@@ -25,6 +25,12 @@
     'step.2t': 'Train', 'step.2d': 'Efficient sessions, designed for your time — not to exhaust you.',
     'step.3t': 'Nourish', 'step.3d': 'Flexible nutrition that fits your life, without absurd restrictions.',
     'step.4t': 'Sustain', 'step.4d': 'Habits that stay. Not one more diet — a way of living.',
+    'train.kicker': 'The training', 'train.h': 'Smart training, not endless training.',
+    'train.p1t': 'Strength', 'train.p1d': 'Build muscle that keeps your metabolism running.',
+    'train.p2t': 'Conditioning', 'train.p2d': 'Energy and endurance for everyday life.',
+    'train.p3t': 'Mobility', 'train.p3d': 'Move without pain, in and out of the gym.',
+    'train.p4t': 'Technique', 'train.p4d': 'Train safely — for good.',
+    'train.spec': '30–45 min sessions · at home or the gym · adapted to your time',
     'prueba.kicker': 'Results', 'prueba.h': 'Real change. That lasts.',
     'prueba.before': 'Before', 'prueba.after': 'After', 'prueba.num': '20 weeks',
     'prueba.q': '“I recognized myself in the mirror again — and this time I didn’t gain it back.”',
@@ -142,6 +148,17 @@
       var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting && !nudged) { nudged = true; var s = Date.now(); (function a() { var k = (Date.now() - s) / 900; if (k < 1) { set(50 + Math.sin(k * Math.PI) * 14); requestAnimationFrame(a); } else set(50); })(); } }); }, { threshold: 0.5 });
       io.observe(frame);
     }
+  })();
+
+  /* ---------- Training video (desktop + motion only; poster elsewhere) ---------- */
+  (function trainVideo() {
+    var v = doc.querySelector('.train__video'); if (!v) return;
+    var src = v.querySelector('source');
+    if (reduce || W.matchMedia('(max-width:820px)').matches) return; // poster only on mobile / reduced-motion
+    function load() { if (src && src.dataset.src && !src.src) { src.src = src.dataset.src; v.load(); var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+    if (!('IntersectionObserver' in W)) { load(); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); load(); } }); }, { rootMargin: '400px' });
+    io.observe(v);
   })();
 
   /* ---------- Calendly ---------- */
