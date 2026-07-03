@@ -103,7 +103,7 @@
       }
     }
     shatter.appendChild(frag);
-    var SMASH = 700;
+    var SMASH = 740;
     setTimeout(function () {
       if (scene) { scene.classList.add('smash'); }
       setTimeout(function () {

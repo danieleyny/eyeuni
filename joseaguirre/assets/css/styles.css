@@ -63,12 +63,12 @@ img.duo,.kb img,.coach__keep img,.ba__img img{ filter:url(#navyduo); }
 .lifter{ width:min(150px,42vw); height:auto; overflow:visible; }
 .loader__wm{ font-size:clamp(1.3rem,5vw,1.9rem); font-weight:400; letter-spacing:.02em; color:var(--off); opacity:0; animation:lup .55s var(--ease) .15s forwards; text-shadow:0 0 30px rgba(134,174,203,.35); }
 .lf-arm{ transform-box:view-box; }
-.lf-arm--l{ transform-origin:108px 90px; animation:armL .72s var(--ease) forwards; }
-.lf-arm--r{ transform-origin:132px 90px; animation:armR .72s var(--ease) forwards; }
-@keyframes armL{ 0%{ transform:rotate(0); } 26%{ transform:rotate(15deg); } 66%,100%{ transform:rotate(-202deg); } }
-@keyframes armR{ 0%{ transform:rotate(0); } 26%{ transform:rotate(-15deg); } 66%,100%{ transform:rotate(202deg); } }
-.lf-legs{ transform-box:view-box; transform-origin:120px 150px; animation:lfCrouch .72s var(--ease) forwards; }
-@keyframes lfCrouch{ 0%,58%{ transform:translateY(0); } 66%{ transform:translateY(7px); } 100%{ transform:translateY(0); } }
+.lf-arm--l{ transform-origin:108px 90px; animation:armL .9s cubic-bezier(0.5,0,0.2,1) forwards; }
+.lf-arm--r{ transform-origin:132px 90px; animation:armR .9s cubic-bezier(0.5,0,0.2,1) forwards; }
+@keyframes armL{ 0%{ transform:rotate(0); } 34%{ transform:rotate(46deg); } 82%{ transform:rotate(-200deg); } 90%{ transform:rotate(-208deg); } 100%{ transform:rotate(-201deg); } }
+@keyframes armR{ 0%{ transform:rotate(0); } 34%{ transform:rotate(-46deg); } 82%{ transform:rotate(200deg); } 90%{ transform:rotate(208deg); } 100%{ transform:rotate(201deg); } }
+.lf-legs{ transform-box:view-box; transform-origin:120px 214px; animation:lfCrouch .9s cubic-bezier(0.5,0,0.2,1) forwards; }
+@keyframes lfCrouch{ 0%{ transform:translateY(0) scaleY(1); } 34%{ transform:translateY(9px) scaleY(.93); } 82%{ transform:translateY(-4px) scaleY(1.02); } 100%{ transform:translateY(0) scaleY(1); } }
 .lf-spark{ opacity:0; transform-box:view-box; transform-origin:120px 20px; }
 .loader__scene.smash .lf-spark{ animation:lfSpark .35s ease-out forwards; }
 @keyframes lfSpark{ 0%{ opacity:0; transform:scale(0); } 30%{ opacity:1; transform:scale(6); } 100%{ opacity:0; transform:scale(11); } }
