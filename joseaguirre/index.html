@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="preload" as="image" href="./assets/media/hero.webp" />
+  <link rel="preload" as="image" href="./assets/media/train-poster.jpg" />
   <link rel="stylesheet" href="./assets/css/styles.css" />
 
   <script type="application/ld+json">
@@ -62,115 +62,105 @@
 
 <!-- Mobile menu -->
 <nav class="menu" id="menu" aria-hidden="true" aria-label="Menú">
-  <a href="#quien" data-i18n="nav.who">Para quién</a>
   <a href="#metodo" data-i18n="nav.method">El método</a>
   <a href="#entrenamiento" data-i18n="nav.training">El entrenamiento</a>
   <a href="#prueba" data-i18n="nav.proof">Resultados</a>
   <a href="#coach" data-i18n="nav.coach">Tu coach</a>
   <a href="#programa" data-i18n="nav.program">El programa</a>
-  <button class="btn menu__cta" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button>
+  <button class="btn btn--ice menu__cta" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button>
 </nav>
 
 <main>
-  <!-- 01 · Hero -->
-  <section class="hero scene" id="hero">
-    <div class="hero__bg kb"><picture><source srcset="./assets/media/hero.webp" type="image/webp" /><img src="./assets/media/hero.jpg" alt="Jose Aguirre, coach de pérdida de grasa en Lima" width="998" height="1500" fetchpriority="high" /></picture></div>
+  <!-- 01 · Hero (training video) -->
+  <section class="hero" id="hero">
+    <div class="hero__media">
+      <video class="hero__video train__video" poster="./assets/media/train-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"><source data-src="./assets/media/train-loop.mp4" type="video/mp4" /></video>
+    </div>
     <div class="hero__scrim"></div>
     <div class="hero__in wrap">
       <p class="eyebrow reveal" data-i18n="hero.eyebrow">Coaching online · Lima, Perú</p>
       <h1 class="hero__h1 reveal" data-i18n="hero.h1">Vuelve a sentirte bien en tu cuerpo.</h1>
-      <p class="hero__sub reveal" data-i18n="hero.sub">Coaching 1:1 para hombres +30 que quieren perder grasa y construir un físico atlético — sin vivir en el gimnasio.</p>
-      <div class="hero__cta reveal"><button class="btn btn--ice" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button></div>
-      <p class="hero__trust reveal" data-i18n="hero.trust">+33.000 hombres siguen su método · Entrenando desde 2013</p>
+      <p class="hero__sub reveal" data-i18n="hero.sub">Coaching 1:1 para hombres +30 — pierde grasa y construye un físico atlético sin vivir en el gimnasio.</p>
+      <div class="hero__cta reveal">
+        <button class="btn btn--ice" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button>
+        <a class="btn btn--ghost" href="#metodo" data-i18n="hero.cta2">Ver el método</a>
+      </div>
+    </div>
+    <div class="hero__stats">
+      <div class="hstat"><b>+33.000</b><span data-i18n="stat.community">comunidad</span></div>
+      <div class="hstat"><b data-i18n="stat.since">Desde 2013</b><span data-i18n="stat.since2">entrenando</span></div>
+      <div class="hstat"><b>100%</b><span data-i18n="stat.online">online</span></div>
     </div>
   </section>
 
-  <!-- 02 · Resonance (pure type) -->
-  <section class="reso scene" id="reso">
-    <div class="wrap">
-      <p class="reso__t reveal" data-i18n="reso.t">No necesitas un físico de portada. Necesitas volver a sentirte fuerte, ligero y con energía — y poder mantenerlo.</p>
-      <span class="rule reveal"></span>
+  <!-- 02 · Value -->
+  <section class="value" id="enfoque">
+    <div class="wrap value__in">
+      <p class="value__t reveal" data-i18n="reso.t">No necesitas un físico de portada. Necesitas volver a sentirte fuerte, ligero y con energía — y poder mantenerlo.</p>
+      <ul class="value__pts reveal">
+        <li><i class="ok" aria-hidden="true"></i><span data-i18n="val.p1">Sin dietas extremas</span></li>
+        <li><i class="ok" aria-hidden="true"></i><span data-i18n="val.p2">Sin vivir en el gimnasio</span></li>
+        <li><i class="ok" aria-hidden="true"></i><span data-i18n="val.p3">Sin recuperar lo perdido</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- 03 · ¿Para quién? -->
-  <section class="quien scene" id="quien">
-    <div class="quien__bg kb"><picture><source srcset="./assets/media/mirror.webp" type="image/webp" /><img src="./assets/media/mirror.jpg" alt="Jose Aguirre frente al espejo" loading="lazy" width="1003" height="1254" /></picture></div>
-    <div class="quien__scrim"></div>
-    <div class="quien__in wrap">
-      <p class="kicker reveal" data-i18n="quien.kicker">Para quién es</p>
-      <h2 class="scene__h reveal" data-i18n="quien.h">Para el hombre que ya lo intentó todo.</h2>
-      <p class="scene__body reveal" data-i18n="quien.body">Dietas imposibles, rutinas de dos horas, planes que ignoran tu trabajo y tu familia. Aquí no. Un método que encaja en tu vida real — y que puedes sostener.</p>
-      <p class="quien__line mono reveal" data-i18n="quien.line">Sin dietas extremas · Sin vivir en el gimnasio · Sin recuperar lo perdido.</p>
-    </div>
-  </section>
-
-  <!-- 04 · El Método -->
+  <!-- 03 · El método (cards) -->
   <section class="metodo" id="metodo">
-    <div class="metodo__head scene">
-      <div class="wrap">
-        <p class="kicker reveal" data-i18n="metodo.kicker">El método</p>
-        <h2 class="scene__h reveal" data-i18n="metodo.h">Un sistema simple, en cuatro pasos.</h2>
-      </div>
-    </div>
-    <div class="step scene" id="step-1">
-      <div class="step__bg kb"><picture><source srcset="./assets/media/food.webp" type="image/webp" /><img src="./assets/media/food.jpg" alt="" loading="lazy" width="1100" height="731" /></picture></div>
-      <div class="step__scrim"></div>
-      <div class="step__in wrap reveal">
-        <span class="step__n">01</span>
-        <div class="step__tx"><h3 class="step__t" data-i18n="step.1t">Evaluar</h3><p class="step__d" data-i18n="step.1d">Entendemos tu punto de partida: composición, hábitos, horarios y tu objetivo real.</p></div>
-      </div>
-    </div>
-    <div class="step scene" id="step-2">
-      <div class="step__bg kb"><picture><source srcset="./assets/media/entrenar.webp" type="image/webp" /><img src="./assets/media/entrenar.jpg" alt="Levantamiento de fuerza en progreso" loading="lazy" width="1400" height="933" /></picture></div>
-      <div class="step__scrim"></div>
-      <div class="step__in wrap reveal">
-        <span class="step__n">02</span>
-        <div class="step__tx"><h3 class="step__t" data-i18n="step.2t">Entrenar</h3><p class="step__d" data-i18n="step.2d">Sesiones eficientes, diseñadas para tu tiempo — no para agotarte.</p></div>
-      </div>
-    </div>
-    <div class="step scene" id="step-3">
-      <div class="step__bg kb"><picture><source srcset="./assets/media/food.webp" type="image/webp" /><img src="./assets/media/food.jpg" alt="Nutrición flexible, cuidada" loading="lazy" width="1100" height="731" /></picture></div>
-      <div class="step__scrim"></div>
-      <div class="step__in wrap reveal">
-        <span class="step__n">03</span>
-        <div class="step__tx"><h3 class="step__t" data-i18n="step.3t">Nutrir</h3><p class="step__d" data-i18n="step.3d">Nutrición flexible que encaja con tu vida, sin prohibiciones absurdas.</p></div>
-      </div>
-    </div>
-    <div class="step scene" id="step-4">
-      <div class="step__bg kb"><picture><source srcset="./assets/media/lifestyle.webp" type="image/webp" /><img src="./assets/media/lifestyle.jpg" alt="Una forma de vivir sostenible" loading="lazy" width="1537" height="960" /></picture></div>
-      <div class="step__scrim"></div>
-      <div class="step__in wrap reveal">
-        <span class="step__n">04</span>
-        <div class="step__tx"><h3 class="step__t" data-i18n="step.4t">Sostener</h3><p class="step__d" data-i18n="step.4d">Hábitos que se quedan. No una dieta más, una forma de vivir.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 04.5 · El entrenamiento (workout substance + video) -->
-  <section class="train scene" id="entrenamiento">
-    <div class="train__bg kb">
-      <video class="train__video" muted loop playsinline preload="none" poster="./assets/media/train-poster.jpg" aria-hidden="true" tabindex="-1"><source data-src="./assets/media/train-loop.mp4" type="video/mp4" /></video>
-    </div>
-    <div class="train__scrim"></div>
-    <div class="train__in wrap">
-      <p class="kicker reveal" data-i18n="train.kicker">El entrenamiento</p>
-      <h2 class="scene__h reveal" data-i18n="train.h">Entrenamiento inteligente, no interminable.</h2>
-      <div class="train__pillars reveal">
-        <div class="pillar"><span class="pillar__t" data-i18n="train.p1t">Fuerza</span><span class="pillar__d" data-i18n="train.p1d">Construir músculo que sostiene tu metabolismo.</span></div>
-        <div class="pillar"><span class="pillar__t" data-i18n="train.p2t">Acondicionamiento</span><span class="pillar__d" data-i18n="train.p2d">Energía y resistencia para el día a día.</span></div>
-        <div class="pillar"><span class="pillar__t" data-i18n="train.p3t">Movilidad</span><span class="pillar__d" data-i18n="train.p3d">Moverte sin dolor, dentro y fuera del gimnasio.</span></div>
-        <div class="pillar"><span class="pillar__t" data-i18n="train.p4t">Técnica</span><span class="pillar__d" data-i18n="train.p4d">Entrenar seguro, para siempre.</span></div>
-      </div>
-      <p class="train__spec mono reveal" data-i18n="train.spec">Sesiones de 30–45 min · en casa o gimnasio · adaptadas a tu tiempo</p>
-    </div>
-  </section>
-
-  <!-- 05 · Prueba -->
-  <section class="prueba scene" id="prueba">
     <div class="wrap">
-      <p class="kicker reveal" data-i18n="prueba.kicker">Resultados</p>
-      <h2 class="scene__h reveal" data-i18n="prueba.h">Cambios reales. Que se sostienen.</h2>
+      <div class="sec-head reveal">
+        <p class="kicker" data-i18n="metodo.kicker">El método</p>
+        <h2 class="sec-h" data-i18n="metodo.h">Un sistema simple, en cuatro pasos.</h2>
+      </div>
+      <div class="mcards">
+        <article class="mcard reveal">
+          <div class="mcard__img kb"><picture><source srcset="./assets/media/evaluar.webp" type="image/webp" /><img src="./assets/media/evaluar.jpg" alt="Jose evaluando el punto de partida de un cliente" loading="lazy" width="1200" height="798" style="object-position:34% 45%" /></picture></div>
+          <div class="mcard__b"><span class="mcard__n">01</span><h3 data-i18n="step.1t">Evaluar</h3><p data-i18n="step.1d">Tu composición, tus hábitos, tu horario y tu objetivo real. Nada se programa hasta entenderlo.</p></div>
+        </article>
+        <article class="mcard reveal">
+          <div class="mcard__img kb"><picture><source srcset="./assets/media/entrenar.webp" type="image/webp" /><img src="./assets/media/entrenar.jpg" alt="Entrenamiento de fuerza en el gimnasio" loading="lazy" width="1300" height="867" style="object-position:50% 34%" /></picture></div>
+          <div class="mcard__b"><span class="mcard__n">02</span><h3 data-i18n="step.2t">Entrenar</h3><p data-i18n="step.2d">Sesiones pensadas para tu tiempo, no para tu agotamiento.</p></div>
+        </article>
+        <article class="mcard reveal">
+          <div class="mcard__img kb"><picture><source srcset="./assets/media/food.webp" type="image/webp" /><img src="./assets/media/food.jpg" alt="Plato equilibrado y fresco" loading="lazy" width="1100" height="1100" /></picture></div>
+          <div class="mcard__b"><span class="mcard__n">03</span><h3 data-i18n="step.3t">Nutrir</h3><p data-i18n="step.3d">Nutrición flexible que encaja con tu vida, sin prohibiciones absurdas.</p></div>
+        </article>
+        <article class="mcard reveal">
+          <div class="mcard__img kb"><picture><source srcset="./assets/media/lifestyle.webp" type="image/webp" /><img src="./assets/media/lifestyle.jpg" alt="Hombre corriendo al aire libre" loading="lazy" width="1400" height="932" style="object-position:56% 42%" /></picture></div>
+          <div class="mcard__b"><span class="mcard__n">04</span><h3 data-i18n="step.4t">Sostener</h3><p data-i18n="step.4d">Hábitos que se quedan para siempre, no una dieta más.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · El entrenamiento (split) -->
+  <section class="train" id="entrenamiento">
+    <div class="wrap train__grid">
+      <figure class="train__media kb reveal">
+        <picture><source srcset="./assets/media/train.webp" type="image/webp" /><img src="./assets/media/train.jpg" alt="Jose Aguirre entrenando" loading="lazy" width="1003" height="1254" /></picture>
+        <span class="train__badge mono"><span class="dot"></span>EN MOVIMIENTO</span>
+      </figure>
+      <div class="train__body">
+        <p class="kicker reveal" data-i18n="train.kicker">El entrenamiento</p>
+        <h2 class="sec-h reveal" data-i18n="train.h">Entrenamiento inteligente, no interminable.</h2>
+        <div class="pillars reveal">
+          <div class="pillar"><span class="pillar__t" data-i18n="train.p1t">Fuerza</span><span class="pillar__d" data-i18n="train.p1d">Músculo que sostiene tu metabolismo.</span></div>
+          <div class="pillar"><span class="pillar__t" data-i18n="train.p2t">Acondicionamiento</span><span class="pillar__d" data-i18n="train.p2d">Energía y resistencia para el día a día.</span></div>
+          <div class="pillar"><span class="pillar__t" data-i18n="train.p3t">Movilidad</span><span class="pillar__d" data-i18n="train.p3d">Moverte sin dolor, dentro y fuera del gym.</span></div>
+          <div class="pillar"><span class="pillar__t" data-i18n="train.p4t">Técnica</span><span class="pillar__d" data-i18n="train.p4d">Entrenar seguro — para siempre.</span></div>
+        </div>
+        <p class="train__spec mono reveal" data-i18n="train.spec">30–45 min · en casa o gimnasio · adaptado a tu tiempo</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Resultados (split) -->
+  <section class="prueba" id="prueba">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="kicker" data-i18n="prueba.kicker">Resultados</p>
+        <h2 class="sec-h" data-i18n="prueba.h">Cambios reales. Que se sostienen.</h2>
+      </div>
       <div class="prueba__grid">
         <div class="ba reveal" id="ba">
           <div class="ba__frame" id="baFrame">
@@ -181,24 +171,25 @@
             <button class="ba__handle" id="baHandle" aria-label="Comparar antes y después" type="button"></button>
           </div>
         </div>
-        <div class="prueba__tx reveal">
-          <p class="prueba__num"><b>−14 kg</b><span data-i18n="prueba.num">20 semanas</span></p>
-          <blockquote class="prueba__q" data-i18n="prueba.q">“Volví a reconocerme en el espejo — y esta vez no lo recuperé.”</blockquote>
+        <div class="prueba__side reveal">
+          <div class="prueba__num"><b>−14 kg</b><span data-i18n="prueba.num">20 semanas</span></div>
+          <blockquote class="prueba__q" data-i18n="prueba.q">"Volví a reconocerme en el espejo — y esta vez no lo recuperé."</blockquote>
           <p class="prueba__cite" data-i18n="prueba.cite">— Carlos, 41</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 06 · Tu Coach -->
-  <section class="coach scene" id="coach">
-    <div class="coach__grid wrap">
-      <div class="coach__media">
-        <div class="coach__portrait kb reveal"><picture><source srcset="./assets/media/coach.webp" type="image/webp" /><img src="./assets/media/coach.jpg" alt="Jose Aguirre" loading="lazy" width="1110" height="1388" /></picture></div>
-        <figure class="coach__keep reveal"><picture><source srcset="./assets/media/child.webp" type="image/webp" /><img src="./assets/media/child.jpg" alt="Jose de niño en Lima" loading="lazy" width="900" height="900" /></picture><figcaption class="mono" data-i18n="coach.keep">Lima, 2013</figcaption></figure>
+  <!-- 06 · Tu coach (split) -->
+  <section class="coach" id="coach">
+    <div class="wrap coach__grid">
+      <div class="coach__media reveal">
+        <div class="coach__portrait kb"><picture><source srcset="./assets/media/coach.webp" type="image/webp" /><img src="./assets/media/coach.jpg" alt="Jose Aguirre, coach en Lima" loading="lazy" width="1110" height="1388" /></picture></div>
+        <figure class="coach__keep"><picture><source srcset="./assets/media/child.webp" type="image/webp" /><img src="./assets/media/child.jpg" alt="Jose de niño, Lima" loading="lazy" width="900" height="900" /></picture><figcaption data-i18n="coach.keep">Lima, 2013</figcaption></figure>
       </div>
-      <div class="coach__tx">
-        <h2 class="scene__h reveal" data-i18n="coach.h">Soy Jose Aguirre.</h2>
+      <div class="coach__body">
+        <p class="kicker reveal" data-i18n="coach.kicker">Tu coach</p>
+        <h2 class="sec-h reveal" data-i18n="coach.h">Soy Jose Aguirre.</h2>
         <p class="scene__body reveal" data-i18n="coach.p1">Coach de pérdida de grasa, desde Lima. Entreno desde 2013 y llevo años ayudando a hombres +30 a recuperar su forma sin poner su vida en pausa.</p>
         <p class="coach__philo reveal" data-i18n="coach.philo">La mayoría no quiere un físico enorme. Quiere volver a sentirse bien. Ese es todo mi trabajo.</p>
         <p class="coach__sig reveal" data-i18n="coach.sig">No te prometo abdominales en 30 días. Te enseño a mantenerlos toda la vida.</p>
@@ -206,43 +197,41 @@
     </div>
   </section>
 
-  <!-- 07 · El Programa -->
-  <section class="prog scene" id="programa">
-    <div class="wrap">
-      <p class="kicker reveal" data-i18n="prog.kicker">Coaching 1:1</p>
-      <h2 class="scene__h reveal" data-i18n="prog.h">Un programa hecho para ti.</h2>
-      <div class="prog__grid">
-        <div class="prog__list reveal">
-          <ul class="incl">
-            <li data-i18n="prog.f1">Plan de entrenamiento personalizado</li>
-            <li data-i18n="prog.f2">Nutrición flexible a tu medida</li>
-            <li data-i18n="prog.f3">Seguimiento y ajustes cada semana</li>
-            <li data-i18n="prog.f4">Soporte directo conmigo</li>
-            <li data-i18n="prog.f5">Adaptado a tu tiempo y tu vida</li>
-          </ul>
-          <p class="prog__note" data-i18n="prog.note">Plazas limitadas. Primero una llamada para ver si encajamos — sin compromiso.</p>
-          <button class="btn btn--ice" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button>
-        </div>
-        <div class="prog__cal" id="calWrap">
-          <div class="cal-skeleton" id="calSkeleton"><span class="cal-spin"></span><span class="mono" data-i18n="prog.loading">Cargando agenda…</span></div>
-          <div class="calendly-inline-widget" id="calInline" style="min-width:280px;height:680px;"></div>
-          <div class="cal-fb" id="calFb">
-            <p class="cal-fb__t" data-i18n="prog.fbt">Reserva tu llamada gratis</p>
-            <p class="cal-fb__sub" data-i18n="prog.fbsub">15 minutos, sin compromiso.</p>
-            <a class="btn btn--ice" href="https://calendly.com/joseaguirrefitness/onlinecoaching" target="_blank" rel="noopener" data-i18n="prog.fblink">Abrir agenda</a>
-          </div>
+  <!-- 07 · El programa (split + Calendly) -->
+  <section class="prog" id="programa">
+    <div class="wrap prog__grid">
+      <div class="prog__info">
+        <p class="kicker reveal" data-i18n="prog.kicker">Coaching 1:1</p>
+        <h2 class="sec-h reveal" data-i18n="prog.h">Un programa hecho para ti.</h2>
+        <ul class="incl reveal">
+          <li data-i18n="prog.f1">Plan de entrenamiento personalizado</li>
+          <li data-i18n="prog.f2">Nutrición flexible a tu medida</li>
+          <li data-i18n="prog.f3">Seguimiento y ajustes cada semana</li>
+          <li data-i18n="prog.f4">Soporte directo conmigo</li>
+          <li data-i18n="prog.f5">Adaptado a tu tiempo y tu vida</li>
+        </ul>
+        <p class="prog__note reveal" data-i18n="prog.note">Plazas limitadas. Primero una llamada para ver si encajamos — sin compromiso.</p>
+        <div class="reveal"><button class="btn btn--ice btn--lg" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button></div>
+      </div>
+      <div class="prog__cal reveal" id="calWrap">
+        <div class="cal-skeleton" id="calSkeleton"><span class="cal-spin"></span><span class="mono" data-i18n="prog.loading">Cargando agenda…</span></div>
+        <div class="calendly-inline-widget" id="calInline" style="min-width:280px;height:680px;"></div>
+        <div class="cal-fb" id="calFb">
+          <p class="cal-fb__t" data-i18n="prog.fbt">Reserva tu llamada gratis</p>
+          <p class="cal-fb__sub" data-i18n="prog.fbsub">15 minutos, sin compromiso.</p>
+          <button class="btn btn--ice" data-cal type="button" data-i18n="prog.fblink">Abrir agenda</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 08 · FAQ -->
-  <section class="faq scene" id="faq">
-    <div class="wrap">
-      <h2 class="scene__h reveal" data-i18n="faq.h">Preguntas frecuentes</h2>
+  <section class="faq" id="faq">
+    <div class="wrap faq__wrap">
+      <h2 class="sec-h reveal" data-i18n="faq.h">Preguntas frecuentes</h2>
       <div class="faq__list reveal">
         <details class="ac"><summary><span data-i18n="faq.q1">¿Necesito ir al gimnasio?</span><i></i></summary><p data-i18n="faq.a1">No es obligatorio. Adapto el plan a lo que tengas — gimnasio, casa o poco equipo. Lo importante es que sea sostenible para ti.</p></details>
-        <details class="ac"><summary><span data-i18n="faq.q2">¿Cuánto tiempo al día?</span><i></i></summary><p data-i18n="faq.a2">Menos del que crees. Sesiones eficientes de 30–45 minutos que encajan con tu agenda.</p></details>
+        <details class="ac"><summary><span data-i18n="faq.q2">¿Cuánto tiempo al día?</span><i></i></summary><p data-i18n="faq.a2">Menos del que crees. Sesiones eficientes de 30–45 min que encajan con tu agenda.</p></details>
         <details class="ac"><summary><span data-i18n="faq.q3">¿Funciona si tengo +40 o +50?</span><i></i></summary><p data-i18n="faq.a3">Es justo para quien trabajo. El método se ajusta a tu edad, tu recuperación y tu punto de partida.</p></details>
         <details class="ac"><summary><span data-i18n="faq.q4">¿Cómo funciona el coaching online?</span><i></i></summary><p data-i18n="faq.a4">Tienes tu plan, seguimiento semanal y contacto directo conmigo. Ajustamos sobre la marcha.</p></details>
         <details class="ac"><summary><span data-i18n="faq.q5">¿Y si viajo o tengo poco tiempo?</span><i></i></summary><p data-i18n="faq.a5">El plan se adapta a tu vida real: viajes, hoteles, cenas fuera. Sin excusas, pero sin castigos.</p></details>
@@ -252,8 +241,8 @@
   </section>
 
   <!-- 09 · Cierre -->
-  <section class="cierre scene" id="cierre">
-    <div class="cierre__bg kb"><picture><source srcset="./assets/media/train.webp" type="image/webp" /><img src="./assets/media/train.jpg" alt="" loading="lazy" width="1003" height="1254" /></picture></div>
+  <section class="cierre" id="cierre">
+    <div class="cierre__bg kb"><picture><source srcset="./assets/media/mirror.webp" type="image/webp" /><img src="./assets/media/mirror.jpg" alt="" loading="lazy" width="1003" height="1254" /></picture></div>
     <div class="cierre__scrim"></div>
     <div class="cierre__in wrap">
       <h2 class="cierre__h reveal" data-i18n="cierre.h">Empieza cuando estés listo.</h2>
@@ -265,10 +254,10 @@
 
 <footer class="foot">
   <div class="wrap foot__in">
-    <span class="foot__wm">Jose Aguirre</span>
-    <div class="foot__meta mono">
+    <a class="foot__wm" href="#hero">Jose Aguirre</a>
+    <div class="foot__meta">
       <span>Lima, Perú</span>
-      <a href="https://www.instagram.com/joseaguirrefitness/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.instagram.com/joseaguirrefitness/" target="_blank" rel="noopener">@joseaguirrefitness</a>
       <span>© 2026</span>
     </div>
   </div>
@@ -277,14 +266,14 @@
 <!-- Sticky mobile CTA -->
 <div class="dock" id="dock"><button class="btn btn--ice btn--block" data-cal type="button" data-i18n="cta.book">Reserva tu llamada</button></div>
 
-<!-- Navy duotone filter -->
-<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+<!-- Duotone filter -->
+<svg class="svg-defs" aria-hidden="true" focusable="false"><defs>
   <filter id="navyduo" color-interpolation-filters="sRGB">
     <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 1 0"/>
     <feComponentTransfer>
-      <feFuncR tableValues="0.063 0.30 0.914"/>
-      <feFuncG tableValues="0.082 0.42 0.894"/>
-      <feFuncB tableValues="0.122 0.52 0.855"/>
+      <feFuncR type="table" tableValues="0.06 0.90"/>
+      <feFuncG type="table" tableValues="0.08 0.91"/>
+      <feFuncB type="table" tableValues="0.12 0.86"/>
     </feComponentTransfer>
   </filter>
 </defs></svg>
