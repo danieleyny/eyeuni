@@ -60,13 +60,17 @@ img.duo,.kb img,.kb video,.ba__img img,.coach__keep img{ filter:url(#navyduo); }
 @keyframes draw{ to{ width:100%; } }
 
 /* Progress line */
-.prog{ position:fixed; top:0; left:0; right:0; height:2px; z-index:1500; background:transparent; }
-.prog i{ display:block; height:100%; width:0; background:var(--ice); opacity:.85; }
+.scrollbar{ position:fixed; top:0; left:0; right:0; height:2px; z-index:1500; background:transparent; pointer-events:none; }
+.scrollbar i{ display:block; height:100%; width:0; background:var(--ice); opacity:.85; }
 
 /* Top bar */
 .bar{ position:fixed; top:0; left:0; right:0; z-index:1000; height:var(--bar-h); display:flex; align-items:center; justify-content:space-between; padding-inline:var(--pad); transition:background .5s var(--ui),backdrop-filter .5s; }
 .bar.is-scrolled{ background:rgba(16,21,31,.72); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); }
 .bar__wm{ font-size:1.05rem; font-weight:500; letter-spacing:.01em; }
+.bar__nav{ display:none; align-items:center; gap:1.9rem; }
+.bar__nav a{ position:relative; font-size:.88rem; color:var(--slate); transition:color .3s var(--ui); }
+.bar__nav a::after{ content:""; position:absolute; left:0; right:0; bottom:-4px; height:1px; background:var(--ice); transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ease); }
+.bar__nav a:hover{ color:var(--off); } .bar__nav a:hover::after{ transform:scaleX(1); }
 .bar__right{ display:flex; align-items:center; gap:1.2rem; }
 .lang{ display:flex; align-items:center; gap:.4rem; font-size:.8rem; color:var(--slate); }
 .lang button{ background:none; border:none; padding:2px; cursor:pointer; color:var(--slate); font-size:.8rem; font-family:inherit; }
@@ -234,6 +238,7 @@ img.duo,.kb img,.kb video,.ba__img img,.coach__keep img{ filter:url(#navyduo); }
 @media (min-width:820px){
   :root{ --bar-h:76px; }
   .bar__cta{ display:inline-flex; }
+  .bar__nav{ display:flex; }
   .bar__menu,.menu,.dock{ display:none; }
   .step__in{ align-items:flex-end; }
   .prueba__grid{ grid-template-columns:.8fr 1.2fr; }
