@@ -10,7 +10,7 @@
   var EN = {
     'meta.desc': 'Online 1:1 coaching for men 30+. Feel good in your body again — lose fat without living at the gym, with a sustainable method. Lima, since 2013.',
     'loader.sub': 'Lima · Online coaching', 'a11y.skip': 'Skip to content',
-    'cta.book': 'Book your call', 'cta.bookShort': 'Book',
+    'cta.book': 'Book your call', 'cta.bookShort': 'Book', 'cta.bookCall': 'Book a Call',
     'rail.0': '00 Home', 'rail.1': '01 Philosophy', 'rail.2': '02 Method', 'rail.3': '03 Story', 'rail.4': '04 Results', 'rail.5': '05 Coaching',
     'rail.1b': 'Philosophy', 'rail.2b': 'Method', 'rail.3b': 'Story', 'rail.4b': 'Results', 'rail.5b': 'Coaching',
     'hero.eyebrow': 'Fat-loss coach · Lima, Peru',
@@ -19,7 +19,7 @@
     'hero.cta2': 'See the method',
     'manif.full': 'Most men don’t want a huge physique. They want to feel good again.',
     'chead.philo': 'Philosophy', 'chead.method': 'The method', 'chead.story': 'About Jose', 'chead.since': 'Since 2013', 'chead.results': 'Results', 'chead.coaching': 'Coaching',
-    'about.kicker': 'About Jose', 'about.keycap': 'Lima, 2013 — where it all began.',
+    'about.kicker': 'About Jose',
     'about.h2a': 'An athletic body,', 'about.h2b': 'built for real life.',
     'about.loc': 'Lima, Peru · Coaching since 2013',
     'about.p1': "I'm an online fat-loss coach from Lima, Peru. I've trained since 2013 and spent years helping men 30+ get back in shape without putting their life on hold — because what you can't sustain doesn't count.",
