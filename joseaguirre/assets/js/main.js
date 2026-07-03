@@ -157,12 +157,12 @@
   /* ---------- Training video (desktop + motion only; poster elsewhere) ---------- */
   (function trainVideo() {
     var v = doc.querySelector('.train__video'); if (!v) return;
-    var src = v.querySelector('source');
-    if (reduce || W.matchMedia('(max-width:820px)').matches) return; // poster only on mobile / reduced-motion
-    function load() { if (src && src.dataset.src && !src.src) { src.src = src.dataset.src; v.load(); var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
-    if (!('IntersectionObserver' in W)) { load(); return; }
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); load(); } }); }, { rootMargin: '400px' });
-    io.observe(v);
+    if (reduce) { v.removeAttribute('autoplay'); try { v.pause(); } catch (e) {} return; } // poster only for reduced motion
+    var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    play();
+    v.addEventListener('canplay', play, { once: true });
+    v.addEventListener('loadeddata', play, { once: true });
+    doc.addEventListener('touchstart', play, { once: true, passive: true });
   })();
 
   /* ---------- Calendly ---------- */

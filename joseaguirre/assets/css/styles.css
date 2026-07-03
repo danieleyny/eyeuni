@@ -233,8 +233,13 @@ img.duo,.kb img,.coach__keep img,.ba__img img{ filter:url(#navyduo); }
 .foot__meta a:hover{ color:var(--ice); }
 
 /* ---------- Sticky mobile CTA ---------- */
-.dock{ position:fixed; left:0; right:0; bottom:0; z-index:900; padding:.6rem var(--pad); padding-bottom:calc(.6rem + env(safe-area-inset-bottom,0px)); background:rgba(16,21,31,.85); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); border-top:1px solid var(--steel); transform:translateY(130%); transition:transform .5s var(--ease); }
+.dock{ position:fixed; left:0; right:0; bottom:0; z-index:900; padding:1rem clamp(18px,5vw,28px); padding-bottom:calc(1rem + env(safe-area-inset-bottom,0px)); background:rgba(16,21,31,.85); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); border-top:1px solid var(--steel); transform:translateY(130%); transition:transform .5s var(--ease); }
 .dock.on{ transform:none; }
+/* Living CTA — soft glow pulse + periodic light-beam sweep */
+.dock .btn--ice{ position:relative; overflow:hidden; min-height:52px; isolation:isolate; animation:dockGlow 3s var(--ease) infinite; }
+.dock .btn--ice::after{ content:""; position:absolute; top:0; bottom:0; left:-65%; width:45%; background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.6) 50%,transparent 100%); transform:skewX(-18deg); pointer-events:none; z-index:2; animation:dockShine 4.2s ease-in-out infinite; }
+@keyframes dockGlow{ 0%,100%{ box-shadow:0 4px 18px -8px rgba(134,174,203,.5); } 50%{ box-shadow:0 10px 40px -8px rgba(134,174,203,.95); } }
+@keyframes dockShine{ 0%{ left:-65%; } 18%{ left:130%; } 100%{ left:130%; } }
 
 /* ============================================================ Desktop */
 @media (min-width:760px){
