@@ -249,7 +249,7 @@ img.duo,.kb img,.coach__keep img,.ba__img img{ filter:url(#navyduo); }
   .train__grid{ grid-template-columns:.85fr 1.15fr; }
   .prueba__grid{ grid-template-columns:.8fr 1.2fr; }
   .coach__grid{ grid-template-columns:.85fr 1.15fr; }
-  .prog__grid{ grid-template-columns:1fr 1.05fr; }
+  .prog__grid{ max-width:640px; }
 }
 @media (min-width:1080px){
   .hero__h1{ font-size:clamp(3.2rem,5.5vw,5rem); }
