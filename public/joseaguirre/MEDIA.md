@@ -19,3 +19,14 @@ Swap any file keeping the same name — the duotone applies automatically. WebP 
 
 Duotone lives in CSS (`.kb img{ filter:url(#navyduo) }`) with a fallback for browsers
 without SVG filter support. The childhood photo is a nostalgic footnote, never a hero.
+
+
+## Training energy (added)
+| File | Use / source |
+| --- | --- |
+| `train-loop.mp4` + `train-poster.*` | 04.5 "El entrenamiento" — cinematic training video, navy-graded via CSS. Desktop autoplays (muted, loop, lazy-loaded on scroll); mobile / reduced-motion show the poster only (no video download). Source: Pexels (JULLIAN PRODUCTION), free for commercial use. |
+| `entrenar.*` | Método·02 Entrenar — real barbell lift in progress (replaces the static pose). Source: Unsplash, free license. Navy-graded. |
+
+The training video and the deadlift still are graded to the same navy duotone as the photos.
+Swap `train-loop.mp4` for Jose's own footage anytime (keep the name); update `train-poster.*`
+to a matching still.
