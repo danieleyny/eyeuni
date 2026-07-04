@@ -39,8 +39,6 @@
     'story.lead': 'Testing, correcting and coaching real men with busy lives — until I landed on a method that lasts.',
     'tl.n1': '— 03 · Lima, where it started', 'tl.n2': 'First clients, first transformations.', 'tl.n3': '100% online coaching — for men 30+.', 'tl.n4': 'A method that lasts, for life.', 'tl.today': 'Today',
     'break.cap': 'Consistency, not perfection.',
-    'vbreak.kicker': 'The effort', 'vbreak.h2a': 'Change is earned,', 'vbreak.h2b': 'one day at a time.',
-    'vbreak.note': 'No shortcuts. No extremes. Just work you can sustain.',
     'res.before': 'Before', 'res.after': 'After',
     'res.q1a': '“I recognised myself', 'res.q1b': 'in the mirror again — and', 'res.q1c': 'this time I didn’t gain it back.”',
     'sr.community': 'community', 'sr.since': 'Since 2013', 'sr.sinceL': 'training', 'sr.online': 'online',
@@ -131,21 +129,6 @@
     }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
     items.forEach(function (el) { io.observe(el); });
     counters.forEach(function (el) { io.observe(el.closest('.sr') || el); });
-  })();
-
-  /* ---------- Battle-ropes video break: robust muted autoplay ---------- */
-  (function vbreak() {
-    var v = doc.querySelector('.vbreak__v'); if (!v) return;
-    // iOS checks the muted *property* before allowing autoplay — force it.
-    v.muted = true; v.defaultMuted = true; v.volume = 0;
-    if (reduce) { v.removeAttribute('autoplay'); try { v.pause(); } catch (e) {} return; }
-    var tries = 0;
-    function play() { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-    function kick() { play(); if (v.paused && tries++ < 60) setTimeout(kick, 200); }
-    kick();
-    ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (ev) { v.addEventListener(ev, play); });
-    doc.addEventListener('visibilitychange', function () { if (!doc.hidden) play(); });
-    ['touchstart', 'click', 'scroll', 'pointerdown'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
   })();
 
   /* Scroll-spy rail */

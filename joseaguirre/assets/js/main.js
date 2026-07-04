@@ -19,6 +19,7 @@
     'stat.community': 'community', 'stat.since': 'Since 2013', 'stat.since2': 'training', 'stat.online': 'online',
     'reso.t': 'You don’t need a cover-model physique. You need to feel strong, light and energized again — and be able to keep it.',
     'val.p1': 'No extreme diets', 'val.p2': 'No living at the gym', 'val.p3': 'No gaining it back',
+    'cinema.kicker': 'The effort', 'cinema.h': 'Change is earned, one day at a time.', 'cinema.note': 'No shortcuts. No extremes. Just work you can sustain.',
     'coach.kicker': 'Your coach',
     'quien.kicker': 'Who it’s for',
     'quien.h': 'For the man who has already tried everything.',
@@ -201,6 +202,20 @@
     ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'keydown'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
     // Loader calls this the moment the site is revealed, so the clip is already moving.
     W.__playHero = function () { tries = 0; kick(); };
+  })();
+
+  /* ---------- Cinematic battle-ropes band: robust muted autoplay ---------- */
+  (function cinemaVideo() {
+    var v = doc.querySelector('.cinema__v'); if (!v) return;
+    v.muted = true; v.defaultMuted = true; v.volume = 0;
+    if (reduce) { v.removeAttribute('autoplay'); try { v.pause(); } catch (e) {} return; }
+    var play = function () { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    var tries = 0;
+    function kick() { play(); if (v.paused && tries++ < 60) setTimeout(kick, 200); }
+    kick();
+    ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (ev) { v.addEventListener(ev, play); });
+    doc.addEventListener('visibilitychange', function () { if (!doc.hidden) play(); });
+    ['touchstart', 'click', 'scroll', 'pointerdown'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
   })();
 
   /* ---------- Calendly ---------- */
