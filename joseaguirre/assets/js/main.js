@@ -188,15 +188,20 @@
   /* ---------- Training video (desktop + motion only; poster elsewhere) ---------- */
   (function trainVideo() {
     var v = doc.querySelector('.train__video'); if (!v) return;
+    // iOS checks the muted *property* (not just the attribute) before allowing autoplay — force it.
+    v.muted = true; v.defaultMuted = true; v.volume = 0;
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
     if (reduce) { v.removeAttribute('autoplay'); try { v.pause(); } catch (e) {} return; } // poster only for reduced motion
-    var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    var play = function () { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
     // Keep nudging until it's actually playing — mobile can block the first autoplay attempt.
     var tries = 0;
-    function kick() { play(); if (v.paused && tries++ < 40) setTimeout(kick, 200); }
+    function kick() { play(); if (v.paused && tries++ < 80) setTimeout(kick, 150); }
+    if (v.readyState < 2) { try { v.load(); } catch (e) {} }
     kick();
-    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(function (ev) { v.addEventListener(ev, play); });
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'stalled', 'suspend'].forEach(function (ev) { v.addEventListener(ev, play); });
     doc.addEventListener('visibilitychange', function () { if (!doc.hidden) play(); });
-    ['touchstart', 'click', 'scroll'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
+    // First real interaction of any kind is a guaranteed gesture — plays even in iOS Low Power Mode.
+    ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'keydown'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
     // Loader calls this the moment the site is revealed, so the clip is already moving.
     W.__playHero = function () { tries = 0; kick(); };
   })();
