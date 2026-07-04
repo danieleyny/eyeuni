@@ -314,3 +314,7 @@ body.loaded .hero__stats{ transition-delay:.54s; }
   .kb img{ transform:none; animation:none; }
   .train__badge .dot{ animation:none; }
 }
+
+/* EYEUNi demo watermark — tiled, non-interactive, sits above everything */
+.wm{ position:fixed; inset:0; z-index:2147483000; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='200'%3E%3Ctext%20x='160'%20y='108'%20font-family='Arial,Helvetica,sans-serif'%20font-size='30'%20font-weight='700'%20letter-spacing='2'%20fill='%23E9E4DA'%20fill-opacity='0.12'%20text-anchor='middle'%20transform='rotate(-28%20160%20100)'%3EEYEUNi%3C/text%3E%3C/svg%3E"); background-repeat:repeat; background-position:center; }
+@media print{ .wm{ display:block !important; } }
