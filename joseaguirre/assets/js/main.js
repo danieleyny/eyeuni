@@ -84,8 +84,6 @@
     var scene = doc.getElementById('loaderScene'), shatter = doc.getElementById('shatter');
     function hide() { el.classList.add('is-hidden'); doc.body.classList.add('loaded'); }
     if (reduce || !shatter) { setTimeout(hide, 500); return; }
-    // Impact flash that fires the instant the weights collide.
-    var flash = doc.createElement('div'); flash.className = 'flash'; el.appendChild(flash);
     // Build navy shards tiling the screen; they fly apart from the smash point on cue.
     var W_ = W.innerWidth, H_ = W.innerHeight;
     var cols = Math.max(4, Math.round(W_ / 96)), rows = Math.max(6, Math.round(H_ / 96));
@@ -107,7 +105,6 @@
     var SMASH = 1780;
     setTimeout(function () {
       if (scene) { scene.classList.add('smash'); }
-      el.classList.add('boom'); // white impact flash on collision
       setTimeout(function () {
         if (scene) scene.classList.add('gone');
         el.classList.add('shattering');
