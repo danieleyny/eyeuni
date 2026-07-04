@@ -82,8 +82,10 @@
   (function loader() {
     var el = doc.getElementById('loader'); if (!el) return;
     var scene = doc.getElementById('loaderScene'), shatter = doc.getElementById('shatter');
-    function hide() { el.classList.add('is-hidden'); }
+    function hide() { el.classList.add('is-hidden'); doc.body.classList.add('loaded'); }
     if (reduce || !shatter) { setTimeout(hide, 500); return; }
+    // Impact flash that fires the instant the weights collide.
+    var flash = doc.createElement('div'); flash.className = 'flash'; el.appendChild(flash);
     // Build navy shards tiling the screen; they fly apart from the smash point on cue.
     var W_ = W.innerWidth, H_ = W.innerHeight;
     var cols = Math.max(4, Math.round(W_ / 96)), rows = Math.max(6, Math.round(H_ / 96));
@@ -93,11 +95,11 @@
       for (var t = 0; t < 2; t++) {
         var s = doc.createElement('div'); s.className = 'shard';
         s.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;clip-path:' + (t ? 'polygon(100% 0,100% 100%,0 100%)' : 'polygon(0 0,100% 0,0 100%)');
-        var cx = x + w / 2, cy = y + h / 2, dx = cx - ox, dy = cy - oy, d = Math.max(1, Math.sqrt(dx * dx + dy * dy)), f = 140 + Math.random() * 300;
-        s.style.setProperty('--tx', (dx / d * f + (Math.random() - 0.5) * 46) + 'px');
-        s.style.setProperty('--ty', (dy / d * f + (Math.random() - 0.5) * 46 + 70) + 'px');
-        s.style.setProperty('--rot', ((Math.random() - 0.5) * 100) + 'deg');
-        s.style.transitionDelay = (Math.random() * 90) + 'ms';
+        var cx = x + w / 2, cy = y + h / 2, dx = cx - ox, dy = cy - oy, d = Math.max(1, Math.sqrt(dx * dx + dy * dy)), f = 260 + Math.random() * 560;
+        s.style.setProperty('--tx', (dx / d * f + (Math.random() - 0.5) * 80) + 'px');
+        s.style.setProperty('--ty', (dy / d * f + (Math.random() - 0.5) * 80 + 130) + 'px');
+        s.style.setProperty('--rot', ((Math.random() - 0.5) * 300) + 'deg');
+        s.style.transitionDelay = (Math.random() * 70) + 'ms';
         frag.appendChild(s);
       }
     }
@@ -105,12 +107,15 @@
     var SMASH = 1780;
     setTimeout(function () {
       if (scene) { scene.classList.add('smash'); }
+      el.classList.add('boom'); // white impact flash on collision
       setTimeout(function () {
         if (scene) scene.classList.add('gone');
         el.classList.add('shattering');
-        if (el.animate) try { el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(4px,-3px)' }, { transform: 'translate(-4px,3px)' }, { transform: 'translate(0,0)' }], { duration: 130 }); } catch (e) {}
+        if (el.animate) try { el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(10px,-8px)' }, { transform: 'translate(-9px,7px)' }, { transform: 'translate(6px,-4px)' }, { transform: 'translate(0,0)' }], { duration: 220 }); } catch (e) {}
         shatter.classList.add('go');
-        setTimeout(hide, 850);
+        doc.body.classList.add('loaded'); // hero text rises in as the shards clear
+        if (W.__playHero) W.__playHero();  // make sure the hero video is running on reveal
+        setTimeout(hide, 950);
       }, 300);
     }, SMASH);
   })();
@@ -185,10 +190,15 @@
     var v = doc.querySelector('.train__video'); if (!v) return;
     if (reduce) { v.removeAttribute('autoplay'); try { v.pause(); } catch (e) {} return; } // poster only for reduced motion
     var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-    play();
-    v.addEventListener('canplay', play, { once: true });
-    v.addEventListener('loadeddata', play, { once: true });
-    doc.addEventListener('touchstart', play, { once: true, passive: true });
+    // Keep nudging until it's actually playing — mobile can block the first autoplay attempt.
+    var tries = 0;
+    function kick() { play(); if (v.paused && tries++ < 40) setTimeout(kick, 200); }
+    kick();
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(function (ev) { v.addEventListener(ev, play); });
+    doc.addEventListener('visibilitychange', function () { if (!doc.hidden) play(); });
+    ['touchstart', 'click', 'scroll'].forEach(function (ev) { doc.addEventListener(ev, play, { passive: true }); });
+    // Loader calls this the moment the site is revealed, so the clip is already moving.
+    W.__playHero = function () { tries = 0; kick(); };
   })();
 
   /* ---------- Calendly ---------- */
