@@ -318,3 +318,8 @@ body.loaded .hero__stats{ transition-delay:.54s; }
 /* EYEUNi demo ribbon — fixed yellow corner banner, stays as you scroll */
 .wm{ position:fixed; top:0; right:0; width:138px; height:138px; overflow:hidden; z-index:2147483000; pointer-events:none; }
 .wm span{ position:absolute; top:26px; right:-52px; width:186px; padding:6px 0; transform:rotate(45deg); background:#FFD21E; color:#17130A; text-align:center; font:800 11px/1 Arial,Helvetica,sans-serif; letter-spacing:.13em; text-transform:uppercase; box-shadow:0 8px 22px rgba(0,0,0,.32); }
+/* On mobile the hamburger sits in the top-right corner, so drop the ribbon to a tab below the bar */
+@media (max-width:820px){
+  .wm{ top:calc(var(--bar-h) + 8px); right:0; width:auto; height:auto; overflow:visible; }
+  .wm span{ display:block; position:static; transform:none; width:auto; padding:6px 12px; font-size:10px; letter-spacing:.12em; border-radius:6px 0 0 6px; box-shadow:0 6px 16px rgba(0,0,0,.3); }
+}
