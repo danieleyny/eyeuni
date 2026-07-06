@@ -13,7 +13,7 @@
     'cta.book': 'Book your call', 'cta.bookShort': 'Book', 'cta.bookCall': 'Book a Call',
     'rail.0': '00 Home', 'rail.1': '01 Philosophy', 'rail.2': '02 Method', 'rail.3': '03 Story', 'rail.4': '04 Results', 'rail.5': '05 Coaching',
     'rail.1b': 'Philosophy', 'rail.2b': 'Method', 'rail.3b': 'Story', 'rail.4b': 'Results', 'rail.5b': 'Coaching',
-    'hero.eyebrow': 'Fat-loss coach · Lima, Peru',
+    'hero.eyebrow': 'Fat-loss coach',
     'hero.h1a': 'Feel', 'hero.h1b': 'good again', 'hero.h1c': 'in your body.',
     'hero.sub': 'I help men 30+ lose fat without living at the gym — and build a lean, athletic physique they can keep.',
     'hero.cta2': 'See the method',
@@ -82,8 +82,8 @@
     try { localStorage.setItem('ja2_lang', lang); } catch (e) {}
   }
   (function initLang() {
-    var q = new URLSearchParams(location.search).get('lang'), s; try { s = localStorage.getItem('ja2_lang'); } catch (e) {}
-    applyLang(q === 'en' || q === 'es' ? q : (s || 'es'));
+    var q = new URLSearchParams(location.search).get('lang');
+    applyLang(q === 'en' ? 'en' : 'es'); // always start in Spanish unless ?lang=en is explicit
     doc.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.dataset.lang); }); });
   })();
 

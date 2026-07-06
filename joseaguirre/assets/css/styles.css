@@ -315,6 +315,6 @@ body.loaded .hero__stats{ transition-delay:.54s; }
   .train__badge .dot{ animation:none; }
 }
 
-/* EYEUNi demo watermark — tiled, non-interactive, sits above everything */
-.wm{ position:fixed; inset:0; z-index:2147483000; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='200'%3E%3Ctext%20x='160'%20y='108'%20font-family='Arial,Helvetica,sans-serif'%20font-size='30'%20font-weight='700'%20letter-spacing='2'%20fill='%23E9E4DA'%20fill-opacity='0.12'%20text-anchor='middle'%20transform='rotate(-28%20160%20100)'%3EEYEUNi%3C/text%3E%3C/svg%3E"); background-repeat:repeat; background-position:center; }
-@media print{ .wm{ display:block !important; } }
+/* EYEUNi demo ribbon — fixed yellow corner banner, stays as you scroll */
+.wm{ position:fixed; top:0; right:0; width:138px; height:138px; overflow:hidden; z-index:2147483000; pointer-events:none; }
+.wm span{ position:absolute; top:26px; right:-52px; width:186px; padding:6px 0; transform:rotate(45deg); background:#FFD21E; color:#17130A; text-align:center; font:800 11px/1 Arial,Helvetica,sans-serif; letter-spacing:.13em; text-transform:uppercase; box-shadow:0 8px 22px rgba(0,0,0,.32); }

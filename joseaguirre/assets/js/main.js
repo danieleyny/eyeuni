@@ -74,8 +74,8 @@
     try { localStorage.setItem('ja1_lang', lang); } catch (e) {}
   }
   (function initLang() {
-    var q = new URLSearchParams(location.search).get('lang'), s; try { s = localStorage.getItem('ja1_lang'); } catch (e) {}
-    applyLang(q === 'en' || q === 'es' ? q : (s || 'es'));
+    var q = new URLSearchParams(location.search).get('lang');
+    applyLang(q === 'en' ? 'en' : 'es'); // always start in Spanish unless ?lang=en is explicit
     doc.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.dataset.lang); }); });
   })();
 
