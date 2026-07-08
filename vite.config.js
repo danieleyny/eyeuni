@@ -17,6 +17,8 @@ export default defineConfig({
         lavi: fileURLToPath(new URL('./lavi/index.html', import.meta.url)),
         // Client demo V2 — Lavi Energy desert variation, served at /lavi-v2/
         'lavi-v2': fileURLToPath(new URL('./lavi-v2/index.html', import.meta.url)),
+        // Client demo — Precision Firearms Academy (Mount Vernon, NY), served at /precisionfirearm/
+        precisionfirearm: fileURLToPath(new URL('./precisionfirearm/index.html', import.meta.url)),
       },
     },
   },
