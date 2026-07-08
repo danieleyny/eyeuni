@@ -1,94 +1,140 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { createContext, createElement, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { MEDIA_BASE } from './content.js'
 
-/* ---- Language ------------------------------------------------------------ */
+/* ---- Reveal system (fail-open) --------------------------------------------
+ *
+ * Content is ALWAYS visible in its resting CSS state. Reveal animation is a
+ * progressive enhancement that only engages when `<html>` carries `js-motion`
+ * — a class the inline head script adds ONLY after confirming an
+ * IntersectionObserver can be constructed. If anything about the JS path is
+ * off (no IO support, script error, JS disabled), `js-motion` is absent and
+ * every `.reveal` simply renders visible. Nothing can get stuck hidden.
+ *
+ * A shared observer adds `.is-in` as elements enter view; a scroll and resize
+ * sweep and a 1200ms timer are belt-and-suspenders backstops so an in-view
+ * element can never stay hidden even if the observer misfires.
+ */
 
-export const LangContext = createContext({ lang: 'en', setLang: () => {} })
+const RevealCtx = createContext(null)
 
-export function useLang() {
-  return useContext(LangContext)
+function useRevealObserver() {
+  return useContext(RevealCtx)
 }
 
-/** Resolve a { en, es } pair (or plain string) against the active language. */
-export function useT() {
-  const { lang } = useLang()
-  return (pair) => (typeof pair === 'string' ? pair : pair?.[lang] ?? pair?.en ?? '')
+export function RevealRoot({ children }) {
+  // Lazy init once — a stable value usable during render (no ref read).
+  const [observer] = useState(() => {
+    const enabled =
+      typeof window !== 'undefined' &&
+      document.documentElement.classList.contains('js-motion')
+    if (!enabled) return null // fail-open: content is already visible via CSS
+    // rootMargin 0 (no bottom inset) so elements at the very bottom of the page
+    // — which can never scroll above a negative bottom margin — still reveal.
+    return new IntersectionObserver(
+      (entries, obs) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in')
+            obs.unobserve(e.target)
+          }
+        }
+      },
+      { rootMargin: '0px', threshold: 0.01 },
+    )
+  })
+
+  useEffect(() => {
+    if (!observer) return
+    // Belt-and-suspenders sweep: reveal anything at/near the viewport the observer
+    // may have missed (fast scroll, anchor jump). Called directly — not via rAF —
+    // so it still fires in backgrounded/headless tabs where rAF is throttled.
+    const sweep = () => {
+      const vh = window.innerHeight
+      document.querySelectorAll('.reveal:not(.is-in)').forEach((el) => {
+        if (el.getBoundingClientRect().top < vh) el.classList.add('is-in')
+      })
+    }
+    window.addEventListener('scroll', sweep, { passive: true })
+    window.addEventListener('resize', sweep, { passive: true })
+    sweep() // catch above-the-fold immediately
+    // Hard backstop: re-sweep shortly after load in case the first paint's
+    // measurements were premature. In-view only, so below-fold reveals still animate.
+    const t = setTimeout(sweep, 1500)
+    return () => {
+      window.removeEventListener('scroll', sweep)
+      window.removeEventListener('resize', sweep)
+      clearTimeout(t)
+    }
+  }, [observer])
+
+  return <RevealCtx.Provider value={observer}>{children}</RevealCtx.Provider>
 }
 
-/* ---- Motion primitives ----------------------------------------------------- */
-
-const EASE_OUT = [0.16, 1, 0.3, 1]
-
-/** Fade + rise once when scrolled into view, with optional stagger delay. */
-export function Reveal({ children, delay = 0, y = 20, as = 'div', className, ...rest }) {
-  const reduce = useReducedMotion()
-  const Tag = motion[as] ?? motion.div
-  return (
-    <Tag
-      className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-      {...rest}
-    >
-      {children}
-    </Tag>
+/** Fade + rise once when scrolled into view. Visible by default (fail-open). */
+export function Reveal({ children, delay = 0, as = 'div', className = '', style, ...rest }) {
+  const obs = useRevealObserver()
+  const setRef = useCallbackRef(obs)
+  const d = Math.min(delay, 0.3) // cap stagger so fast scrollers never outrun it
+  const mergedStyle = d ? { ...style, '--rd': `${Math.round(d * 1000)}ms` } : style
+  return createElement(
+    as,
+    { ref: setRef, className: `reveal ${className}`.trim(), style: mergedStyle, ...rest },
+    children,
   )
 }
 
-/** Line-masked rise for headlines: each child renders inside an overflow mask.
- * The in-view trigger lives on the (static) mask — the moving span starts fully
- * clipped, so observing it directly would never fire. */
-export function MaskedLines({ lines, className, delay = 0, stagger = 0.08 }) {
-  const reduce = useReducedMotion()
+/** Line-masked headline rise. Fails open: resting state is fully visible; the
+ * clip is only applied (momentarily) once `js-motion` + `.is-in` are present. */
+export function MaskedLines({ lines, className = '', delay = 0, stagger = 0.06 }) {
+  const obs = useRevealObserver()
+  const setRef = useCallbackRef(obs)
   return (
-    <span className={className}>
+    <span ref={setRef} className={`reveal reveal--mask ${className}`.trim()}>
       {lines.map((line, i) => (
-        <motion.span
+        <span
           className="mask-line"
           key={i}
-          initial={reduce ? false : 'hidden'}
-          whileInView={reduce ? undefined : 'visible'}
-          viewport={{ once: true, amount: 0.5 }}
+          style={{ '--ml-d': `${Math.round((Math.min(delay, 0.3) + i * stagger) * 1000)}ms` }}
         >
-          <motion.span
-            variants={{
-              hidden: { y: '110%' },
-              visible: {
-                y: 0,
-                transition: { duration: 0.9, ease: EASE_OUT, delay: delay + i * stagger },
-              },
-            }}
-          >
-            {line}
-          </motion.span>
-        </motion.span>
+          <span className="ml-i">{line}</span>
+        </span>
       ))}
     </span>
   )
 }
 
-/** Animated stat counter — counts up in view; renders final value when reduced motion. */
-export function Counter({ value, suffix = '', duration = 1.6 }) {
-  const reduce = useReducedMotion()
+// Small helper so Reveal/MaskedLines register their node with the shared observer.
+function useCallbackRef(obs) {
+  return useCallback(
+    (node) => {
+      if (node && obs) obs.observe(node)
+    },
+    [obs],
+  )
+}
+
+/* ---- Counter --------------------------------------------------------------
+ * Renders the FINAL value by default (fail-open — a ghosted "0+" reads broken).
+ * Only counts up when the cell is scrolled into view from below the fold.
+ */
+export function Counter({ value, suffix = '', duration = 1.4 }) {
   const ref = useRef(null)
-  const [display, setDisplay] = useState(reduce ? value : 0)
+  const [display, setDisplay] = useState(value)
 
   useEffect(() => {
-    if (reduce) {
-      setDisplay(value)
-      return
-    }
     const el = ref.current
     if (!el) return
-    let raf
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    // Already in view at mount → keep final value, no flash.
+    if (el.getBoundingClientRect().top < window.innerHeight) return
+
+    let raf = 0
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
         io.disconnect()
         const t0 = performance.now()
+        setDisplay(0)
         const tick = (t) => {
           const p = Math.min(1, (t - t0) / (duration * 1000))
           const eased = 1 - Math.pow(1 - p, 4)
@@ -97,14 +143,14 @@ export function Counter({ value, suffix = '', duration = 1.6 }) {
         }
         raf = requestAnimationFrame(tick)
       },
-      { threshold: 0.4 },
+      { threshold: 0.5 },
     )
     io.observe(el)
     return () => {
       io.disconnect()
       cancelAnimationFrame(raf)
     }
-  }, [value, duration, reduce])
+  }, [value, duration])
 
   return (
     <span ref={ref} className="tnum">
@@ -123,16 +169,22 @@ export function LoopVideo({ name, className, eager = false }) {
   useEffect(() => {
     const video = ref.current
     if (!video) return
+    const play = () => video.play().catch(() => {})
+    if (eager) play()
+    if (!('IntersectionObserver' in window)) {
+      play()
+      return
+    }
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {})
+        if (entry.isIntersecting) play()
         else video.pause()
       },
       { threshold: 0.1 },
     )
     io.observe(video)
     return () => io.disconnect()
-  }, [])
+  }, [eager])
 
   return (
     <video

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { T, CONTACT } from './content.js'
-import { LangContext, useLang, useT, CrosshairMark, LoopVideo, Reveal } from './ui.jsx'
+import { LangContext, useLang, useT } from './i18n.js'
+import { RevealRoot, CrosshairMark, LoopVideo, Reveal } from './ui.jsx'
 import {
   Hero,
   Stats,
@@ -17,15 +18,37 @@ import {
   Contact,
 } from './sections.jsx'
 
+// Range folds into Classes/Contact anchors to keep the bar uncrowded at 1280–1440px.
 const NAV_ITEMS = [
   ['licensing', T.nav.licensing],
   ['courses', T.nav.courses],
   ['instructor', T.nav.instructor],
   ['classes', T.nav.classes],
-  ['range', T.nav.range],
   ['faq', T.nav.faq],
   ['contact', T.nav.contact],
 ]
+
+/** Track which section is in view so the matching nav item gets the brass underline. */
+function useScrollSpy(ids) {
+  const [active, setActive] = useState('')
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id)
+        })
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+    )
+    ids.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) io.observe(el)
+    })
+    return () => io.disconnect()
+  }, [ids])
+  return active
+}
 
 function ScrollProgress() {
   const ref = useRef(null)
@@ -51,10 +74,13 @@ function ScrollProgress() {
   return <div className="pfa-progress" ref={ref} aria-hidden="true" />
 }
 
+const NAV_IDS = NAV_ITEMS.map(([id]) => id)
+
 function Nav({ scrolled }) {
   const t = useT()
   const { lang, setLang } = useLang()
   const [open, setOpen] = useState(false)
+  const active = useScrollSpy(NAV_IDS)
 
   return (
     <nav className={`nav${scrolled || open ? ' nav--solid' : ''}`}>
@@ -62,15 +88,16 @@ function Nav({ scrolled }) {
         <a className="nav__brand" href="#top" onClick={() => setOpen(false)}>
           <CrosshairMark />
           <span>
-            PRECISION{' '}
-            <span className="nav__brand-rest" style={{ color: 'var(--faint)' }}>
-              FIREARMS ACADEMY
-            </span>
+            PRECISION <span className="nav__brand-rest">FIREARMS ACADEMY</span>
           </span>
         </a>
         <div className="nav__links">
           {NAV_ITEMS.map(([id, label]) => (
-            <a key={id} className="nav__link" href={`#${id}`}>
+            <a
+              key={id}
+              className={`nav__link${active === id ? ' nav__link--active' : ''}`}
+              href={`#${id}`}
+            >
               {t(label)}
             </a>
           ))}
@@ -123,7 +150,7 @@ function WorkbenchBand() {
       aria-label={t({ en: 'Craftsmanship at the workbench', es: 'Oficio en el banco de trabajo' })}
     >
       <LoopVideo name="workbench-loop" />
-      <Reveal as="p" y={26} className="band__quote" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 1.7rem)', maxWidth: '30ch' }}>
+      <Reveal as="p" className="band__quote">
         {t({
           en: 'Handling. Cleaning. Storage. The quiet half of marksmanship.',
           es: 'Manejo. Limpieza. Almacenamiento. La mitad silenciosa de la puntería.',
@@ -208,27 +235,29 @@ export default function PfaApp() {
 
   return (
     <LangContext.Provider value={ctx}>
-      <ScrollProgress />
-      <Nav scrolled={scrolled} />
-      <main>
-        <Hero />
-        <Stats />
-        <HowItWorks />
-        <Licensing />
-        <VideoBand />
-        <Testimonial />
-        <Courses />
-        <WorkbenchBand />
-        <Instructor />
-        <UpcomingClasses />
-        <Range />
-        <Women />
-        <Faq />
-        <Contact />
-      </main>
-      <Footer />
-      <StickyCta visible={pastHero} />
-      <div className="pfa-grain" aria-hidden="true" />
+      <RevealRoot>
+        <ScrollProgress />
+        <Nav scrolled={scrolled} />
+        <main>
+          <Hero />
+          <Stats />
+          <HowItWorks />
+          <Licensing />
+          <VideoBand />
+          <Testimonial />
+          <Courses />
+          <WorkbenchBand />
+          <Instructor />
+          <UpcomingClasses />
+          <Range />
+          <Women />
+          <Faq />
+          <Contact />
+        </main>
+        <Footer />
+        <StickyCta visible={pastHero} />
+        <div className="pfa-grain" aria-hidden="true" />
+      </RevealRoot>
     </LangContext.Provider>
   )
 }

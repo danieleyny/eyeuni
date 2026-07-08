@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { T, PLACEHOLDERS, CONTACT, CALIBERS, MONTHS, upcomingSaturdays } from './content.js'
-import { useLang, useT, Reveal, MaskedLines, Counter, LoopVideo, Still, RingsOrnament } from './ui.jsx'
+import { useLang, useT } from './i18n.js'
+import { Reveal, MaskedLines, Counter, LoopVideo, Still, RingsOrnament } from './ui.jsx'
 
 const STARS = '★★★★★'
 
@@ -30,7 +31,7 @@ export function Hero() {
             </a>
             <span className="hero__proof">
               <span className="stars" aria-hidden="true">{STARS}</span>
-              {t(T.hero.proof).replace('[N]', String(PLACEHOLDERS.reviewCount))}
+              {t(T.hero.proof).replace('[N]', PLACEHOLDERS.studentsTrained.toLocaleString('en-US'))}
             </span>
           </div>
         </Reveal>
@@ -148,7 +149,7 @@ export function VideoBand() {
   return (
     <section className="band" aria-label={t(T.band.quote)}>
       <LoopVideo name="band-livefire" />
-      <Reveal as="p" y={26} className="band__quote">
+      <Reveal as="p" className="band__quote">
         {t(T.band.quote)}
       </Reveal>
     </section>
@@ -412,23 +413,17 @@ export function Women() {
 function FaqItem({ item, index }) {
   const t = useT()
   const [open, setOpen] = useState(false)
-  const bodyRef = useRef(null)
   return (
     <Reveal delay={index * 0.05} className={`faq__item${open ? ' faq__item--open' : ''}`}>
-      <button
-        className="faq__q"
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-      >
+      <button className="faq__q" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         {t(item.q)}
         <span className="faq__icon" aria-hidden="true" />
       </button>
-      <div
-        className="faq__a"
-        ref={bodyRef}
-        style={{ maxHeight: open ? `${bodyRef.current?.scrollHeight ?? 400}px` : 0 }}
-      >
-        <p className="faq__a-inner">{t(item.a)}</p>
+      {/* CSS grid-rows accordion — animates height with no JS measurement. */}
+      <div className="faq__a">
+        <div className="faq__a-clip">
+          <p className="faq__a-inner">{t(item.a)}</p>
+        </div>
       </div>
     </Reveal>
   )
