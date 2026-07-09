@@ -1,4 +1,4 @@
-import { T, CONTACT } from './content.js'
+import { T, CONTACT, MEDIA_BASE } from './content.js'
 import { Reveal, MaskedLines, LoopVideo, Still } from './ui.jsx'
 
 /* ---- 1 · Hero --------------------------------------------------------------- */
@@ -24,7 +24,7 @@ export function Hero() {
             <a className="btn btn--gold" href={CONTACT.phoneHref}>
               {T.hero.ctaPrimary} <span className="arr">→</span>
             </a>
-            <a className="btn btn--ghost-light" href="#arrangements">
+            <a className="btn btn--ghost-light" href="#occasions">
               {T.hero.ctaSecondary}
             </a>
           </div>
@@ -116,6 +116,9 @@ export function Occasions() {
         <h2 className="h2">
           <MaskedLines lines={[T.occasions.title]} />
         </h2>
+        <Reveal delay={0.1}>
+          <p className="sub">{T.occasions.body}</p>
+        </Reveal>
         <div className="occasions">
           {T.occasions.items.map((item, i) => (
             <Reveal key={item.img} delay={i * 0.08} as="article" className="occasion">
@@ -166,20 +169,35 @@ export function Story() {
   )
 }
 
-/* ---- 7 · Clients strip ----------------------------------------------------------------------- */
+/* ---- 7 · Events we arrange (logo wall) ------------------------------------------------------- */
 
-export function Clients() {
+export function Events() {
   return (
-    <section className="clients" aria-label="Clients">
+    <section className="events" id="events" aria-label="Events we arrange">
       <div className="container">
         <Reveal>
-          <span className="overline overline--ivory">{T.clients.overline}</span>
+          <span className="overline overline--ivory">{T.events.overline}</span>
         </Reveal>
-        <Reveal delay={0.1} as="ul" className="clients__list">
-          {T.clients.names.map((name) => (
-            <li key={name}>{name}</li>
+        <h2 className="h2 events__title">
+          <MaskedLines lines={[T.events.title]} />
+        </h2>
+        <Reveal delay={0.08}>
+          <p className="events__sub">{T.events.sub}</p>
+        </Reveal>
+        <div className="events__grid">
+          {T.events.logos.map((logo, i) => (
+            <Reveal key={logo.file} delay={(i % 3) * 0.06} className="events__logo">
+              <img
+                src={`${MEDIA_BASE}/${logo.file}`}
+                alt={logo.name}
+                loading="lazy"
+                decoding="async"
+              />
+            </Reveal>
           ))}
-          <li className="clients__coda">{T.clients.coda}</li>
+        </div>
+        <Reveal delay={0.2}>
+          <p className="events__coda">{T.events.coda}</p>
         </Reveal>
       </div>
     </section>

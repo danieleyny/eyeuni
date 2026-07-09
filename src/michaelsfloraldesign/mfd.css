@@ -933,36 +933,73 @@ button {
   }
 }
 
-/* ---- Clients strip ------------------------------------------------------------------------------------------------ */
-.clients {
+/* ---- Events we arrange (logo wall) -------------------------------------------------------------------------------- */
+.events {
   background: var(--green);
   color: #f7f3ec;
-  padding-block: clamp(56px, 7vw, 96px);
+  padding-block: var(--section-pad);
 }
 
-.clients__list {
-  list-style: none;
+.events__title {
+  color: #f7f3ec;
+}
+
+.events__sub {
+  color: rgba(247, 243, 236, 0.72);
+  max-width: 52ch;
+  margin-top: 18px;
+}
+
+.events__grid {
+  margin-top: clamp(44px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 64px);
+  align-items: center;
+}
+
+.events__logo {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 18px clamp(32px, 5vw, 72px);
-  margin-top: 30px;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
 }
 
-.clients__list li {
+/* Force every logo to a single ivory tone so the mixed-colour marks read as one
+   quiet brand wall rather than a colourful logo dump. brightness(0) flattens
+   each mark to black, invert lifts it to ivory; transparency is preserved so
+   the interior detail of line-art marks (e.g. the Lotos seal) still reads. */
+.events__logo img {
+  max-width: min(200px, 100%);
+  max-height: 76px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(0.92);
+  opacity: 0.78;
+  transition: opacity 300ms var(--ease-ui);
+}
+
+.events__logo:hover img {
+  opacity: 1;
+}
+
+.events__coda {
+  margin-top: clamp(36px, 5vw, 56px);
   font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  color: rgba(247, 243, 236, 0.88);
-  white-space: nowrap;
+  font-style: italic;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--accent-hi);
 }
 
-.clients__coda {
-  font-style: italic;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem) !important;
-  color: var(--accent-hi) !important;
+@media (max-width: 760px) {
+  .events__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .events__logo {
+    min-height: 72px;
+  }
 }
 
 /* ---- Testimonial --------------------------------------------------------------------------------------------------- */

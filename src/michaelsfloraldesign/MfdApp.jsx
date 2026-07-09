@@ -7,8 +7,8 @@ import {
   Gallery,
   AtelierBand,
   Occasions,
+  Events,
   Story,
-  Clients,
   Testimonial,
   DeliveryBand,
   Visit,
@@ -162,8 +162,8 @@ export default function MfdApp() {
         <Gallery />
         <AtelierBand />
         <Occasions />
+        <Events />
         <Story />
-        <Clients />
         <Testimonial />
         <DeliveryBand />
         <Visit />
