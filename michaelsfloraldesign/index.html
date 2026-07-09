@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/michaelsfloraldesign/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#F7F3EC" />
+    <title>Michael's Floral Design NYC — Luxury Florist, Upper East Side · Same-Day Manhattan Delivery</title>
+    <meta
+      name="description"
+      content="Upper East Side florist since 2002. Hand-selected flowers arranged like art — weddings, events, sympathy & everyday luxury. Same-day delivery across Manhattan. Call 212-879-1690."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Michael's Floral Design NYC — Flowers, Arranged Like Art" />
+    <meta
+      property="og:description"
+      content="Upper East Side luxury florist since 2002. Hand-selected daily, delivered across Manhattan. 347 E 85th St · 212-879-1690."
+    />
+    <meta property="og:url" content="https://eye-uni.com/michaelsfloraldesign/" />
+    <meta property="og:image" content="https://eye-uni.com/michaelsfloraldesign/media/og-michaelsfloraldesign.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://eye-uni.com/michaelsfloraldesign/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Florist",
+        "name": "Michael's Floral Design NYC",
+        "description": "Upper East Side luxury florist — hand-selected flowers arranged daily for weddings, events, sympathy, and everyday occasions. Same-day delivery across Manhattan.",
+        "telephone": "+1-212-879-1690",
+        "email": "michaelsfloraldesignnyc@outlook.com",
+        "url": "https://eye-uni.com/michaelsfloraldesign/",
+        "foundingDate": "2002",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "347 E 85th St",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "postalCode": "10028",
+          "addressCountry": "US"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 40.7764, "longitude": -73.9509 },
+        "areaServed": "Manhattan, New York",
+        "priceRange": "$$$"
+      }
+    </script>
+    <style>
+      /* Paint the warm ivory base immediately so there's no stark-white flash before CSS loads. */
+      html, body { background-color: #F7F3EC; }
+    </style>
+    <script>
+      // Fail-open reveals: only allow content to start hidden-then-animate if we
+      // can actually construct an IntersectionObserver to reveal it. If this check
+      // fails (no support, JS error), `js-motion` is never added and every
+      // `.reveal` stays visible via CSS. Runs before paint, so there's no flash.
+      try {
+        var _io = new IntersectionObserver(function () {});
+        _io.disconnect();
+        document.documentElement.classList.add('js-motion');
+      } catch (e) {
+        /* leave content fully visible */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="mfd-root"></div>
+    <script type="module" src="/src/main-michaelsfloraldesign.jsx"></script>
+  </body>
+</html>

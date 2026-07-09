@@ -19,6 +19,8 @@ export default defineConfig({
         'lavi-v2': fileURLToPath(new URL('./lavi-v2/index.html', import.meta.url)),
         // Client demo — Precision Firearms Academy (Mount Vernon, NY), served at /precisionfirearm/
         precisionfirearm: fileURLToPath(new URL('./precisionfirearm/index.html', import.meta.url)),
+        // Client demo — Michael's Floral Design NYC (Upper East Side), served at /michaelsfloraldesign/
+        michaelsfloraldesign: fileURLToPath(new URL('./michaelsfloraldesign/index.html', import.meta.url)),
       },
     },
   },
