@@ -30,3 +30,16 @@ you swap a clip (`qlmanage -t -s 1600 -o . <file>.mp4`, then sips/cwebp).
 Pexels source IDs: gallery 931159, 5503330, 5414056, 35001457, 1684232,
 5894100, 169190 · occasions 6479566, 1616113, 10363632, 29692594 ·
 story 5273726 · storefront 12189793.
+
+## Client logos — "Events we arrange" (`logo-*.png`)
+
+These are the REAL organizations from michaelsfloraldesignnyc.com, pulled from his
+Squarespace CDN: Carl Schurz Park Conservancy, The Lotos Club, Friends of the
+Children, Skidmore College, NYU College of Dentistry, American Prairie Reserve.
+The section renders them monochrome-ivory on the deep green via CSS
+`filter: brightness(0) invert(.92)`, so mixed-colour marks read as one quiet
+wall instead of a logo dump. Two were pre-processed so the silhouette treatment
+works: `logo-lotos.png` had its light seal-fill knocked out to transparent
+(kept only the dark navy line-art) and its source was a GIF. If you swap a logo,
+give it transparent background + dark artwork (or already-white artwork) so the
+filter produces a clean ivory silhouette.
